@@ -9,6 +9,8 @@ export interface CardProps {
   tone?: 'default' | 'tint' | 'dashed'
   onClick?: () => void
   className?: string
+  /** Voor anker-links, bijv. /hulp#feedback. */
+  id?: string
 }
 
 export function Card({
@@ -18,10 +20,12 @@ export function Card({
   tone = 'default',
   onClick,
   className,
+  id,
 }: CardProps) {
   const Tag = onClick ? 'button' : 'div'
   return (
     <Tag
+      id={id}
       onClick={onClick}
       className={cn(
         'rounded-md text-left',
