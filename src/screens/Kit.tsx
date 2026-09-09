@@ -10,10 +10,13 @@ import { assetCounts } from '../lib/assets'
 import { PAGE_CONTENT } from '../data'
 import { LANGS } from '../data/langs'
 import { cn } from '../lib/cn'
+import { ComponentsPanel } from './kit/ComponentsPanel'
+import { KitBlock } from './kit/KitBlock'
 
-type Tab = 'tokens' | 'state' | 'data' | 'routes'
+type Tab = 'componenten' | 'tokens' | 'state' | 'data' | 'routes'
 
 const TABS: { id: Tab; label: string }[] = [
+  { id: 'componenten', label: 'Componenten' },
   { id: 'tokens', label: 'Tokens' },
   { id: 'state', label: 'State' },
   { id: 'data', label: 'Content' },
@@ -21,7 +24,7 @@ const TABS: { id: Tab; label: string }[] = [
 ]
 
 export default function Kit() {
-  const [tab, setTab] = useState<Tab>('tokens')
+  const [tab, setTab] = useState<Tab>('componenten')
 
   return (
     <section className="flex flex-col gap-6">
@@ -51,6 +54,7 @@ export default function Kit() {
         ))}
       </div>
 
+      {tab === 'componenten' && <ComponentsPanel />}
       {tab === 'tokens' && <TokensPanel />}
       {tab === 'state' && <StatePanel />}
       {tab === 'data' && <DataPanel />}
@@ -79,7 +83,7 @@ const GRAYS = ['bg-gray-1', 'bg-gray-2', 'bg-gray-3', 'bg-gray-4', 'bg-gray-5', 
 function TokensPanel() {
   return (
     <div className="flex flex-col gap-8">
-      <Block title="Kleuren">
+      <KitBlock title="Kleuren">
         <div className="flex flex-col gap-3">
           {FAMILIES.map((f) => (
             <div key={f} className="flex items-center gap-3">
@@ -104,9 +108,9 @@ function TokensPanel() {
             ))}
           </div>
         </div>
-      </Block>
+      </KitBlock>
 
-      <Block title="Statussen">
+      <KitBlock title="Statussen">
         <p className="mb-3 text-body-sm text-gray-3">
           Basisgroen is een tintsterkte: als stip op wit vrijwel onzichtbaar. Daarom gebruiken
           goedgekeurd en live green-shade voor stip en balk.
@@ -121,9 +125,9 @@ function TokensPanel() {
             </div>
           ))}
         </div>
-      </Block>
+      </KitBlock>
 
-      <Block title="Typografie">
+      <KitBlock title="Typografie">
         <div className="flex flex-col gap-2 rounded-md bg-white p-6 shadow-card">
           <p className="text-display text-gray-1">Bergrode in één oogopslag</p>
           <p className="text-h1 text-gray-1">Kies je avatar</p>
@@ -135,11 +139,11 @@ function TokensPanel() {
           <p className="text-body-sm text-gray-3">Ondersteunende tekst en tabelcellen.</p>
           <p className="type-label text-gray-3">Sectielabel</p>
         </div>
-      </Block>
+      </KitBlock>
 
-      <Block title="Assets">
+      <KitBlock title="Assets">
         <AssetStatus />
-      </Block>
+      </KitBlock>
     </div>
   )
 }
@@ -256,7 +260,7 @@ function StatePanel() {
 function DataPanel() {
   return (
     <div className="flex flex-col gap-6">
-      <Block title="Talen">
+      <KitBlock title="Talen">
         <div className="flex flex-wrap gap-2">
           {LANGS.map((l) => (
             <span key={l.code} className="rounded-pill bg-gray-6 px-3 py-1.5 text-body-sm text-gray-2">
@@ -264,9 +268,9 @@ function DataPanel() {
             </span>
           ))}
         </div>
-      </Block>
+      </KitBlock>
 
-      <Block title="Pagina's">
+      <KitBlock title="Pagina's">
         <div className="flex flex-col gap-3">
           {PAGE_CONTENT.map((p) => (
             <details key={p.id} className="rounded-md bg-white p-4 shadow-card">
@@ -289,7 +293,7 @@ function DataPanel() {
             </details>
           ))}
         </div>
-      </Block>
+      </KitBlock>
     </div>
   )
 }
@@ -320,15 +324,6 @@ function RoutesPanel() {
 }
 
 /* ------------------------------------------------------------------ helpers */
-
-function Block({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="flex flex-col gap-3">
-      <h2 className="text-h3 text-gray-1">{title}</h2>
-      {children}
-    </div>
-  )
-}
 
 function KitButton({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
