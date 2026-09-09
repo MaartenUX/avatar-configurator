@@ -23,8 +23,8 @@ const ROUTES = [
   ['/paginas/p-bijstand', null],
   ['/paginas/nieuw', 'Pagina toevoegen'],
   ['/paginas/p-bijstand/samenvatting', 'Basissamenvatting'],
-  ['/paginas/p-bijstand/tr', 'Vertaling'],
-  ['/paginas/p-bijstand/video/tr', 'Ondertiteling'],
+  ['/paginas/p-bijstand/tr', 'Turks'],
+  ['/paginas/p-bijstand/video/tr', 'Turks'],
 ]
 
 if (wantShots) mkdirSync(outDir, { recursive: true })
