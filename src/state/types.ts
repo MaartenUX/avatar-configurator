@@ -76,8 +76,9 @@ export interface Config {
   level: 'B1' | 'B2'
   languages: Lang[]
   avatars: Partial<Record<Lang, string>>
-  videoType: 'vast' | 'adaptief'
-  /** Vier shots; null = standaard kantoorshot. Slugs, nooit URL's. */
+  /** Pas gezet zodra de gebruiker kiest; leeg = nog geen keuze. */
+  videoType?: 'vast' | 'adaptief'
+  /** Vier shots; null = standaard kantoorshot. Leeg = nog geen keuze. */
   backgrounds: (string | null)[]
   signedAt?: string
 }

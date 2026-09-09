@@ -10,8 +10,7 @@ export const EMPTY_CONFIG: Config = {
   level: 'B1',
   languages: ['nl'],
   avatars: {},
-  videoType: 'vast',
-  backgrounds: [null, null, null, null],
+  backgrounds: [],
 }
 
 /** De configuratie zoals Esmee hem heeft vastgelegd: vier talen naast Nederlands. */
