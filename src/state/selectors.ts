@@ -53,7 +53,7 @@ export function nextAction(page: Page, user: 'esmee' | 'emre' = 'esmee'): NextAc
       const video = langsWith(page, 'review-video')[0]
       if (video)
         return {
-          label: `Controleer video ${langLabel(video).toLowerCase()}`,
+          label: `Controleer video ${langLabel(video)}`,
           to: `/paginas/${page.id}/video/${video}`,
           hint: 'Een video is klaar om te controleren',
         }

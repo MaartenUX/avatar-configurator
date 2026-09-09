@@ -35,7 +35,7 @@ export const FLOW: Record<
   },
   video: {
     destination: () => '/',
-    toast: (c) => `Video ${langLabel(c.lang!).toLowerCase()} goedgekeurd.`,
+    toast: (c) => `Video ${langLabel(c.lang!)} goedgekeurd.`,
   },
   publish: {
     destination: (c) => `/paginas/${c.pageId}`,

@@ -12,6 +12,8 @@ export interface LanguageRowProps {
   lang: Lang
   status: LangStatus
   reviewer?: string
+  /** Geschatte resterende minuten als er geen timer loopt. */
+  etaMin?: number
   /** Loopt er een timer voor deze taal, dan telt de rij mee af. */
   timer?: Timer
   views?: number
@@ -26,6 +28,7 @@ export function LanguageRow({
   lang,
   status,
   reviewer,
+  etaMin,
   timer,
   views,
   actionTo,
@@ -35,9 +38,12 @@ export function LanguageRow({
   const countdown = useCountdown(timer)
   const statusKey = LANG_STATUS[status]
 
+  // Loopt er een timer, dan telt hij mee af; anders de geschatte tijd uit de
+  // state, zodat een gezaaide pagina ook een verwachting toont.
+  const minuten = countdown?.etaMin ?? etaMin
   const label =
-    status === 'generating' && countdown
-      ? `Video wordt gemaakt · nog ${countdown.etaMin} min`
+    status === 'generating' && minuten
+      ? `Video wordt gemaakt · nog ${minuten} min`
       : LANG_STATUS_LABEL[status]
 
   return (

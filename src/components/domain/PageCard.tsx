@@ -67,6 +67,7 @@ export function PageCard({ page, user = 'esmee', highlighted, langFilter }: Page
                 lang={lang}
                 status={entry.status}
                 reviewer={entry.reviewer}
+                etaMin={entry.etaMin}
                 timer={page.timer?.lang === lang || !page.timer?.lang ? page.timer : undefined}
                 views={isLive ? page.views[lang] : undefined}
                 actionTo={rowAction?.to}
