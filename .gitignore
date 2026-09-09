@@ -4,3 +4,4 @@ shots
 .DS_Store
 *.local
 .claude/settings.local.json
+src/assets/avatars/_origineel/

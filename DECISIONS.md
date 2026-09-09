@@ -77,6 +77,17 @@ Afgestemd met Maarten op 9 september.
 Inter plus Noto Sans Arabic (Inter heeft geen Arabisch schrift). Afgestemd met
 Maarten. Let op: zonder internet valt de typografie terug op een systeemfont.
 
+### 15. Portretten heten naar het gezicht, niet naar de avatar
+Achttien avatars delen zeven gezichten — het bouwplan staat hergebruik tussen
+talen expliciet toe. Een bestand per avatar zou hetzelfde beeld tot drie keer
+in de bundel zetten. Nu wijst `AvatarDef.face` naar de bestandsnaam.
+
+### 16. Aangeleverde portretten worden getrimd
+De bronbeelden zijn liggend met de figuur klein in het midden; ruim 70% is
+transparante leegte. Daardoor zou elke plek in de UI moeten raden hoe ver hij
+inzoomt. `scripts/trim-avatars.mjs` snijdt de rand weg, waarna overal
+`object-contain` volstaat en de figuur nooit halverwege wordt afgesneden.
+
 ## Open punt
 
 De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

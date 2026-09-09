@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Check, Volume2 } from 'lucide-react'
+import { Volume2 } from 'lucide-react'
 import { Avatar } from './Avatar'
 import { voiceClip } from '../../lib/assets'
 import { waveformBars } from '../../mock/waveform'
@@ -17,13 +17,16 @@ export interface AvatarTileProps {
 const SPEAK_MS = 3000
 
 /**
- * Aanklikken doet twee dingen tegelijk: de avatar kiezen én hem laten spreken.
- * Tijdens die drie seconden pulseert het portret en verschijnt de voorbeeldzin
- * als ondertitel in de taal zelf, zodat je hoort en ziet wat de inwoner krijgt.
+ * Portret in een licht kader, daaronder de naam en de steekwoorden. Gekozen is
+ * een blauwe rand, geen gevuld vlak: het portret moet de aandacht houden.
+ *
+ * Aanklikken kiest én laat de avatar spreken. Tijdens die drie seconden
+ * verschijnt de voorbeeldzin als ondertitel óver het portret, zoals in de
+ * echte video, in plaats van eronder ruimte te reserveren.
  */
 export function AvatarTile({ avatar, selected, advised, onSelect }: AvatarTileProps) {
   const [speaking, setSpeaking] = useState(false)
-  const bars = waveformBars(avatar.id, 24)
+  const bars = waveformBars(avatar.id, 20)
   const dir = langDir(avatar.lang)
 
   useEffect(() => {
@@ -45,62 +48,60 @@ export function AvatarTile({ avatar, selected, advised, onSelect }: AvatarTilePr
       onClick={handle}
       aria-pressed={selected}
       className={cn(
-        'relative flex w-full flex-col items-center gap-3 rounded-md border-2 p-5 transition-all',
+        'group relative flex w-full flex-col gap-3 rounded-md border-2 bg-white p-3 text-center transition-all',
         selected
-          ? 'border-blue bg-blue-tint'
-          : 'border-gray-5 bg-white hover:border-gray-4 hover:shadow-card',
+          ? 'border-blue shadow-card'
+          : 'border-transparent shadow-card hover:border-gray-4',
       )}
     >
-      {advised && (
-        <span className="type-label absolute right-3 top-3 rounded-pill bg-green-tint px-2 py-0.5 text-green-shade">
-          Meest gekozen
-        </span>
-      )}
-
-      <Avatar id={avatar.id} name={avatar.name} size={88} speaking={speaking} />
-
-      <span className="flex items-center gap-2">
-        <span className={cn('text-h3', selected ? 'text-blue-shade' : 'text-gray-1')}>
-          {avatar.name}
-        </span>
-        {selected && (
-          <span className="grid size-5 place-items-center rounded-pill bg-blue text-white">
-            <Check size={13} strokeWidth={3} aria-hidden />
+      <span className="relative block aspect-[9/8] overflow-hidden rounded-sm bg-gray-6">
+        {advised && (
+          <span className="type-label absolute left-2 top-2 z-10 whitespace-nowrap rounded-pill bg-green-tint px-2 py-1 text-green-shade">
+            Meest gekozen
           </span>
         )}
-      </span>
+        {/* Iets minder dan vol: houdt kopruimte vrij voor het advieslabel. */}
+        <Avatar
+          face={avatar.face}
+          name={avatar.name}
+          speaking={speaking}
+          className="absolute inset-x-0 bottom-0 h-[88%]"
+        />
 
-      <span className="text-center text-body-sm text-gray-3">
-        {avatar.keywords.join(' · ')}
-      </span>
-
-      {speaking ? (
-        <span className="flex h-5 items-center gap-[2px]" aria-hidden>
-          {bars.map((h, i) => (
-            <span
-              key={i}
-              className="w-1 rounded-pill bg-blue"
-              style={{ height: `${Math.round(h * 100)}%` }}
-            />
-          ))}
-        </span>
-      ) : (
-        <span className="flex h-5 items-center gap-1.5 text-body-sm text-blue-shade">
+        {/* Beluister-affordance; verdwijnt zodra hij spreekt. */}
+        <span
+          className={cn(
+            'absolute bottom-2 right-2 grid size-8 place-items-center rounded-pill bg-white/90 text-blue-shade shadow-card transition-opacity',
+            speaking ? 'opacity-0' : 'opacity-100',
+          )}
+        >
           <Volume2 size={15} aria-hidden />
-          Beluister
         </span>
-      )}
 
-      {/* Ondertitel bij het spreken: wat de inwoner straks te horen krijgt. */}
-      <span
-        dir={dir}
-        className={cn(
-          'min-h-10 rounded-sm px-2 py-1 text-center text-body-sm transition-opacity duration-300',
-          dir === 'rtl' && 'font-[var(--font-arabic)]',
-          speaking ? 'bg-gray-1/85 text-white opacity-100' : 'opacity-0',
+        {speaking && (
+          <>
+            <span className="absolute bottom-2 right-2 flex h-5 items-end gap-[2px]" aria-hidden>
+              {bars.slice(0, 8).map((h, i) => (
+                <span
+                  key={i}
+                  className="w-1 rounded-pill bg-blue"
+                  style={{ height: `${Math.round(h * 100)}%` }}
+                />
+              ))}
+            </span>
+            <span
+              dir={dir}
+              className="absolute inset-x-2 bottom-2 rounded-sm bg-gray-1/85 px-2 py-1 text-[11px] leading-snug text-white"
+            >
+              {avatar.sampleSentence}
+            </span>
+          </>
         )}
-      >
-        {avatar.sampleSentence}
+      </span>
+
+      <span className="flex flex-col gap-0.5">
+        <span className="text-h3 text-gray-1">{avatar.name}</span>
+        <span className="text-body-sm text-gray-3">{avatar.keywords.join(' • ')}</span>
       </span>
     </button>
   )

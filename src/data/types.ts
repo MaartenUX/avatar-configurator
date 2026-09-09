@@ -19,6 +19,10 @@ export interface AvatarDef {
   lang: Lang
   name: string
   gender: 'v' | 'm'
+  /** Bestandsnaam van het portret in src/assets/avatars/, zonder extensie.
+   *  Gezichten mogen tussen talen hergebruikt worden, dus meerdere avatars
+   *  kunnen naar hetzelfde bestand wijzen. */
+  face: string
   /** Drie à vier steekwoorden: "rustig · warm · lage stem". */
   keywords: string[]
   /** Voorbeeldzin in de taal zelf, klinkt bij het beluisteren. */

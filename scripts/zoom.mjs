@@ -1,0 +1,15 @@
+/** Zoomt in op één element voor detailcontrole. */
+import { chromium } from 'playwright'
+const [base, tab, heading, nth, out] = process.argv.slice(2)
+const browser = await chromium.launch()
+const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 3 })
+await page.goto(`${base}#/kit`, { waitUntil: 'load' })
+await page.getByRole('button', { name: tab, exact: true }).click()
+await page.waitForTimeout(500)
+const block = page.getByRole('heading', { level: 2, name: heading, exact: true }).locator('xpath=ancestor::section[1]')
+const target = block.locator('.aspect-\\[16\\/10\\]').nth(Number(nth))
+await target.scrollIntoViewIfNeeded()
+await page.waitForTimeout(300)
+await target.screenshot({ path: out })
+await browser.close()
+console.log(out)

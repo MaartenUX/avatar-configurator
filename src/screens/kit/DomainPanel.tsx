@@ -8,6 +8,7 @@ import { FileVideo, Gauge, Timer } from 'lucide-react'
 import { KitBlock, KitRow } from './KitBlock'
 import { useStore } from '../../state/store'
 import { AVATARS, ADVICE, avatarsFor } from '../../data/avatars'
+import { langLabel } from '../../data/langs'
 import { pageContent } from '../../data'
 import { SEED_CONFIG } from '../../data/seed'
 import { startTimer } from '../../state/timers'
@@ -71,20 +72,26 @@ export function DomainPanel() {
         <div className="w-[520px]"><PreviewGrid config={staged} /></div>
       </KitBlock>
 
-      <KitBlock title="AvatarTile" note="klikken kiest én laat de avatar spreken, met ondertitel">
-        <KitRow>
-          {avatarsFor('nl').map((a) => (
-            <div key={a.id} className="w-56">
-              <AvatarTile avatar={a} selected={avatar === a.id} advised={a.advised} onSelect={() => setAvatar(a.id)} />
+      <KitBlock title="AvatarTile" note="portret in een kader, naam en steekwoorden eronder">
+        <div className="flex flex-col gap-5">
+          {(['nl', 'tr', 'ar'] as const).map((code) => (
+            <div key={code} className="flex flex-col gap-2">
+              <h3 className="text-h3 text-gray-1">{langLabel(code)}</h3>
+              <div className="grid w-[460px] grid-cols-2 gap-3">
+                {avatarsFor(code).map((a) => (
+                  <AvatarTile
+                    key={a.id}
+                    avatar={a}
+                    selected={avatar === a.id}
+                    advised={a.advised}
+                    onSelect={() => setAvatar(a.id)}
+                  />
+                ))}
+              </div>
+              <AdviceBox>{ADVICE[code]}</AdviceBox>
             </div>
           ))}
-          {avatarsFor('ar').map((a) => (
-            <div key={a.id} className="w-56">
-              <AvatarTile avatar={a} selected={avatar === a.id} advised={a.advised} onSelect={() => setAvatar(a.id)} />
-            </div>
-          ))}
-        </KitRow>
-        <AdviceBox>{ADVICE.nl}</AdviceBox>
+        </div>
         <p className="text-body-sm text-gray-3">
           Alle {AVATARS.length} avatars staan in de Content-tab.
         </p>

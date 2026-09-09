@@ -19,11 +19,21 @@ export interface SiteMockProps {
   className?: string
 }
 
+/** Hoe breed één figuur is, afhankelijk van het aantal talen. Voluit
+ *  geschreven, want de Tailwind-scanner leest broncode als tekst. */
+const FIGURE_WIDTH: Record<number, string> = {
+  1: 'w-[46%]',
+  2: 'w-[40%]',
+  3: 'w-[36%]',
+  4: 'w-[32%]',
+  5: 'w-[28%]',
+}
+
 const CORNER: Record<Config['widgetCorner'], string> = {
-  lb: 'bottom-3 left-3',
-  rb: 'bottom-3 right-3',
-  lt: 'top-3 left-3',
-  rt: 'top-3 right-3',
+  lb: 'bottom-4 left-4',
+  rb: 'bottom-4 right-4',
+  lt: 'top-4 left-4',
+  rt: 'top-4 right-4',
 }
 
 /**
@@ -117,45 +127,45 @@ function Widget({
   primary: string
 }) {
   const shown = langs.slice(0, 5)
+
   return (
     <div
       className={cn(
-        'absolute flex items-center gap-2 rounded-sm bg-white shadow-pop transition-all duration-500',
+        'absolute flex flex-col overflow-hidden rounded-md bg-white shadow-pop transition-all duration-500',
         CORNER[config.widgetCorner],
-        mini ? 'px-1.5 py-1' : 'px-2.5 py-2',
+        mini ? 'w-[42%]' : 'w-[38%]',
       )}
     >
-      <span
-        className="grid shrink-0 place-items-center rounded-pill text-white"
-        style={{ background: primary, width: mini ? 14 : 24, height: mini ? 14 : 24 }}
-      >
-        <Play size={mini ? 8 : 12} aria-hidden />
-      </span>
-
-      {/* Eén silhouet per gekozen taal; wordt de gekozen avatar zodra die er is. */}
-      <span className="flex -space-x-1.5">
-        {shown.map((code) => {
+      {/* Videokaartje: de gekozen avatars naast elkaar op één grondlijn.
+          Zolang er niets gekozen is staan er silhouetten, één per taal. */}
+      <div className="relative flex aspect-[16/10] items-end justify-center bg-white">
+        {shown.map((code, i) => {
           const avatar = avatarById(config.avatars[code])
-          const size = mini ? 12 : 22
-          return avatar ? (
+          return (
             <Avatar
               key={code}
-              id={avatar.id}
-              name={avatar.name}
-              size={size}
-              className="ring-1 ring-white"
-            />
-          ) : (
-            <span
-              key={code}
-              className="rounded-pill bg-gray-4 ring-1 ring-white"
-              style={{ width: size, height: size }}
+              face={avatar?.face}
+              name={avatar?.name}
+              className={cn('h-full', FIGURE_WIDTH[shown.length] ?? 'w-[28%]', i > 0 && '-ml-[7%]')}
             />
           )
         })}
-      </span>
 
-      {!mini && <span className="text-body-sm text-gray-2">Bekijk uitleg</span>}
+        <span
+          className={cn(
+            'absolute grid place-items-center rounded-pill text-white shadow-card',
+            mini ? 'left-1 top-1 size-3.5' : 'left-2 top-2 size-6',
+          )}
+          style={{ background: primary }}
+        >
+          <Play size={mini ? 7 : 12} aria-hidden />
+        </span>
+      </div>
+
+      {/* Ondertitelbalk onder het beeld. */}
+      <div className={cn('flex items-center bg-gray-5', mini ? 'h-3 px-1' : 'h-6 px-2')}>
+        {!mini && <span className="h-1.5 w-3/5 rounded-pill bg-gray-4" />}
+      </div>
     </div>
   )
 }
@@ -185,7 +195,7 @@ function VideoFrame({ config, shot }: { config: Config; shot: number }) {
 
       {avatar && (
         <span className="absolute bottom-8 left-1/2 -translate-x-1/2">
-          <Avatar id={avatar.id} name={avatar.name} size={72} />
+          <Avatar face={avatar.face} name={avatar.name} className="h-32 w-32" />
         </span>
       )}
 

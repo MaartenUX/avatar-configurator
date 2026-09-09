@@ -36,12 +36,18 @@ const BACKGROUNDS = byBasename(
   }) as Record<string, string>,
 )
 
-export const avatarImage = (id: string): string | undefined => AVATARS[id]
+/** Portret bij een gezicht-slug (zie AvatarDef.face). */
+export const faceImage = (face?: string): string | undefined =>
+  face ? AVATARS[face] : undefined
+
+/** Het grijze silhouet voor de lege staat, zolang er niets gekozen is. */
+export const silhouetImage = (): string | undefined => AVATARS['silhouet']
 export const voiceClip = (id: string): string | undefined => VOICES[id]
 export const backgroundImage = (slug: string): string | undefined => BACKGROUNDS[slug]
 
 export const assetCounts = () => ({
-  avatars: Object.keys(AVATARS).length,
+  // Het silhouet is een placeholder, geen portret: niet meetellen.
+  avatars: Object.keys(AVATARS).filter((k) => k !== 'silhouet').length,
   voices: Object.keys(VOICES).length,
   backgrounds: Object.keys(BACKGROUNDS).length,
 })

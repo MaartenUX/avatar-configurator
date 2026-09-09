@@ -1,71 +1,54 @@
-import { avatarImage } from '../../lib/assets'
+import { faceImage, silhouetImage } from '../../lib/assets'
 import { cn } from '../../lib/cn'
 
 export interface AvatarProps {
-  id: string
-  name: string
+  /** Gezicht-slug uit AvatarDef.face. Leeg = silhouet. */
+  face?: string
+  name?: string
+  /** Vierkant kader van deze grootte; weglaten om de ouder te vullen. */
   size?: number
-  /** Laat het portret "spreken": lichte puls tijdens het afspelen. */
+  /** Rond uitsnijden, voor kleine rijtjes. Standaard rechthoekig. */
+  round?: boolean
+  /** Laat het portret "spreken": lichte puls. */
   speaking?: boolean
   className?: string
 }
 
-// Deterministisch een van de zeven merkfamilies, zodat een avatar altijd
-// dezelfde kleur houdt.
-const PALETTE = [
-  ['#E6FAFF', '#156D84'],
-  ['#FFD9C8', '#892900'],
-  ['#CDEFEC', '#1F5E58'],
-  ['#D5DBFF', '#001895'],
-  ['#FFC4E7', '#84004F'],
-  ['#E6FEE1', '#1F9B06'],
-  ['#FFB8B8', '#780000'],
-] as const
-
-const hash = (s: string) => {
-  let h = 0
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0
-  return Math.abs(h)
-}
-
 /**
- * Portret van een avatar. Staat het bestand in src/assets/avatars/, dan wordt
- * dat gebruikt; anders een getekend silhouet met de initiaal. Bewust een
- * ontworpen terugval en geen grijs vlak, want dit is waar de gebruiker zijn
- * keuze op baseert.
+ * Portret van een avatar: een uitgeknipte figuur met transparante achtergrond,
+ * niet een pasfoto in een cirkel. De bestanden zijn strak om de figuur
+ * getrimd (zie scripts/trim-avatars.mjs), dus object-contain toont hem altijd
+ * heel, op de onderrand, ongeacht de vorm van het kader.
+ *
+ * Zonder gekozen avatar valt hij terug op het grijze silhouet — dat is de lege
+ * staat uit het ontwerp, niet een gebrek.
  */
-export function Avatar({ id, name, size = 96, speaking, className }: AvatarProps) {
-  const src = avatarImage(id)
-  const [bg, fg] = PALETTE[hash(id) % PALETTE.length]
+export function Avatar({ face, name, size, round, speaking, className }: AvatarProps) {
+  const src = faceImage(face) ?? silhouetImage()
 
   return (
     <span
       className={cn(
-        'relative block shrink-0 overflow-hidden rounded-pill transition-transform duration-500',
-        speaking && 'scale-105',
+        'relative block shrink-0 overflow-hidden transition-transform duration-500',
+        round && 'rounded-pill',
+        speaking && 'scale-[1.03]',
         className,
       )}
-      style={{ width: size, height: size }}
+      style={size ? { width: size, height: size } : undefined}
     >
       {src ? (
-        <img src={src} alt={name} width={size} height={size} className="size-full object-cover" />
+        <img
+          src={src}
+          alt={name ?? ''}
+          className="size-full object-contain object-bottom"
+          draggable={false}
+        />
       ) : (
-        <svg viewBox="0 0 96 96" width={size} height={size} role="img" aria-label={name}>
-          <rect width="96" height="96" fill={bg} />
-          {/* Hoofd en schouders, zodat de terugval als portret leest. */}
-          <circle cx="48" cy="38" r="17" fill={fg} opacity="0.22" />
-          <path d="M18 96c0-17 13.4-28 30-28s30 11 30 28z" fill={fg} opacity="0.22" />
-          <text
-            x="48"
-            y="54"
-            textAnchor="middle"
-            fill={fg}
-            fontSize="30"
-            fontWeight="600"
-            fontFamily="Inter, sans-serif"
-          >
-            {name.slice(0, 1)}
-          </text>
+        // Laatste terugval als zelfs het silhouet ontbreekt.
+        <svg viewBox="0 0 96 96" className="size-full" role="img" aria-label={name ?? 'Avatar'}>
+          <rect width="96" height="96" fill="#F2F2F2" />
+          <circle cx="48" cy="36" r="16" fill="#DEDEDE" />
+          <path d="M18 96c0-17 13.4-28 30-28s30 11 30 28z" fill="#DEDEDE" />
         </svg>
       )}
     </span>

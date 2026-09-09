@@ -12,108 +12,108 @@ import type { AvatarDef } from './types'
 export const AVATARS: AvatarDef[] = [
   // Nederlands
   {
-    id: 'nl-sanne', lang: 'nl', name: 'Sanne', gender: 'v', advised: true,
+    id: 'nl-sanne', lang: 'nl', name: 'Sanne', gender: 'v', face: 'vrouw-donker', advised: true,
     keywords: ['rustig', 'warm', 'duidelijk'],
     sampleSentence: 'Goedendag. Ik leg u in het kort uit hoe dit werkt.',
   },
   {
-    id: 'nl-daan', lang: 'nl', name: 'Daan', gender: 'm',
-    keywords: ['zakelijk', 'lage stem', 'kalm'],
+    id: 'nl-daan', lang: 'nl', name: 'Daan', gender: 'm', face: 'man-grijs',
+    keywords: ['zakelijk', 'kalm', 'lage stem'],
     sampleSentence: 'Goedendag. Ik leg u in het kort uit hoe dit werkt.',
   },
 
   // Engels
   {
-    id: 'en-emma', lang: 'en', name: 'Emma', gender: 'v', advised: true,
-    keywords: ['helder', 'vriendelijk', 'neutraal accent'],
+    id: 'en-emma', lang: 'en', name: 'Emma', gender: 'v', face: 'vrouw-blond', advised: true,
+    keywords: ['helder', 'vriendelijk', 'neutraal'],
     sampleSentence: 'Hello. Let me briefly explain how this works.',
   },
   {
-    id: 'en-james', lang: 'en', name: 'James', gender: 'm',
-    keywords: ['warm', 'rustig tempo', 'lage stem'],
+    id: 'en-james', lang: 'en', name: 'James', gender: 'm', face: 'man-grijs',
+    keywords: ['warm', 'rustig', 'lage stem'],
     sampleSentence: 'Hello. Let me briefly explain how this works.',
   },
 
   // Duits
   {
-    id: 'de-lena', lang: 'de', name: 'Lena', gender: 'v',
+    id: 'de-lena', lang: 'de', name: 'Lena', gender: 'v', face: 'vrouw-blond',
     keywords: ['helder', 'vriendelijk', 'precies'],
     sampleSentence: 'Guten Tag. Ich erkläre Ihnen kurz, wie das funktioniert.',
   },
   {
-    id: 'de-jonas', lang: 'de', name: 'Jonas', gender: 'm', advised: true,
+    id: 'de-jonas', lang: 'de', name: 'Jonas', gender: 'm', face: 'man-grijs', advised: true,
     keywords: ['zakelijk', 'betrouwbaar', 'rustig'],
     sampleSentence: 'Guten Tag. Ich erkläre Ihnen kurz, wie das funktioniert.',
   },
 
   // Frans
   {
-    id: 'fr-camille', lang: 'fr', name: 'Camille', gender: 'v', advised: true,
+    id: 'fr-camille', lang: 'fr', name: 'Camille', gender: 'v', face: 'vrouw-donker', advised: true,
     keywords: ['warm', 'vloeiend', 'vriendelijk'],
     sampleSentence: 'Bonjour. Je vous explique brièvement comment cela fonctionne.',
   },
   {
-    id: 'fr-louis', lang: 'fr', name: 'Louis', gender: 'm',
+    id: 'fr-louis', lang: 'fr', name: 'Louis', gender: 'm', face: 'man-grijs',
     keywords: ['kalm', 'lage stem', 'formeel'],
     sampleSentence: 'Bonjour. Je vous explique brièvement comment cela fonctionne.',
   },
 
   // Turks
   {
-    id: 'tr-zeynep', lang: 'tr', name: 'Zeynep', gender: 'v', advised: true,
+    id: 'tr-zeynep', lang: 'tr', name: 'Zeynep', gender: 'v', face: 'vrouw-turks', advised: true,
     keywords: ['warm', 'duidelijk', 'geduldig'],
     sampleSentence: 'Merhaba. Size bunun nasıl işlediğini kısaca anlatayım.',
   },
   {
-    id: 'tr-mehmet', lang: 'tr', name: 'Mehmet', gender: 'm',
+    id: 'tr-mehmet', lang: 'tr', name: 'Mehmet', gender: 'm', face: 'man-turks',
     keywords: ['zakelijk', 'rustig', 'lage stem'],
     sampleSentence: 'Merhaba. Size bunun nasıl işlediğini kısaca anlatayım.',
   },
 
   // Arabisch
   {
-    id: 'ar-nour', lang: 'ar', name: 'Nour', gender: 'v',
+    id: 'ar-nour', lang: 'ar', name: 'Nour', gender: 'v', face: 'vrouw-marokkaans',
     keywords: ['zacht', 'duidelijk', 'geduldig'],
     sampleSentence: 'مرحباً. سأشرح لك باختصار كيف يعمل هذا.',
   },
   {
-    id: 'ar-omar', lang: 'ar', name: 'Omar', gender: 'm', advised: true,
-    keywords: ['warm', 'rustig tempo', 'vertrouwd'],
+    id: 'ar-omar', lang: 'ar', name: 'Omar', gender: 'm', face: 'man-marokkaans', advised: true,
+    keywords: ['warm', 'rustig', 'vertrouwd'],
     sampleSentence: 'مرحباً. سأشرح لك باختصار كيف يعمل هذا.',
   },
 
   // Pools
   {
-    id: 'pl-zofia', lang: 'pl', name: 'Zofia', gender: 'v', advised: true,
+    id: 'pl-zofia', lang: 'pl', name: 'Zofia', gender: 'v', face: 'vrouw-blond', advised: true,
     keywords: ['helder', 'vriendelijk', 'rustig'],
     sampleSentence: 'Dzień dobry. Wyjaśnię pokrótce, jak to działa.',
   },
   {
-    id: 'pl-jakub', lang: 'pl', name: 'Jakub', gender: 'm',
+    id: 'pl-jakub', lang: 'pl', name: 'Jakub', gender: 'm', face: 'man-grijs',
     keywords: ['zakelijk', 'kalm', 'lage stem'],
     sampleSentence: 'Dzień dobry. Wyjaśnię pokrótce, jak to działa.',
   },
 
   // Grieks
   {
-    id: 'el-eleni', lang: 'el', name: 'Eleni', gender: 'v', advised: true,
+    id: 'el-eleni', lang: 'el', name: 'Eleni', gender: 'v', face: 'vrouw-donker', advised: true,
     keywords: ['warm', 'duidelijk', 'vriendelijk'],
     sampleSentence: 'Καλημέρα. Θα σας εξηγήσω σύντομα πώς λειτουργεί αυτό.',
   },
   {
-    id: 'el-nikos', lang: 'el', name: 'Nikos', gender: 'm',
+    id: 'el-nikos', lang: 'el', name: 'Nikos', gender: 'm', face: 'man-marokkaans',
     keywords: ['rustig', 'lage stem', 'zakelijk'],
     sampleSentence: 'Καλημέρα. Θα σας εξηγήσω σύντομα πώς λειτουργεί αυτό.',
   },
 
   // Spaans
   {
-    id: 'es-lucia', lang: 'es', name: 'Lucía', gender: 'v', advised: true,
+    id: 'es-lucia', lang: 'es', name: 'Lucía', gender: 'v', face: 'vrouw-marokkaans', advised: true,
     keywords: ['warm', 'vlot', 'vriendelijk'],
     sampleSentence: 'Hola. Le explico brevemente cómo funciona esto.',
   },
   {
-    id: 'es-mateo', lang: 'es', name: 'Mateo', gender: 'm',
+    id: 'es-mateo', lang: 'es', name: 'Mateo', gender: 'm', face: 'man-marokkaans',
     keywords: ['kalm', 'duidelijk', 'lage stem'],
     sampleSentence: 'Hola. Le explico brevemente cómo funciona esto.',
   },

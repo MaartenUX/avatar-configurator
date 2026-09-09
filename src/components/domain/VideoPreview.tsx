@@ -96,7 +96,7 @@ export function VideoPreview({
 
       {avatar && (
         <span className="absolute bottom-14 left-1/2 -translate-x-1/2">
-          <Avatar id={avatar.id} name={avatar.name} size={132} speaking={playing} />
+          <Avatar face={avatar.face} name={avatar.name} speaking={playing} className="h-52 w-40" />
         </span>
       )}
 

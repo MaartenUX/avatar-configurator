@@ -25,7 +25,25 @@ Vlaggen werken zowel vóór als achter de hash: `index.html?fast=1#/` en
 
 ## Assets
 
-Portretten, stemfragmenten en kantoorshots worden aangeleverd. Droppen in
-`src/assets/avatars/{id}.png`, `src/assets/voices/{id}.mp3` en
-`src/assets/backgrounds/kantoor-{1..4}.jpg`. Er is geen codewijziging nodig:
-`src/lib/assets.ts` pakt ze automatisch op en `#/kit` laat zien wat er ligt.
+Portretten staan in `src/assets/avatars/` en heten naar het **gezicht**, niet
+naar de avatar: `vrouw-turks.png`, `man-grijs.png`. Meerdere avatars kunnen
+hetzelfde gezicht gebruiken — welke, staat in het `face`-veld in
+`src/data/avatars.ts`. Zo hoef je een gezicht dat in meer talen terugkomt maar
+één keer aan te leveren.
+
+Eisen aan een portret: PNG met **transparante** achtergrond, figuur staand,
+tot ongeveer het middel. Lever hem gerust ruim aan; `scripts/trim-avatars.mjs`
+snijdt de lege rand eromheen weg zodat elk kader hem goed kan schalen:
+
+```bash
+node scripts/trim-avatars.mjs src/assets/avatars/nieuw-gezicht.png
+```
+
+`silhouet.png` is de grijze placeholder die verschijnt zolang er voor een taal
+nog niets gekozen is. Achtergronden heten `kantoor-1.jpg` tot en met
+`kantoor-4.jpg`; stemfragmenten `src/assets/voices/{avatar-id}.mp3`, dus
+`tr-zeynep.mp3`.
+
+Houd portretten onder de 45 KB en achtergronden onder de 150 KB: de single-file
+build bakt elk bestand als base64 in `dist/index.html` en maakt ze daarbij ruim
+een derde zwaarder. Op `#/kit`, tabblad Tokens, staat geteld wat er ligt.
