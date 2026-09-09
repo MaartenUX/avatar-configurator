@@ -8,8 +8,10 @@ import { nextAction } from '../state/selectors'
 import type { Page } from '../state/types'
 
 describe('content', () => {
-  it('geeft elke volledige pagina vier scènes, ook in vertaling', () => {
-    for (const page of PAGE_CONTENT.filter((p) => !p.thin)) {
+  it('geeft elke pagina vier scènes, ook in vertaling', () => {
+    // Ook de dunne pagina's: ze staan live, dus het beheerscherm toont hun
+    // script en ondertiteling.
+    for (const page of PAGE_CONTENT) {
       expect(page.scenes, page.id).toHaveLength(4)
       for (const [lang, scenes] of Object.entries(page.translations)) {
         expect(scenes, `${page.id} ${lang}`).toHaveLength(4)
@@ -17,8 +19,14 @@ describe('content', () => {
     }
   })
 
+  it('geeft elke pagina in elk geval Nederlandse ondertiteling', () => {
+    for (const page of PAGE_CONTENT) {
+      expect(page.subtitles.nl, page.id).toBeDefined()
+    }
+  })
+
   it('houdt scènes binnen de 50 woorden', () => {
-    for (const page of PAGE_CONTENT.filter((p) => !p.thin)) {
+    for (const page of PAGE_CONTENT) {
       for (const scene of page.scenes) {
         expect(scene.text.trim().split(/\s+/).length, `${page.id}: ${scene.title}`).toBeLessThanOrEqual(50)
       }
@@ -26,7 +34,7 @@ describe('content', () => {
   })
 
   it('geeft ondertitels 8 tot 10 regels met oplopende tijdcodes binnen 1:50', () => {
-    for (const page of PAGE_CONTENT.filter((p) => !p.thin)) {
+    for (const page of PAGE_CONTENT) {
       for (const [lang, lines] of Object.entries(page.subtitles)) {
         expect(lines!.length, `${page.id} ${lang}`).toBeGreaterThanOrEqual(8)
         expect(lines!.length, `${page.id} ${lang}`).toBeLessThanOrEqual(10)

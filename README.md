@@ -11,6 +11,21 @@ npm run typecheck
 npm run build        # dist/index.html — één bestand, opent zonder server
 ```
 
+## Controlescripts
+
+Draaien tegen de dev-server of tegen de single-file build vanaf `file://`.
+
+```bash
+node scripts/verify.mjs      "file://$PWD/dist/index.html"   # alle routes + consolefouten
+node scripts/productie-flow.mjs "file://$PWD/dist/index.html" # testtaken b en c
+node scripts/publiceer-flow.mjs "file://$PWD/dist/index.html" # testtaak d
+node scripts/config-flow.mjs "file://$PWD/dist/index.html"   # testtaak a
+node scripts/polish-check.mjs "file://$PWD/dist/index.html"  # RTL, 1280 en 1440, lege staat
+node scripts/dod-check.mjs   "file://$PWD/dist/index.html" "$PWD/dist"  # eisen uit het bouwplan
+```
+
+Voeg `--shots` toe aan `verify.mjs` voor screenshots van elke route in `shots/`.
+
 ## Handig tijdens de test
 
 | | |

@@ -67,11 +67,12 @@ ook timers die al lopen.
 ### 12. Ondertitels: 8–10 regels over 1:50
 Zoals §9. Bij 180 woorden is dat een rustig tempo, passend bij B1.
 
-### 13. Contentdiepte: 2 pagina's volledig, 3 dun
+### 13. Contentdiepte: 2 pagina's volledig, 3 alleen Nederlands
 Parkeervergunning en Bijstandsuitkering hebben bronpagina, scenes, EN/TR/AR en
-ondertitels. WMO, Paspoort en Afval staan alleen als live kaartje in het
-overzicht; hun script opent tijdens de test niemand. Halveert het schrijfwerk.
-Afgestemd met Maarten op 9 september.
+ondertitels. WMO, Paspoort en Afval kregen alsnog een Nederlandse samenvatting
+en ondertiteling: ze staan live, en wie op "Bekijk" klikt komt op het
+beheerscherm dat het script toont. Zonder die tekst was daar een leeg vlak
+blijven staan. Vertalingen hebben ze niet. Afgestemd met Maarten op 9 september.
 
 ### 14. Fonts via Google Fonts
 Inter plus Noto Sans Arabic (Inter heeft geen Arabisch schrift). Afgestemd met
@@ -88,9 +89,27 @@ transparante leegte. Daardoor zou elke plek in de UI moeten raden hoe ver hij
 inzoomt. `scripts/trim-avatars.mjs` snijdt de rand weg, waarna overal
 `object-contain` volstaat en de figuur nooit halverwege wordt afgesneden.
 
-## Open punt
+### 17. Publiceren is de uitzondering op "terug naar het overzicht"
+Na elk akkoord land je op het overzicht met een toast. Na publiceren blijf je
+staan, want daar hoort de afsluiting met de social-activatie; van daaruit ga je
+zelf terug. Dit staat in `flow.ts`, niet in het scherm.
 
-De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een
-moedertaalspreker nagekeken. Laat vóór de test minimaal de Turkse tekst van
-Parkeervergunning controleren — dat is de enige niet-Nederlandse tekst die in
-testtaak (c) daadwerkelijk geopend wordt.
+## Open punten
+
+1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een
+   moedertaalspreker nagekeken. Laat vóór de test minimaal de Turkse tekst van
+   Parkeervergunning controleren — dat is de enige niet-Nederlandse tekst die
+   in testtaak (c) daadwerkelijk geopend wordt.
+
+2. Er is één mannengezicht te weinig: `en-james` deelt `man-grijs` met
+   `nl-daan`, dus Nederlands en Engels tonen dezelfde man. Zichtbaar in sectie
+   2 van de configuratie als een deelnemer beide talen kiest.
+
+3. Stemfragmenten ontbreken. De speler draait een mock op dezelfde klok; een
+   mp3 in `src/assets/voices/{avatar-id}.mp3` neemt het zonder codewijziging
+   over.
+
+4. WMO, Paspoort en Afval hebben wel een Nederlandse samenvatting en
+   ondertiteling — die toont het beheerscherm — maar geen vertalingen. Klikt
+   een deelnemer bij zo'n pagina op een niet-Nederlandse taal, dan valt de
+   tekst terug op het Nederlands.

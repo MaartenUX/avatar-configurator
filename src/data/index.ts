@@ -45,7 +45,6 @@ if (import.meta.env?.DEV) {
 
   for (const page of PAGE_CONTENT) {
     if (RESERVED_IDS.has(page.id)) problems.push(`${page.id} botst met een route-segment`)
-    if (page.thin) continue
     if (page.scenes.length !== 4) {
       problems.push(`${page.id} heeft ${page.scenes.length} scènes, verwacht 4`)
     }

@@ -37,8 +37,10 @@ export const FLOW: Record<
     destination: () => '/',
     toast: (c) => `Video in het ${langLabel(c.lang!)} goedgekeurd.`,
   },
+  // Publiceren is de enige uitzondering op "terug naar het overzicht": je
+  // blijft staan, want hier hoort de afsluiting. Vanaf daar ga je zelf terug.
   publish: {
-    destination: (c) => `/paginas/${c.pageId}`,
+    destination: (c) => `/paginas/${c.pageId}/publiceren`,
     toast: () => 'Je video staat live op de pagina.',
   },
 }
