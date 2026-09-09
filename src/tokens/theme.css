@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+@theme {
+  /* Tailwind-defaults wissen: alleen merkkleuren zijn bereikbaar.
+     Voorkomt dat er over 40 componenten bg-blue-500 / text-slate-600 insluipt. */
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-blue: #46bad8;
+  --color-blue-tint: #e6faff;
+  --color-blue-shade: #156d84;
+
+  --color-orange: #ff996d;
+  --color-orange-tint: #ffd9c8;
+  --color-orange-shade: #892900;
+
+  --color-green: #bdfcb0;
+  --color-green-tint: #e6fee1;
+  --color-green-shade: #1f9b06;
+
+  --color-red: #ff4242;
+  --color-red-tint: #ffb8b8;
+  --color-red-shade: #780000;
+
+  --color-turq: #7ad3cb;
+  --color-turq-tint: #cdefec;
+  --color-turq-shade: #1f5e58;
+
+  --color-violet: #8ea0ff;
+  --color-violet-tint: #d5dbff;
+  --color-violet-shade: #001895;
+
+  --color-pink: #ff61c0;
+  --color-pink-tint: #ffc4e7;
+  --color-pink-shade: #84004f;
+
+  /* Grijs loopt van donker (1) naar licht (6), zoals in Figma. */
+  --color-gray-1: #333333;
+  --color-gray-2: #4f4f4f;
+  --color-gray-3: #828282;
+  --color-gray-4: #bdbdbd;
+  --color-gray-5: #e0e0e0;
+  --color-gray-6: #f2f2f2;
+  --color-bg: #fafafa;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "Noto Sans Arabic", "Inter", ui-sans-serif, sans-serif;
+
+  --text-display: 40px;
+  --text-display--line-height: 48px;
+  --text-display--font-weight: 600;
+  --text-h1: 32px;
+  --text-h1--line-height: 40px;
+  --text-h1--font-weight: 600;
+  --text-h2: 24px;
+  --text-h2--line-height: 32px;
+  --text-h2--font-weight: 600;
+  --text-h3: 20px;
+  --text-h3--line-height: 28px;
+  --text-h3--font-weight: 500;
+  --text-body: 16px;
+  --text-body--line-height: 24px;
+  --text-body--font-weight: 400;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 20px;
+  --text-body-sm--font-weight: 400;
+  --text-label: 12px;
+  --text-label--line-height: 16px;
+  --text-label--font-weight: 600;
+  --text-label--letter-spacing: 0.08em;
+  --text-button: 16px;
+  --text-button--line-height: 24px;
+  --text-button--font-weight: 500;
+
+  --radius-*: initial;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-pill: 999px;
+
+  --shadow-*: initial;
+  --shadow-card: 1px 1px 0 rgba(0, 0, 0, 0.1), 0 0 16px rgba(0, 0, 0, 0.05);
+  --shadow-pop: 2px 2px 0 rgba(0, 0, 0, 0.08), 0 8px 32px rgba(0, 0, 0, 0.12);
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* text-transform is niet uitdrukbaar als --text-*-modifier, dus label krijgt
+   een eigen utility. text-label alleen zet wel maat/gewicht/spacing. */
+@utility type-label {
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  font-weight: var(--text-label--font-weight);
+  letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+}
+
+@layer base {
+  :root {
+    --bar-h: 72px;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    background: var(--color-bg);
+    color: var(--color-gray-1);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    margin: 0;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  [dir="rtl"] {
+    font-family: var(--font-arabic);
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes highlight-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(70, 186, 216, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgba(70, 186, 216, 0);
+  }
+}

@@ -1,0 +1,61 @@
+import { Link, Outlet } from 'react-router-dom'
+import { ArrowLeft } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { cn } from '../../lib/cn'
+
+/**
+ * Volledig scherm zonder sidebar: links de preview, rechts het paneel.
+ * Dat de sidebar hier wegvalt is opzet — het maakt voelbaar dat je in een
+ * losse stap zit en straks weer terugkomt op het overzicht.
+ */
+export function SpokeLayout() {
+  return (
+    <div className="min-h-svh bg-bg">
+      <Outlet />
+    </div>
+  )
+}
+
+export interface SpokeFrameProps {
+  /** Wat er linksboven staat, standaard "Overzicht". */
+  backTo?: string
+  backLabel?: string
+  help?: ReactNode
+  preview: ReactNode
+  children: ReactNode
+  /** Vergrendeld scherm: geen bewerkbare velden, wel zichtbaar. */
+  locked?: boolean
+}
+
+export function SpokeFrame({
+  backTo = '/',
+  backLabel = 'Overzicht',
+  help,
+  preview,
+  children,
+  locked,
+}: SpokeFrameProps) {
+  return (
+    <div className="flex min-h-svh flex-col">
+      <div className="flex h-[72px] shrink-0 items-center justify-between px-6">
+        <Link
+          to={backTo}
+          className="flex items-center gap-2 rounded-sm px-2 py-1.5 text-body text-gray-2 hover:text-blue-shade"
+        >
+          <ArrowLeft size={18} aria-hidden />
+          {backLabel}
+        </Link>
+        {help}
+      </div>
+
+      <div className="grid flex-1 grid-cols-1 gap-8 px-6 pb-10 lg:grid-cols-[55fr_45fr]">
+        <div className="lg:sticky lg:top-6 lg:h-[calc(100svh-120px)]">
+          <div className="flex h-full items-center justify-center">{preview}</div>
+        </div>
+        <div className={cn('flex flex-col gap-6 py-2', locked && 'pointer-events-none opacity-60')}>
+          {children}
+        </div>
+      </div>
+    </div>
+  )
+}
