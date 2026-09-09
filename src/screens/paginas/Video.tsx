@@ -69,7 +69,7 @@ export default function Video() {
     >
       {wacht ? (
         <WaitScreen
-          title={`De ${langLabel(lang).toLowerCase()}e video wordt gemaakt`}
+          title={`De video in het ${langLabel(lang)} wordt gemaakt`}
           subtitle="Je hoeft hier niet op te wachten. Zodra hij klaar is staat hij op je overzicht."
           timer={page.timer}
           tips={WACHT_TIPS.video}
@@ -92,7 +92,7 @@ export default function Video() {
           />
 
           <ApproveBox
-            consequence={`Na akkoord staat ${langLabel(lang).toLowerCase()} klaar om te publiceren. Zodra alle talen klaar zijn kun je de pagina live zetten.`}
+            consequence={`Na akkoord staat het ${langLabel(lang)} klaar om te publiceren. Zodra alle talen klaar zijn kun je de pagina live zetten.`}
             onApprove={() => {
               approveVideo(page.id, lang)
               finish('video', { pageId: page.id, lang })

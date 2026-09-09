@@ -52,11 +52,13 @@ export function ChoiceTile({
 
       {visual && <div className="overflow-hidden rounded-sm">{visual}</div>}
 
-      <span className="flex items-center gap-2">
+      <span className="flex min-w-0 items-center gap-2">
         {Icon && (
           <Icon size={18} className={selected ? 'text-blue-shade' : 'text-gray-3'} aria-hidden />
         )}
-        <span className={cn('text-h3', selected ? 'text-blue-shade' : 'text-gray-1')}>{title}</span>
+        <span className={cn('min-w-0 break-words text-h3', selected ? 'text-blue-shade' : 'text-gray-1')}>
+          {title}
+        </span>
         {selected && (
           <span className="ml-auto grid size-5 place-items-center rounded-pill bg-blue text-white">
             <Check size={13} strokeWidth={3} aria-hidden />

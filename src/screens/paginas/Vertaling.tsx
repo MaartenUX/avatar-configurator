@@ -73,8 +73,8 @@ export default function Vertaling() {
     >
       <h1 className="text-h2 text-gray-1">{langLabel(lang)}</h1>
       <p className="text-body text-gray-2">
-        Je collega heeft de Nederlandse tekst goedgekeurd. Controleer of de {langLabel(lang).toLowerCase()}e
-        versie klopt en prettig klinkt om uit te spreken.
+        Je collega heeft de Nederlandse tekst goedgekeurd. Controleer of de versie in het{' '}
+        {langLabel(lang)} klopt en prettig klinkt om uit te spreken.
       </p>
 
       <HowBox points={HOE.vertaling} />
@@ -98,7 +98,7 @@ export default function Vertaling() {
       </div>
 
       <ApproveBox
-        consequence={`Na akkoord wordt de ${langLabel(lang).toLowerCase()}e video gemaakt. Dat duurt ongeveer 20 minuten. Daarna controleer je de ondertiteling.`}
+        consequence={`Na akkoord wordt de video in het ${langLabel(lang)} gemaakt. Dat duurt ongeveer 20 minuten. Daarna controleer je de ondertiteling.`}
         onApprove={() => {
           approveLang(page.id, lang)
           finish('lang', { pageId: page.id, lang })

@@ -198,7 +198,7 @@ export function S4Personaliseren() {
                   </span>
                 )}
               </span>
-              <span className="flex gap-2">
+              <span className="flex flex-wrap gap-2">
                 <Button
                   size="sm"
                   variant={standaard ? 'primary' : 'secondary'}
@@ -295,7 +295,7 @@ export function S5Widget() {
 
       <div className="flex flex-col gap-2">
         <h3 className="text-h3 text-gray-1">Plek op de pagina</h3>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3">
           {HOEKEN.map((h) => (
             <ChoiceTile
               key={h.id}

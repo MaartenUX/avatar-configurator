@@ -31,11 +31,11 @@ export const FLOW: Record<
   },
   lang: {
     destination: () => '/',
-    toast: (c) => `${langLabel(c.lang!)} goedgekeurd — de video wordt nu gemaakt.`,
+    toast: (c) => `Tekst in het ${langLabel(c.lang!)} goedgekeurd — de video wordt nu gemaakt.`,
   },
   video: {
     destination: () => '/',
-    toast: (c) => `Video ${langLabel(c.lang!)} goedgekeurd.`,
+    toast: (c) => `Video in het ${langLabel(c.lang!)} goedgekeurd.`,
   },
   publish: {
     destination: (c) => `/paginas/${c.pageId}`,
