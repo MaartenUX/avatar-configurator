@@ -34,3 +34,32 @@ export const fallbackContent = (id: string, url: string, title: string): PageCon
 
 export * from './types'
 export * from './langs'
+
+/**
+ * Bewakingen die alleen in ontwikkeling draaien. Ze vangen het soort fout dat
+ * anders pas tijdens de gebruikerstest opvalt: een pagina met drie scènes, een
+ * taal zonder aanbevolen avatar, of een id dat met een route botst.
+ */
+if (import.meta.env?.DEV) {
+  const problems: string[] = []
+
+  for (const page of PAGE_CONTENT) {
+    if (RESERVED_IDS.has(page.id)) problems.push(`${page.id} botst met een route-segment`)
+    if (page.thin) continue
+    if (page.scenes.length !== 4) {
+      problems.push(`${page.id} heeft ${page.scenes.length} scènes, verwacht 4`)
+    }
+    for (const [lang, scenes] of Object.entries(page.translations)) {
+      if (scenes?.length !== page.scenes.length) {
+        problems.push(`${page.id} ${lang} heeft ${scenes?.length} scènes, NL heeft ${page.scenes.length}`)
+      }
+    }
+    for (const [lang, lines] of Object.entries(page.subtitles)) {
+      if (!lines || lines.length < 8 || lines.length > 10) {
+        problems.push(`${page.id} ${lang} heeft ${lines?.length} ondertitelregels, verwacht 8 tot 10`)
+      }
+    }
+  }
+
+  if (problems.length) console.warn('[data]\n  ' + problems.join('\n  '))
+}

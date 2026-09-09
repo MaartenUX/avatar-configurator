@@ -11,12 +11,14 @@ import { PAGE_CONTENT } from '../data'
 import { LANGS } from '../data/langs'
 import { cn } from '../lib/cn'
 import { ComponentsPanel } from './kit/ComponentsPanel'
+import { DomainPanel } from './kit/DomainPanel'
 import { KitBlock } from './kit/KitBlock'
 
-type Tab = 'componenten' | 'tokens' | 'state' | 'data' | 'routes'
+type Tab = 'componenten' | 'domein' | 'tokens' | 'state' | 'data' | 'routes'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'componenten', label: 'Componenten' },
+  { id: 'domein', label: 'Domein' },
   { id: 'tokens', label: 'Tokens' },
   { id: 'state', label: 'State' },
   { id: 'data', label: 'Content' },
@@ -55,6 +57,7 @@ export default function Kit() {
       </div>
 
       {tab === 'componenten' && <ComponentsPanel />}
+      {tab === 'domein' && <DomainPanel />}
       {tab === 'tokens' && <TokensPanel />}
       {tab === 'state' && <StatePanel />}
       {tab === 'data' && <DataPanel />}
