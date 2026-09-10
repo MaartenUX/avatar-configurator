@@ -94,6 +94,68 @@ Na elk akkoord land je op het overzicht met een toast. Na publiceren blijf je
 staan, want daar hoort de afsluiting met de social-activatie; van daaruit ga je
 zelf terug. Dit staat in `flow.ts`, niet in het scherm.
 
+---
+
+# CHANGES-01 — 10 september
+
+## Afgestemd met Maarten
+
+### 18. Het overzicht wordt de hub
+Zonder zijbalk hadden Pagina's en Team geen enkel toegangspunt meer. Pagina's
+vervalt als scherm — het overzicht toont dezelfde kaarten, in productie én live
+— en `/paginas` redirect naar `/`. Team en Hulp staan in de voettekst.
+
+### 19. Alleen de ondertiteltracks die de test opent gaan naar 28 regels
+Nederlands en Turks van Parkeervergunning en Bijstandsuitkering. De overige
+zeven tracks blijven op 10 regels; die komt tijdens de test niemand tegen.
+Scheelt ruim 200 regels handgeschreven tekst waarvan het meeste in het Turks en
+Arabisch niemand kan proeflezen.
+
+### 20. Beheer en de publiceerstap houden allebei hun publiceerblokken
+De changelijst koos voor dubbeling boven één plek. Om te voorkomen dat de twee
+uit elkaar groeien renderen ze dezelfde componenten: `EmbedBlok` en
+`Distributie` in `src/components/domain/Distributie.tsx`.
+
+## Vervallen beslissingen
+
+- **§2.8 uit het bouwplan (opnieuw draaien kost een credit)** vervalt. Er zijn
+  nu twee potten: uitlegvideo's (10, één per pagina) en opnieuw maken (5,
+  gezamenlijk voor alle video's). Het woord *credit* komt nergens meer voor.
+- **De mailbevestiging na het vastleggen** vervalt. Je komt op een demo-pagina
+  met een deelbare link; collega's horen pas iets zodra er een pagina is
+  toegevoegd.
+- **Beslissing 12 (ondertitels 8–10 regels over 1:50)** is deels achterhaald.
+  Elf seconden per regel was ongeveer het dubbele van comfortabel; de vier
+  tracks die de test opent zitten nu op vier seconden per regel, wat precies
+  uitkomt op de 180 woorden van het script.
+
+## Nieuwe keuzes binnen CHANGES-01
+
+### 21. De spraaktips — zeven voorstellen, schrap wat je niet wilt
+Ze staan in `src/data/spraaktips.ts` en verschijnen in het zijpaneel bij elke
+tekststap:
+
+1. Houd zinnen kort en zeg één ding per zin. Een stem kan geen komma's laten horen.
+2. Schrijf getallen voluit als ze belangrijk zijn: "zesentwintig euro" klinkt rustiger dan "26 euro".
+3. Schrijf afkortingen uit. "Bijvoorbeeld" in plaats van "bijv.".
+4. Klinkt een naam verkeerd? Schrijf hem op zoals hij klinkt, bijvoorbeeld "Berch-rode".
+5. Maak van een opsomming een lopende zin. Streepjes hoor je niet.
+6. Zet het belangrijkste vooraan in de zin. De kijker kan niet terugspoelen.
+7. Lees je aanpassing hardop. Struikel jij erover, dan doet de stem dat ook.
+
+De videostap heeft een eigen variant met vier tips over ondertiteling, want die
+stap gaat niet over spraak.
+
+### 22. Downloads hangen aan "goedgekeurd", niet aan "live"
+Op de publiceerstap zijn de video's klaar terwijl de widget nog niet live
+staat. De knop hoort daar gewoon te werken; alleen het embed-blok meldt dat de
+widget pas actief wordt na publiceren.
+
+### 23. Een afgetekende stap is terug te kijken
+Bij hover op een goedgekeurde taalregel verschijnt "Bekijk", die de spaak opent
+met `?bekijk=1`. De velden zijn dan dood en een balk vervangt de akkoordknop.
+De `locked`-prop op `SpokeFrame` bestond al maar werd nergens doorgegeven.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

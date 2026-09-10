@@ -185,8 +185,8 @@ export default function Configuratie() {
             <div className="mb-8 rounded-md bg-white p-5 shadow-card">
               <h1 className="text-h2 text-gray-1">Voordat je begint</h1>
               <p className="mt-1.5 text-body text-gray-2">
-                Dit duurt ongeveer een kwartier. Je hebt nodig: het webadres van je website,
-                eventueel eigen achtergrondfoto’s, en de namen van collega’s per taal.
+                Dit duurt ongeveer een kwartier. Je hebt nodig: het webadres van je website, en
+                eventueel eigen achtergrondfoto’s.
               </p>
               <p className="mt-1.5 text-body-sm text-gray-3">
                 Je kunt altijd stoppen en later verdergaan.

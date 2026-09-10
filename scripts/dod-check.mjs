@@ -18,9 +18,6 @@ eis('dist bevat alleen index.html', bestanden.length === 1 && bestanden[0] === '
   bestanden.join(', '))
 
 const html = readFileSync(`${dist}/index.html`, 'utf8')
-const extern = [...html.matchAll(/(?:src|href)="(https?:\/\/[^"]+)"/g)].map((m) => m[1])
-const nietFonts = extern.filter((u) => !u.includes('fonts.g'))
-eis('geen externe verwijzingen behalve fonts', nietFonts.length === 0, nietFonts.join(', '))
 eis('bestand blijft onder 8 MB', html.length < 8 * 1024 * 1024,
   `${(html.length / 1024 / 1024).toFixed(2)} MB`)
 
@@ -33,6 +30,16 @@ page.on('console', (m) => m.type() === 'error' && fouten.push(m.text()))
 await page.goto(`${base}#/`, { waitUntil: 'load' })
 await page.waitForTimeout(600)
 eis('opent vanaf file:// zonder server', (await page.$eval('#root', (e) => e.children.length)) > 0)
+
+// 3. Wat laadt de pagina echt van buiten? In de DOM kijken, niet in de tekst:
+// het embed-veld bevat een scripttag als tekst die de gebruiker kopieert.
+const extern = await page.evaluate(() =>
+  [...document.querySelectorAll('script[src], link[href], img[src], iframe[src]')]
+    .map((el) => el.getAttribute('src') || el.getAttribute('href') || '')
+    .filter((u) => /^https?:/.test(u)),
+)
+const nietFonts = extern.filter((u) => !u.includes('fonts.g'))
+eis('laadt niets van buiten behalve fonts', nietFonts.length === 0, nietFonts.join(', '))
 
 // 3. Geen Engelse UI-termen of lorem op de schermen.
 const verboden = ['lorem', 'summary', 'translate', 'pipeline', 'credit']
@@ -47,7 +54,7 @@ for (const route of ['/', '/configuratie', '/configuratie/demo', '/paginas/nieuw
 eis('geen Engelse UI-termen of lorem', gevonden.size === 0, [...gevonden].join(', '))
 
 // 4. ?fast=1 versnelt de timers naar een seconde.
-await page.goto(`${base}?fast=1#/?reset=1`, { waitUntil: 'load' })
+await page.goto(`${base}?fast=1&scenario=tweede#/`, { waitUntil: 'load' })
 await page.waitForTimeout(500)
 await page.goto(`${base}?fast=1#/paginas/nieuw`, { waitUntil: 'load' })
 await page.waitForTimeout(400)
@@ -66,7 +73,7 @@ eis('na akkoord terug op het overzicht met een toast',
   url.endsWith('#/') && body.includes('Basissamenvatting goedgekeurd'), url)
 
 // 6. Elke wachtstap noemt de tijd; elke akkoordstap noemt de consequentie.
-await page.goto(`${base}#/?reset=1`, { waitUntil: 'load' })
+await page.goto(`${base}?scenario=tweede#/`, { waitUntil: 'load' })
 await page.waitForTimeout(500)
 await page.goto(`${base}#/paginas/p-bijstand/video/ar`, { waitUntil: 'load' })
 await page.waitForTimeout(500)
@@ -78,7 +85,18 @@ await page.waitForTimeout(500)
 const akkoord = await page.textContent('body')
 eis('akkoordstap noemt de consequentie', akkoord.includes('Na akkoord'))
 
-// 7. Credits lopen mee.
+// 7. Elk shell-scherm is bereikbaar zonder zijbalk.
+await page.goto(`${base}#/`, { waitUntil: 'load' })
+await page.waitForTimeout(400)
+const teamLink = await page.getByRole('link', { name: 'Team', exact: true }).count()
+const hulpLink = await page.getByRole('link', { name: /Veelgestelde vragen/ }).count()
+eis('Team en Hulp bereikbaar vanaf het overzicht', teamLink > 0 && hulpLink > 0,
+  `team=${teamLink} hulp=${hulpLink}`)
+
+await page.goto(`${base}#/paginas`, { waitUntil: 'load' })
+await page.waitForTimeout(500)
+eis('/paginas redirect naar het overzicht', page.url().endsWith('#/'), page.url().split('#')[1])
+
 eis('geen consolefouten tijdens de controle', fouten.length === 0, [...new Set(fouten)].join(' | '))
 
 await browser.close()

@@ -1,5 +1,5 @@
 import { useState, type RefObject } from 'react'
-import { Check, Mail, Pencil, Send } from 'lucide-react'
+import { ArrowRight, Check, Pencil, Send } from 'lucide-react'
 import { Button, Card, VideoPreview } from '../../components'
 import { useStore } from '../../state/store'
 import { avatarById } from '../../data/avatars'
@@ -128,9 +128,9 @@ export function S6Vastleggen({ gridSentinel, onWijzig, onVastgelegd }: S6Props) 
         <Card className="flex flex-col gap-3 border-2 border-green-shade">
           <h3 className="text-h3 text-gray-1">Vastgelegd</h3>
           <p className="text-body text-gray-2">
-            We hebben een bevestiging gestuurd naar e.devries@bergrode.nl en naar je collega’s.
+            Bekijk hoe het eruitziet en deel het gerust met je collega’s.
           </p>
-          <Button iconLeft={Mail} onClick={onVastgelegd}>Open de mail</Button>
+          <Button iconLeft={ArrowRight} onClick={onVastgelegd}>Bekijk de demo</Button>
         </Card>
       ) : (
         <Card className="flex flex-col gap-4 border-2 border-blue">

@@ -63,7 +63,7 @@ export function SiteMock({
       )}
     >
       {config.siteScreenshot ? (
-        <img src={config.siteScreenshot} alt="" className="size-full object-cover object-top" />
+        <img src={config.siteScreenshot} alt="" className="size-full scale-105 object-cover object-top blur-[4px]" />
       ) : (
         <>
           {/* Sitekop: krijgt de opgehaalde huisstijlkleur zodra die er is. */}
@@ -180,7 +180,7 @@ function VideoFrame({ config, shot }: { config: Config; shot: number }) {
   return (
     <div className="absolute inset-2 overflow-hidden rounded-sm bg-gray-1">
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 scale-105 blur-[6px]"
         style={
           bg
             ? { backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }

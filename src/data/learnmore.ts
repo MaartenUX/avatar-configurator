@@ -143,7 +143,7 @@ export const LEARN_MORE: LearnMoreDef[] = [
       'Na het vastleggen kunt u de configuratie wel bekijken, maar niet meer wijzigen. Dat is geen administratieve regel: avatar, achtergronden en huisstijl zitten in elk gerenderd beeld. Iets veranderen betekent alle video’s opnieuw maken.',
     features: [
       { icon: 'ShieldCheck', label: 'Eén keer instellen' },
-      { icon: 'Mail', label: 'Bevestiging per mail' },
+      { icon: 'Eye', label: 'Demo om te delen' },
       { icon: 'Eye', label: 'Altijd in te zien' },
       { icon: 'CircleHelp', label: 'Hulp bij twijfel' },
     ],
@@ -153,8 +153,8 @@ export const LEARN_MORE: LearnMoreDef[] = [
         a: 'Neem contact op met XS2Content. Opnieuw instellen kan, maar betekent een volledig nieuwe set-up en nieuwe video’s voor al uw pagina’s.',
       },
       {
-        q: 'Wie krijgt de bevestigingsmail?',
-        a: 'Alle accounts onder uw hoofdaccount, zodat uw collega’s weten dat ze aan de slag kunnen.',
+        q: 'Wanneer horen mijn collega’s hiervan?',
+        a: 'Pas als u de eerste pagina heeft toegevoegd en de basissamenvatting heeft goedgekeurd. Dan krijgen ze één bericht met wat er van hen wordt verwacht.',
       },
       {
         q: 'Kan ik nu al stoppen en later verder?',

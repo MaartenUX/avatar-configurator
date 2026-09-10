@@ -78,8 +78,8 @@ export function S1Talen() {
 
       {config.languages.length > 1 && (
         <AdviceBox label="Goed om te weten">
-          Je kiest {config.languages.length} talen. Voor elke taal behalve Nederlands wijs je
-          straks een collega aan die de tekst controleert voordat de video gemaakt wordt.
+          Je kiest {config.languages.length} talen. Voor elke taal behalve Nederlands heb je
+          straks een collega nodig die de tekst controleert voordat de video gemaakt wordt.
         </AdviceBox>
       )}
     </>
@@ -191,7 +191,7 @@ export function S4Personaliseren() {
               <span className="type-label text-gray-3">Scène {i + 1}</span>
               <span className="overflow-hidden rounded-sm">
                 {src ? (
-                  <img src={src} alt="" className="aspect-video w-full object-cover" />
+                  <img src={src} alt="" className="aspect-video w-full scale-105 object-cover blur-[6px]" />
                 ) : (
                   <span className="grid aspect-video w-full place-items-center bg-turq-tint text-body-sm text-turq-shade">
                     Kantoorshot {i + 1}

@@ -22,6 +22,7 @@ node scripts/publiceer-flow.mjs "file://$PWD/dist/index.html" # testtaak d
 node scripts/config-flow.mjs "file://$PWD/dist/index.html"   # testtaak a
 node scripts/polish-check.mjs "file://$PWD/dist/index.html"  # RTL, 1280 en 1440, lege staat
 node scripts/dod-check.mjs   "file://$PWD/dist/index.html" "$PWD/dist"  # eisen uit het bouwplan
+node scripts/scenario-check.mjs "file://$PWD/dist/index.html"            # de vier scenario's
 ```
 
 Voeg `--shots` toe aan `verify.mjs` voor screenshots van elke route in `shots/`.
@@ -32,8 +33,14 @@ Voeg `--shots` toe aan `verify.mjs` voor screenshots van elke route in `shots/`.
 |---|---|
 | `#/kit` | alle componenten, tokens, content en state op één pagina |
 | `?fast=1` | alle mock-timers naar 1 seconde |
-| `?reset=1` | terug naar de seed-staat |
-| `?reset=empty` | terug naar de lege staat (eerste keer) |
+| `?scenario=eerste` | eerste keer: nog geen configuratie |
+| `?scenario=tweede` | één pagina in productie, twee live |
+| `?scenario=derde` | alles live |
+| `?scenario=emre` | zelfde data als tweede, gezien door de Turkse collega |
+| `?reset=1` | het huidige scenario terugzetten naar zijn beginstand |
+
+Je kunt het scenario ook rechtsboven in de header kiezen. Elke stand wordt vers
+opgebouwd, dus wat je in de ene doet lekt niet door naar de andere.
 
 Vlaggen werken zowel vóór als achter de hash: `index.html?fast=1#/` en
 `index.html#/?fast=1`.

@@ -85,8 +85,11 @@ export function VideoPreview({
         className,
       )}
     >
+      {/* Licht geblurd, zoals in het echte product: de achtergrond mag de
+          avatar niet wegconcurreren. scale-105 voorkomt een doorschijnende
+          rand rond het geblurde vlak. */}
       <div
-        className="absolute inset-0 transition-opacity duration-500"
+        className="absolute inset-0 scale-105 blur-[7px] transition-opacity duration-500"
         style={
           bg
             ? { backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
