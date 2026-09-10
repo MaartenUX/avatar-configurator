@@ -110,7 +110,7 @@ export default function Video() {
         options={REDENEN}
         value={reden}
         onValueChange={setReden}
-        confirmLabel="Opnieuw maken (1 credit)"
+        confirmLabel="Opnieuw maken"
         onConfirm={() => {
           rerun(page.id, lang)
           setDialoog(false)

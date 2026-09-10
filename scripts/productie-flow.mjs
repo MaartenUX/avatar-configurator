@@ -24,7 +24,7 @@ let fouten = 0
 const check = async (n, t) => { if (!(await stap(n, t))) fouten++ }
 
 // Seed-staat, snelle timers.
-await page.goto(`${base}?fast=1#/?reset=1`, { waitUntil: 'load' })
+await page.goto(`${base}?fast=1&scenario=tweede#/`, { waitUntil: 'load' })
 await page.waitForTimeout(600)
 
 // (b) Pagina toevoegen, samenvatting goedkeuren, script finetunen.

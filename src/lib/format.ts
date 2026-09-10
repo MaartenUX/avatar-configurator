@@ -1,6 +1,10 @@
-/** "8 van 10 credits" */
-export const creditsLabel = (used: number, total: number) =>
-  `${Math.max(0, total - used)} van ${total} credits`
+/** "7 van 10 uitlegvideo's over" */
+export const videosLabel = (used: number, total: number) =>
+  `${Math.max(0, total - used)} van ${total} uitlegvideo’s over`
+
+/** "5× opnieuw maken over" */
+export const rerunsLabel = (used: number, total: number) =>
+  `${Math.max(0, total - used)}× opnieuw maken over`
 
 export const wordCount = (text: string) =>
   text.trim() ? text.trim().split(/\s+/).length : 0

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Lock, Save } from 'lucide-react'
-import { Button, LockedBanner, PreviewGrid, SiteMock, Stepper } from '../../components'
+import { Button, LockedBanner, PreviewGrid, SiteMock } from '../../components'
 import { ProgressBar } from '../../components/layout/ProgressBar'
 import { useStore } from '../../state/store'
 import { SECTIONS, doneSections, firstOpenSection } from './sections'
@@ -130,15 +130,15 @@ export default function Configuratie() {
       <S6Vastleggen
         gridSentinel={gridSentinel}
         onWijzig={scrollNaar}
-        onVastgelegd={() => navigate('/configuratie/bevestigd')}
+        onVastgelegd={() => navigate('/configuratie/demo')}
       />
     ),
   }
 
   return (
-    <div className="-mt-8">
+    <div>
       {/* Sticky balk: waar ben je, en hoe stop je tussentijds. */}
-      <div className="sticky top-[72px] z-20 -mx-6 border-b border-gray-5 bg-bg/95 px-6 py-3 backdrop-blur">
+      <div className="sticky top-[72px] z-20 border-b border-gray-5 bg-white/95 px-6 py-3 backdrop-blur">
         <div className="flex items-center gap-6">
           <span className="min-w-0 flex-1">
             <ProgressBar
@@ -153,9 +153,9 @@ export default function Configuratie() {
         </div>
       </div>
 
-      <div className="grid gap-10 pt-6 lg:grid-cols-[52fr_48fr]">
+      <div className="grid lg:grid-cols-2">
         {/* Links: de preview die meegroeit met wat rechts gekozen wordt. */}
-        <div className="hidden lg:block">
+        <div className="hidden bg-bg px-8 py-8 lg:block">
           <div className="sticky top-[152px] flex flex-col gap-4">
             <div className="relative">
               <div
@@ -176,17 +176,11 @@ export default function Configuratie() {
               </div>
             </div>
 
-            <Stepper
-              steps={SECTIONS.map((s) => ({ id: s.id, label: s.title }))}
-              current={active}
-              done={gedaan}
-              onStepClick={scrollNaar}
-            />
           </div>
         </div>
 
         {/* Rechts: één doorlopende scrollpagina. */}
-        <div className="flex flex-col">
+        <div className="flex flex-col bg-white px-8 py-8">
           {!vergrendeld && (
             <div className="mb-8 rounded-md bg-white p-5 shadow-card">
               <h1 className="text-h2 text-gray-1">Voordat je begint</h1>

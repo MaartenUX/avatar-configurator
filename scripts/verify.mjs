@@ -16,10 +16,10 @@ const outDir = 'shots'
 const ROUTES = [
   ['/kit', 'Componenten en tokens'],
   ['/', 'Bergrode'],
-  ['/paginas', "Pagina's"],
   ['/team', 'Team'],
   ['/hulp', 'Hulp'],
   ['/configuratie', 'Configuratie'],
+  ['/configuratie/demo', 'Zo ziet het eruit'],
   ['/paginas/p-bijstand', null],
   ['/paginas/nieuw', 'Pagina toevoegen'],
   ['/paginas/p-bijstand/samenvatting', 'Basissamenvatting'],

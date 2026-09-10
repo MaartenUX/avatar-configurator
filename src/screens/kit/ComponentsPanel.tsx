@@ -36,7 +36,7 @@ export function ComponentsPanel() {
         <KitRow>
           <Button disabled>Uitgeschakeld</Button>
           <Button loading>Bezig</Button>
-          <Button variant="secondary" disabled>Geen credits</Button>
+          <Button variant="secondary" disabled>Niets meer over</Button>
         </KitRow>
       </KitBlock>
 
@@ -106,7 +106,7 @@ export function ComponentsPanel() {
         <KitRow>
           <StatCard label="Weergaven Nederlands" value={2891} sub="afgelopen 30 dagen" />
           <StatCard label="Weergaven Turks" value={264} sub="afgelopen 30 dagen" />
-          <StatCard label="Credits over" value="8" sub="van 10" />
+          <StatCard label="Uitlegvideo’s over" value="7" sub="van 10" />
         </KitRow>
       </KitBlock>
 
@@ -151,7 +151,7 @@ export function ComponentsPanel() {
           open={dialog}
           onClose={() => setDialog(false)}
           title="Video is niet oké?"
-          description="Vertel wat er mis is. Opnieuw maken kost 1 credit."
+          description="Vertel wat er mis is. Opnieuw maken gaat van je gezamenlijke pot."
           options={[
             { id: 'avatar', label: 'Avatar ziet er vreemd uit' },
             { id: 'sync', label: 'Spraak loopt niet synchroon' },
@@ -159,7 +159,7 @@ export function ComponentsPanel() {
           ]}
           value={reason}
           onValueChange={setReason}
-          confirmLabel="Opnieuw maken (1 credit)"
+          confirmLabel="Opnieuw maken"
           onConfirm={() => setDialog(false)}
         />
       </KitBlock>

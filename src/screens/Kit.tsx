@@ -8,8 +8,10 @@ import { useCountdown } from '../state/useCountdown'
 import { nextAction } from '../state/selectors'
 import { assetCounts } from '../lib/assets'
 import { PAGE_CONTENT } from '../data'
+import { SCENARIOS } from '../data/seed'
 import { LANGS } from '../data/langs'
 import { cn } from '../lib/cn'
+import { ShellContainer } from '../components'
 import { ComponentsPanel } from './kit/ComponentsPanel'
 import { DomainPanel } from './kit/DomainPanel'
 import { KitBlock } from './kit/KitBlock'
@@ -29,6 +31,7 @@ export default function Kit() {
   const [tab, setTab] = useState<Tab>('componenten')
 
   return (
+    <ShellContainer>
     <section className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-h1 text-gray-1">Componenten en tokens</h1>
@@ -63,6 +66,7 @@ export default function Kit() {
       {tab === 'data' && <DataPanel />}
       {tab === 'routes' && <RoutesPanel />}
     </section>
+    </ShellContainer>
   )
 }
 
@@ -193,8 +197,9 @@ function StatePanel() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center gap-2">
-        <KitButton onClick={() => store.resetTo('seed')}>Reset naar seed</KitButton>
-        <KitButton onClick={() => store.resetTo('empty')}>Reset naar leeg</KitButton>
+        {SCENARIOS.map((sc) => (
+          <KitButton key={sc.id} onClick={() => store.setScenario(sc.id)}>{sc.label}</KitButton>
+        ))}
         <KitButton onClick={() => store.setFast(!store.fast)}>
           Snel: {store.fast ? 'aan' : 'uit'}
         </KitButton>
@@ -240,7 +245,7 @@ function StatePanel() {
       <div className="rounded-md bg-white p-4 shadow-card">
         <p className="type-label mb-2 text-gray-3">Klok</p>
         <p className="text-body-sm text-gray-2">
-          now = {now} · credits {store.credits.used}/{store.credits.total} · gebruiker {store.user}
+          now = {now} · video’s {store.videos.used}/{store.videos.total} · opnieuw {store.reruns.used}/{store.reruns.total} · {store.user}
         </p>
       </div>
 
@@ -248,7 +253,7 @@ function StatePanel() {
         <summary className="cursor-pointer text-body text-gray-1">Volledige state</summary>
         <pre className="mt-3 max-h-96 overflow-auto rounded-sm bg-gray-6 p-3 text-body-sm text-gray-2">
           {JSON.stringify(
-            { config: store.config, credits: store.credits, pages: store.pages.map((p) => ({ ...p, scenes: `${p.scenes.length} scenes`, translations: Object.keys(p.translations), subtitles: Object.keys(p.subtitles) })) },
+            { config: store.config, videos: store.videos, reruns: store.reruns, pages: store.pages.map((p) => ({ ...p, scenes: `${p.scenes.length} scenes`, translations: Object.keys(p.translations), subtitles: Object.keys(p.subtitles) })) },
             null,
             2,
           )}

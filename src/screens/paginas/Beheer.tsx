@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { Copy, Download, ExternalLink, Eye, RefreshCw } from 'lucide-react'
 import {
-  Button, Card, Dialog, LanguageRow, StatCard, VideoPreview,
+  Button, Card, Dialog, LanguageRow, ShellContainer, StatCard, VideoPreview,
 } from '../../components'
 import { useStore } from '../../state/store'
 import { findPage, totalViews } from '../../state/selectors'
@@ -16,7 +16,7 @@ export default function Beheer() {
   const page = useStore((s) => findPage(s.pages, id))
   const config = useStore((s) => s.config)
   const rerun = useStore((s) => s.rerun)
-  const credits = useStore((s) => s.credits)
+  const reruns = useStore((s) => s.reruns)
   const [opnieuw, setOpnieuw] = useState(false)
 
   if (!page) return <Navigate to="/paginas" replace />
@@ -26,6 +26,7 @@ export default function Beheer() {
   const script = page.scenes.map((s, i) => `${i + 1}. ${s.title}\n${s.text}`).join('\n\n')
 
   return (
+    <ShellContainer>
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-1">
         <h1 className="text-h1 text-gray-1">{page.title}</h1>
@@ -125,13 +126,14 @@ export default function Beheer() {
         open={opnieuw}
         onClose={() => setOpnieuw(false)}
         title="Deze pagina opnieuw maken?"
-        description={`We lezen de pagina opnieuw en maken een nieuwe samenvatting. Je controleert daarna alles opnieuw: de tekst, de vertalingen en de ondertiteling. Dit kost 1 credit; je hebt er ${credits.total - credits.used}.`}
-        confirmLabel="Ja, maak opnieuw (1 credit)"
+        description={`We lezen de pagina opnieuw en maken een nieuwe samenvatting. Je controleert daarna alles opnieuw: de tekst, de vertalingen en de ondertiteling. Je kunt nog ${reruns.total - reruns.used}× een video opnieuw laten maken.`}
+        confirmLabel="Ja, maak opnieuw"
         onConfirm={() => {
           rerun(page.id)
           setOpnieuw(false)
         }}
       />
     </div>
+    </ShellContainer>
   )
 }

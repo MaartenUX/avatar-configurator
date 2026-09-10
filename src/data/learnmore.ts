@@ -140,7 +140,7 @@ export const LEARN_MORE: LearnMoreDef[] = [
     id: 'vastleggen',
     title: 'Vastleggen',
     body:
-      'Na het vastleggen kunt u de configuratie wel bekijken, maar niet meer wijzigen. Dat is geen administratieve regel: avatar, achtergronden en huisstijl zitten in elk gerenderd beeld. Iets veranderen betekent alle video’s opnieuw maken, en dat kost opnieuw credits.',
+      'Na het vastleggen kunt u de configuratie wel bekijken, maar niet meer wijzigen. Dat is geen administratieve regel: avatar, achtergronden en huisstijl zitten in elk gerenderd beeld. Iets veranderen betekent alle video’s opnieuw maken.',
     features: [
       { icon: 'ShieldCheck', label: 'Eén keer instellen' },
       { icon: 'Mail', label: 'Bevestiging per mail' },

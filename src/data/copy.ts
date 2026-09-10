@@ -67,10 +67,10 @@ export const FAQ_KORT = [
   },
   {
     q: 'Kan ik dit later nog wijzigen?',
-    a: 'De tekst wel, zolang je nog niet akkoord bent. Na akkoord gaat de video in productie en kost opnieuw draaien een credit.',
+    a: 'De tekst wel, zolang je nog niet akkoord bent. Na akkoord gaat de video in productie; opnieuw laten maken gaat dan van je gezamenlijke pot.',
   },
   {
-    q: 'Wat is een credit?',
-    a: 'Elke nieuwe pagina kost één credit, en een video opnieuw laten maken ook. Je ziet rechtsboven hoeveel je er nog hebt.',
+    q: 'Hoeveel video’s mag ik maken?',
+    a: 'Rechtsboven zie je hoeveel uitlegvideo’s je nog kunt maken. Daarnaast staat hoe vaak je nog een video opnieuw kunt laten maken; dat is één pot voor al je video’s samen.',
   },
 ]

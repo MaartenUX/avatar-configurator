@@ -17,7 +17,7 @@ const check = async (naam, tekst) => {
   console.log(`${ok ? '  ok' : 'FAIL'}  ${naam}  ("${tekst}")`)
 }
 
-await page.goto(`${base}?fast=1#/?reset=1`, { waitUntil: 'load' })
+await page.goto(`${base}?fast=1&scenario=tweede#/`, { waitUntil: 'load' })
 await page.waitForTimeout(500)
 
 const P = 'p-bijstand'

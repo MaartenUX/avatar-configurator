@@ -11,10 +11,9 @@ export { StatCard } from './primitives/StatCard'
 export { Dialog } from './primitives/Dialog'
 
 // Layout
-export { ShellLayout } from './layout/ShellLayout'
+export { ShellLayout, ShellContainer } from './layout/ShellLayout'
 export { SpokeLayout, SpokeFrame } from './layout/SpokeLayout'
-export { SidebarItem } from './layout/SidebarItem'
-export { CreditsMeter } from './layout/CreditsMeter'
+export { VideoMeter } from './layout/VideoMeter'
 export { Stepper } from './layout/Stepper'
 export { ProgressBar } from './layout/ProgressBar'
 export { PipelineStep } from './layout/PipelineStep'

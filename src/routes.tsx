@@ -7,8 +7,7 @@ import Hulp from './screens/Hulp'
 import NotFound from './screens/NotFound'
 import Kit from './screens/Kit'
 import Configuratie from './screens/configuratie/Configuratie'
-import Bevestigd from './screens/configuratie/Bevestigd'
-import PaginaLijst from './screens/paginas/PaginaLijst'
+import Demo from './screens/configuratie/Demo'
 import Beheer from './screens/paginas/Beheer'
 import NieuwePagina from './screens/paginas/NieuwePagina'
 import Samenvatting from './screens/paginas/Samenvatting'
@@ -37,8 +36,7 @@ export interface RouteDef {
 export const ROUTES: RouteDef[] = [
   { path: '/', layout: 'shell', label: 'Overzicht' },
   { path: '/configuratie', layout: 'shell', label: 'Configuratie' },
-  { path: '/configuratie/bevestigd', layout: 'shell', label: 'Configuratie bevestigd' },
-  { path: '/paginas', layout: 'shell', label: "Pagina's" },
+  { path: '/configuratie/demo', layout: 'shell', label: 'Demo' },
   { path: '/paginas/:id', layout: 'shell', label: 'Pagina beheren' },
   { path: '/team', layout: 'shell', label: 'Team' },
   { path: '/hulp', layout: 'shell', label: 'Hulp' },
@@ -76,8 +74,9 @@ export function RouteTree() {
       <Route element={<ShellLayout />}>
         <Route path="/" element={<Overzicht />} />
         <Route path="/configuratie" element={<Configuratie />} />
-        <Route path="/configuratie/bevestigd" element={<Bevestigd />} />
-        <Route path="/paginas" element={<PaginaLijst />} />
+        <Route path="/configuratie/demo" element={<Demo />} />
+        {/* De paginalijst is opgegaan in het overzicht; oude links blijven werken. */}
+        <Route path="/paginas" element={<Navigate to="/" replace />} />
         <Route path="/paginas/:id" element={<Beheer />} />
         <Route path="/team" element={<Team />} />
         <Route path="/hulp" element={<Hulp />} />

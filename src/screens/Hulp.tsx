@@ -1,14 +1,22 @@
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { ChevronDown, Mail, MessageCircle, Phone } from 'lucide-react'
-import { Button, Card, Tabs } from '../components'
+import { Button, Card, ShellContainer, Tabs } from '../components'
 import { LEARN_MORE } from '../data/learnmore'
 import { FAQ_KORT } from '../data/copy'
 import { cn } from '../lib/cn'
 
 export default function Hulp() {
-  const [tab, setTab] = useState('vragen')
+  // Zo werkt /hulp?tab=feedback vanuit de voettekst.
+  const [params, setParams] = useSearchParams()
+  const [tab, setTabState] = useState(params.get('tab') ?? 'vragen')
+  const setTab = (id: string) => {
+    setTabState(id)
+    setParams(id === 'vragen' ? {} : { tab: id }, { replace: true })
+  }
 
   return (
+    <ShellContainer>
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-h1 text-gray-1">Hulp</h1>
@@ -66,7 +74,7 @@ export default function Hulp() {
         <Card className="flex max-w-2xl flex-col gap-3">
           <h2 className="text-h3 text-gray-1">XS2Content</h2>
           <p className="text-body text-gray-2">
-            Voor extra talen, extra credits of een configuratie die opnieuw moet.
+            Voor extra talen, extra uitlegvideo’s of een configuratie die opnieuw moet.
           </p>
           <span className="flex flex-col gap-2 text-body text-gray-2">
             <span className="flex items-center gap-2">
@@ -81,6 +89,7 @@ export default function Hulp() {
         </Card>
       )}
     </div>
+    </ShellContainer>
   )
 }
 

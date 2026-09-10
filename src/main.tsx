@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { HashRouter } from 'react-router-dom'
 import App from './App'
 import { useStore } from './state/store'
+import type { ScenarioId } from './data/seed'
 import './tokens/theme.css'
 
 /**
@@ -17,12 +18,23 @@ function readFlags() {
   return {
     fast: params.get('fast') === '1',
     reset: params.get('reset'),
+    scenario: params.get('scenario'),
   }
 }
 
-const { fast, reset } = readFlags()
-if (reset === '1' || reset === 'empty') useStore.getState().resetTo(reset === 'empty' ? 'empty' : 'seed')
-useStore.getState().setFast(fast)
+const SCENARIO_IDS = ['eerste', 'tweede', 'derde', 'emre']
+
+const { fast, reset, scenario } = readFlags()
+const store = useStore.getState()
+
+if (scenario && SCENARIO_IDS.includes(scenario)) {
+  store.setScenario(scenario as ScenarioId)
+} else if (reset === 'empty') {
+  store.setScenario('eerste')
+} else if (reset === '1') {
+  store.resetScenario()
+}
+store.setFast(fast)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

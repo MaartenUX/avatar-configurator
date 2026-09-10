@@ -1,5 +1,5 @@
 import { Mail, Plus, ShieldCheck } from 'lucide-react'
-import { Button, Card } from '../components'
+import { Button, Card, ShellContainer } from '../components'
 import { useStore } from '../state/store'
 import { langLabel } from '../data/langs'
 
@@ -10,6 +10,7 @@ export default function Team() {
   const team = useStore((s) => s.team)
 
   return (
+    <ShellContainer>
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-h1 text-gray-1">Team</h1>
@@ -65,5 +66,6 @@ export default function Team() {
         </span>
       </Card>
     </div>
+    </ShellContainer>
   )
 }

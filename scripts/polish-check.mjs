@@ -15,7 +15,6 @@ for (const breedte of [1280, 1440]) {
   for (const [route, naam] of [
     ['/', 'overzicht'],
     ['/configuratie', 'configuratie'],
-    ['/paginas', 'paginas'],
     ['/paginas/p-bijstand', 'beheer'],
     ['/paginas/p-bijstand/ar', 'arabisch'],
     ['/paginas/p-bijstand/video/ar', 'arabisch-video'],

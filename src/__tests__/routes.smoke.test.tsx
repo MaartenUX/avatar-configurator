@@ -16,7 +16,7 @@ const renderAt = (path: string) =>
 
 describe('routes', () => {
   it('rendert elke route zonder te crashen', () => {
-    useStore.getState().resetTo('seed')
+    useStore.getState().setScenario('tweede')
     for (const route of ROUTES) {
       const { unmount } = renderAt(samplePath(route.path))
       unmount()
@@ -24,7 +24,7 @@ describe('routes', () => {
   })
 
   it('stuurt een onbekende taalcode terug naar de pagina', () => {
-    useStore.getState().resetTo('seed')
+    useStore.getState().setScenario('tweede')
     renderAt('/paginas/p-bijstand/samenvattng')
     // De guard redirect naar /paginas/:id, dus we zien het beheerscherm.
     expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument()

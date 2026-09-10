@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CircleHelp, MessageCircle, Plus, Settings2, Sparkles } from 'lucide-react'
+import { CircleHelp, MessageCircle, Plus, Settings2, Sparkles, Users } from 'lucide-react'
 import {
-  Button, Card, Chip, EmptyState, LockedBanner, PageCard, PipelineStep,
+  Button, Card, Chip, EmptyState, LockedBanner, PageCard, PipelineStep, ShellContainer,
 } from '../components'
 import { useStore } from '../state/store'
 import { useNow } from '../state/TickProvider'
@@ -16,7 +16,7 @@ const HIGHLIGHT_MS = 3500
 export default function Overzicht() {
   const config = useStore((s) => s.config)
   const pages = useStore((s) => s.pages)
-  const credits = useStore((s) => s.credits)
+  const videos = useStore((s) => s.videos)
   const user = useStore((s) => s.user)
   const highlightPageId = useStore((s) => s.highlightPageId)
   const clearHighlight = useStore((s) => s.clearHighlight)
@@ -40,7 +40,7 @@ export default function Overzicht() {
     return [...set]
   }, [pages])
 
-  const geenCredits = credits.used >= credits.total
+  const geenVideos = videos.used >= videos.total
 
   if (config.status !== 'locked') return <EersteKeer />
 
@@ -50,6 +50,7 @@ export default function Overzicht() {
       : list.filter((p) => langFilter.some((l) => p.langs[l]))
 
   return (
+    <ShellContainer>
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-1">
         <h1 className="text-display text-gray-1">Bergrode in één oogopslag</h1>
@@ -89,12 +90,12 @@ export default function Overzicht() {
           <span className="text-body-sm text-gray-3">{inProductie.length}</span>
           {user === 'esmee' && (
             <span className="ml-auto flex items-center gap-3">
-              {geenCredits && (
+              {geenVideos && (
                 <span className="text-body-sm text-orange-shade">
-                  Je credits zijn op. Neem contact op met XS2Content voor meer.
+                  Je hebt alle uitlegvideo’s gebruikt. Neem contact op met XS2Content voor meer.
                 </span>
               )}
-              <Button iconLeft={Plus} to={geenCredits ? undefined : '/paginas/nieuw'} disabled={geenCredits}>
+              <Button iconLeft={Plus} to={geenVideos ? undefined : '/paginas/nieuw'} disabled={geenVideos}>
                 Pagina toevoegen
               </Button>
             </span>
@@ -143,14 +144,16 @@ export default function Overzicht() {
 
       <Voettekst />
     </div>
+    </ShellContainer>
   )
 }
 
 /** Eerste keer: nog geen configuratie, dus één duidelijke volgende stap. */
 function EersteKeer() {
-  const credits = useStore((s) => s.credits)
+  const videos = useStore((s) => s.videos)
 
   return (
+    <ShellContainer>
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-1">
         <h1 className="text-display text-gray-1">Welkom bij Bergrode</h1>
@@ -180,7 +183,7 @@ function EersteKeer() {
         <div className="flex flex-wrap items-center gap-3">
           <Button to="/configuratie" iconLeft={Settings2}>Start de configuratie</Button>
           <span className="text-body-sm text-gray-3">
-            Je hebt {credits.total} credits. Elke pagina kost er één.
+            Je kunt {videos.total} uitlegvideo’s maken. Elke pagina kost er één.
           </span>
         </div>
       </Card>
@@ -209,11 +212,12 @@ function EersteKeer() {
 
       <Voettekst />
     </div>
+    </ShellContainer>
   )
 }
 
 function Voettekst() {
-  const resetTo = useStore((s) => s.resetTo)
+  const resetScenario = useStore((s) => s.resetScenario)
 
   return (
     <footer className="flex flex-wrap items-center gap-4 border-t border-gray-5 pt-5 text-body-sm">
@@ -221,20 +225,23 @@ function Voettekst() {
         <CircleHelp size={15} aria-hidden />
         Veelgestelde vragen
       </Link>
-      <Link to="/hulp#feedback" className="inline-flex items-center gap-1.5 text-gray-2 hover:text-blue-shade">
+      <Link to="/team" className="inline-flex items-center gap-1.5 text-gray-2 hover:text-blue-shade">
+        <Users size={15} aria-hidden />
+        Team
+      </Link>
+      <Link to="/hulp?tab=feedback" className="inline-flex items-center gap-1.5 text-gray-2 hover:text-blue-shade">
         <MessageCircle size={15} aria-hidden />
         Feedback
       </Link>
 
-      {/* Alleen voor de test: snel terug naar een bekende beginsituatie. */}
-      <span className="ml-auto flex items-center gap-3 text-gray-4">
-        <button type="button" onClick={() => resetTo('seed')} className="hover:text-gray-2">
-          Reset naar seed
-        </button>
-        <button type="button" onClick={() => resetTo('empty')} className="hover:text-gray-2">
-          Reset naar lege staat
-        </button>
-      </span>
+      {/* Alleen voor de test: dit scenario terugzetten naar zijn beginstand. */}
+      <button
+        type="button"
+        onClick={resetScenario}
+        className="ml-auto text-gray-4 hover:text-gray-2"
+      >
+        Zet dit scenario terug
+      </button>
     </footer>
   )
 }

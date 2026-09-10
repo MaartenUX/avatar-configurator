@@ -11,14 +11,14 @@ import { PAGE_CONTENT } from '../../data'
 export default function NieuwePagina() {
   const navigate = useNavigate()
   const config = useStore((s) => s.config)
-  const credits = useStore((s) => s.credits)
+  const videos = useStore((s) => s.videos)
   const addPage = useStore((s) => s.addPage)
 
   const [url, setUrl] = useState('https://www.bergrode.nl/parkeervergunning-bewoners')
   const [titel, setTitel] = useState('Parkeervergunning bewoners')
 
-  const geenCredits = credits.used >= credits.total
-  const over = credits.total - credits.used
+  const geenVideos = videos.used >= videos.total
+  const over = videos.total - videos.used
   const bestaat = useStore((s) => s.pages.some((p) => p.url === url))
 
   const start = () => {
@@ -76,17 +76,17 @@ export default function NieuwePagina() {
 
       <Card className="flex flex-col gap-3 border-2 border-blue">
         <span className="flex items-center gap-2 text-body text-gray-1">
-          {geenCredits ? (
+          {geenVideos ? (
             <>
               <AlertTriangle size={18} className="text-orange-shade" aria-hidden />
-              Je credits zijn op. Neem contact op met XS2Content voor meer.
+              Je hebt alle uitlegvideo’s gebruikt. Neem contact op met XS2Content voor meer.
             </>
           ) : (
-            <>Dit kost 1 credit. Je houdt er {over - 1} van {credits.total} over.</>
+            <>Dit is uitlegvideo {videos.used + 1} van {videos.total}. Je houdt er {over - 1} over.</>
           )}
         </span>
         <span className="flex gap-2">
-          <Button onClick={start} disabled={geenCredits || !url.trim() || !titel.trim() || bestaat}>
+          <Button onClick={start} disabled={geenVideos || !url.trim() || !titel.trim() || bestaat}>
             Start
           </Button>
           <Button variant="secondary" to="/">Annuleer</Button>

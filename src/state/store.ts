@@ -11,13 +11,18 @@ import type {
   TeamMember,
 } from './types'
 import { nextPageStatus, startTimer, tickPages } from './timers'
-import { EMPTY_CONFIG, SEED_CONFIG, SEED_PAGES } from '../data/seed'
+import { snapshotFor, type ScenarioId } from '../data/seed'
 import { fallbackContent, pageContent, RESERVED_IDS } from '../data'
 import { TEAM } from '../data/team'
 
 export interface Store {
+  /** Welke stand van het prototype je bekijkt. Stuurt de seed en de gebruiker. */
+  scenario: ScenarioId
   user: 'esmee' | 'emre'
-  credits: { used: number; total: number }
+  /** Aantal uitlegvideo's dat je mag maken. */
+  videos: { used: number; total: number }
+  /** Eén gezamenlijke pot voor opnieuw maken, over alle video's heen. */
+  reruns: { used: number; total: number }
   config: Config
   pages: Page[]
   team: TeamMember[]
@@ -53,11 +58,9 @@ export interface Store {
   // sessie
   tick: (now: number) => void
   setFast: (fast: boolean) => void
-  switchUser: (user: 'esmee' | 'emre') => void
-  resetTo: (mode: 'empty' | 'seed') => void
+  setScenario: (scenario: ScenarioId) => void
+  resetScenario: () => void
 }
-
-const CREDITS_TOTAL = 10
 
 /** Reviewer per taal, uit het team. Valt terug op Esmee. */
 const reviewerFor = (lang: Lang) =>
@@ -75,27 +78,15 @@ const newId = (title: string) => {
   return RESERVED_IDS.has(base) ? `${base}-1` : base
 }
 
-const emptyState = () => ({
-  config: { ...EMPTY_CONFIG },
-  pages: [] as Page[],
-  credits: { used: 0, total: CREDITS_TOTAL },
-})
-
-const seedState = () => ({
-  config: { ...SEED_CONFIG },
-  pages: SEED_PAGES.map((p) => ({ ...p })),
-  credits: { used: 2, total: CREDITS_TOTAL },
-})
-
 export const useStore = create<Store>()(
   persist(
     (set, get) => ({
-      user: 'esmee',
+      scenario: 'tweede',
       team: TEAM,
       fast: false,
       toast: null,
       highlightPageId: null,
-      ...seedState(),
+      ...snapshotFor('tweede'),
 
       // ---------------------------------------------------------------- config
       startConfig: () =>
@@ -137,7 +128,7 @@ export const useStore = create<Store>()(
         }
         set((s) => ({
           pages: [page, ...s.pages.filter((p) => p.id !== id)],
-          credits: { ...s.credits, used: Math.min(s.credits.total, s.credits.used + 1) },
+          videos: { ...s.videos, used: Math.min(s.videos.total, s.videos.used + 1) },
         }))
         return id
       },
@@ -211,10 +202,9 @@ export const useStore = create<Store>()(
           }),
         })),
 
-      // Opnieuw draaien kost een credit.
       rerun: (id, lang) =>
         set((s) => ({
-          credits: { ...s.credits, used: Math.min(s.credits.total, s.credits.used + 1) },
+          videos: { ...s.videos, used: Math.min(s.videos.total, s.videos.used + 1) },
           pages: s.pages.map((p) => {
             if (p.id !== id) return p
             if (!lang) {
@@ -251,14 +241,13 @@ export const useStore = create<Store>()(
       },
 
       setFast: (fast) => set({ fast }),
-      switchUser: (user) => set({ user, highlightPageId: null, toast: null }),
-      resetTo: (mode) =>
-        set({
-          ...(mode === 'empty' ? emptyState() : seedState()),
-          user: 'esmee',
-          toast: null,
-          highlightPageId: null,
-        }),
+
+      /** Wisselen van stand bouwt de data vers op, zodat standen niet lekken. */
+      setScenario: (scenario) =>
+        set({ scenario, ...snapshotFor(scenario), toast: null, highlightPageId: null }),
+
+      resetScenario: () =>
+        set((s) => ({ ...snapshotFor(s.scenario), toast: null, highlightPageId: null })),
     }),
     {
       name: 'avatar-proto-v1',
@@ -266,8 +255,10 @@ export const useStore = create<Store>()(
       /** Alleen voortgang bewaren, nooit de statische content. Dat houdt
        *  localStorage klein en voorkomt dat oude teksten blijven hangen. */
       partialize: (s) => ({
+        scenario: s.scenario,
         user: s.user,
-        credits: s.credits,
+        videos: s.videos,
+        reruns: s.reruns,
         config: s.config,
         pages: s.pages.map((p) => ({
           id: p.id,

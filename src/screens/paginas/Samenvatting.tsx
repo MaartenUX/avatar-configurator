@@ -76,7 +76,7 @@ export default function Samenvatting() {
             variant="secondary" iconLeft={RefreshCw}
             onClick={() => rerun(page.id)}
           >
-            Opnieuw genereren (1 credit)
+            Opnieuw genereren
           </Button>
 
           <ApproveBox

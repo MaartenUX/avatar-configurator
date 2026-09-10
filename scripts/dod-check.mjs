@@ -35,9 +35,9 @@ await page.waitForTimeout(600)
 eis('opent vanaf file:// zonder server', (await page.$eval('#root', (e) => e.children.length)) > 0)
 
 // 3. Geen Engelse UI-termen of lorem op de schermen.
-const verboden = ['lorem', 'summary', 'translate', 'pipeline', 'Lorem']
+const verboden = ['lorem', 'summary', 'translate', 'pipeline', 'credit']
 const gevonden = new Set()
-for (const route of ['/', '/configuratie', '/paginas', '/paginas/nieuw', '/team', '/hulp',
+for (const route of ['/', '/configuratie', '/configuratie/demo', '/paginas/nieuw', '/team', '/hulp',
                      '/paginas/p-bijstand', '/paginas/p-bijstand/tr', '/paginas/p-bijstand/video/tr']) {
   await page.goto(`${base}?fast=1#${route}`, { waitUntil: 'load' })
   await page.waitForTimeout(350)
