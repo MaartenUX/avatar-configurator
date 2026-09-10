@@ -4,8 +4,10 @@ import {
   ApproveBox, Avatar, Button, Card, HowBox, SceneBlock, WaitScreen,
 } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
+import { Bekijkbalk } from '../../components/feedback/Bekijkbalk'
 import { HelpTray } from '../../components/feedback/HelpTray'
 import { useStore } from '../../state/store'
+import { useBekijkstand } from '../../state/useBekijkstand'
 import { useFinishSpoke } from '../../state/flow'
 import { findPage } from '../../state/selectors'
 import { avatarById } from '../../data/avatars'
@@ -21,6 +23,7 @@ const MAX_WOORDEN = 50
 export default function Samenvatting() {
   const { id } = useParams()
   const page = useStore((s) => findPage(s.pages, id))
+  const bekijken = useBekijkstand()
   const config = useStore((s) => s.config)
   const editScenes = useStore((s) => s.editScenes)
   const approveSummary = useStore((s) => s.approveSummary)
@@ -34,6 +37,7 @@ export default function Samenvatting() {
 
   return (
     <SpokeFrame
+      locked={bekijken}
       help={<HelpTray sectionId="videotype" tips={WACHT_TIPS.samenvatting} />}
       preview={<Voorbeeld avatarFace={avatar?.face} naam={avatar?.name} />}
     >
@@ -79,14 +83,18 @@ export default function Samenvatting() {
             Opnieuw genereren
           </Button>
 
-          <ApproveBox
-            consequence="Na akkoord wordt deze tekst de basis voor elke taal. In de volgende stap maak je de Nederlandse zinnen mooi voor de spraak."
-            onApprove={() => {
-              approveSummary(page.id)
-              finish('summary', { pageId: page.id })
-            }}
-            onSave={() => finish('summary', { pageId: page.id })}
-          />
+          {bekijken ? (
+            <Bekijkbalk />
+          ) : (
+            <ApproveBox
+              consequence="Na akkoord wordt deze tekst de basis voor elke taal. In de volgende stap maak je de Nederlandse zinnen mooi voor de spraak."
+              onApprove={() => {
+                approveSummary(page.id)
+                finish('summary', { pageId: page.id })
+              }}
+              onSave={() => finish('summary', { pageId: page.id })}
+            />
+          )}
         </>
       )}
     </SpokeFrame>

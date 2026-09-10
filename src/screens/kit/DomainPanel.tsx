@@ -123,12 +123,11 @@ export function DomainPanel() {
 
       <KitBlock title="LanguageRow" note="losse rij, elke status">
         <div className="w-full max-w-2xl rounded-md bg-white p-3 shadow-card">
-          <LanguageRow lang="nl" status="approved" reviewer="Vincent Bakker" />
-          <LanguageRow lang="en" status="review-text" reviewer="Vincent Bakker" actionTo="#" actionLabel="Controleer tekst" />
+                    <LanguageRow lang="en" status="review-text" reviewer="Vincent Bakker" actionTo="#" actionLabel="Controleer script" />
           <LanguageRow lang="tr" status="review-video" reviewer="Emre Yılmaz" actionTo="#" actionLabel="Controleer video" />
           <LanguageRow lang="ar" status="generating" reviewer="Layla Haddad" timer={startTimer('generate')} />
           <LanguageRow lang="de" status="waiting" reviewer="Vincent Bakker" />
-          <LanguageRow lang="pl" status="live" views={1240} />
+          <LanguageRow lang="nl" status="approved" reviewer="Vincent Bakker" bekijkTo="#" />
         </div>
       </KitBlock>
 

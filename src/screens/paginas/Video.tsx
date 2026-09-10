@@ -5,8 +5,10 @@ import {
   ApproveBox, Dialog, HowBox, SubtitleEditor, VideoPreview, WaitScreen,
 } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
+import { Bekijkbalk } from '../../components/feedback/Bekijkbalk'
 import { HelpTray } from '../../components/feedback/HelpTray'
 import { useStore } from '../../state/store'
+import { useBekijkstand } from '../../state/useBekijkstand'
 import { useFinishSpoke } from '../../state/flow'
 import { findPage } from '../../state/selectors'
 import { langDir, langLabel, isLang } from '../../data/langs'
@@ -22,6 +24,7 @@ const REDENEN = [
 export default function Video() {
   const { id, lang } = useParams()
   const page = useStore((s) => findPage(s.pages, id))
+  const bekijken = useBekijkstand()
   const config = useStore((s) => s.config)
   const editSubtitles = useStore((s) => s.editSubtitles)
   const approveVideo = useStore((s) => s.approveVideo)
@@ -42,6 +45,7 @@ export default function Video() {
 
   return (
     <SpokeFrame
+      locked={bekijken}
       help={<HelpTray sectionId="widget" tips={HOE.video} />}
       preview={
         <div className="flex w-full max-w-2xl flex-col gap-3">
@@ -91,14 +95,18 @@ export default function Video() {
             onChange={(lines) => editSubtitles(page.id, lang, lines)}
           />
 
-          <ApproveBox
-            consequence={`Na akkoord staat het ${langLabel(lang)} klaar om te publiceren. Zodra alle talen klaar zijn kun je de pagina live zetten.`}
-            onApprove={() => {
-              approveVideo(page.id, lang)
-              finish('video', { pageId: page.id, lang })
-            }}
-            onSave={() => finish('video', { pageId: page.id, lang })}
-          />
+          {bekijken ? (
+            <Bekijkbalk />
+          ) : (
+            <ApproveBox
+              consequence={`Na akkoord staat het ${langLabel(lang)} klaar om te publiceren. Zodra alle talen klaar zijn kun je de pagina live zetten.`}
+              onApprove={() => {
+                approveVideo(page.id, lang)
+                finish('video', { pageId: page.id, lang })
+              }}
+              onSave={() => finish('video', { pageId: page.id, lang })}
+            />
+          )}
         </>
       )}
 

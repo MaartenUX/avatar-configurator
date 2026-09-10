@@ -2,8 +2,10 @@ import { Navigate, useParams } from 'react-router-dom'
 import { RefreshCw } from 'lucide-react'
 import { ApproveBox, Button, HowBox, Player, SceneBlock } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
+import { Bekijkbalk } from '../../components/feedback/Bekijkbalk'
 import { HelpTray } from '../../components/feedback/HelpTray'
 import { useStore } from '../../state/store'
+import { useBekijkstand } from '../../state/useBekijkstand'
 import { useFinishSpoke } from '../../state/flow'
 import { findPage } from '../../state/selectors'
 import { avatarById } from '../../data/avatars'
@@ -17,6 +19,7 @@ const MAX_WOORDEN = 50
 export default function Script() {
   const { id } = useParams()
   const page = useStore((s) => findPage(s.pages, id))
+  const bekijken = useBekijkstand()
   const config = useStore((s) => s.config)
   const editScenes = useStore((s) => s.editScenes)
   const approveNl = useStore((s) => s.approveNl)
@@ -32,6 +35,7 @@ export default function Script() {
 
   return (
     <SpokeFrame
+      locked={bekijken}
       help={<HelpTray sectionId="avatars" tips={HOE.script} />}
       preview={
         <div className="flex w-full max-w-xl flex-col gap-3">
@@ -77,14 +81,18 @@ export default function Script() {
         {audioBezig ? 'Audio wordt gemaakt' : 'Audio opnieuw maken (gratis)'}
       </Button>
 
-      <ApproveBox
-        consequence={`Na akkoord krijgen je collega's een bericht om hun taal te controleren, en worden de video's gemaakt. Dat duurt ongeveer 20 minuten.`}
-        onApprove={() => {
-          approveNl(page.id)
-          finish('script', { pageId: page.id, langCount: talen })
-        }}
-        onSave={() => finish('summary', { pageId: page.id })}
-      />
+      {bekijken ? (
+            <Bekijkbalk />
+          ) : (
+            <ApproveBox
+          consequence={`Na akkoord krijgen je collega's een bericht om hun taal te controleren, en worden de video's gemaakt. Dat duurt ongeveer 20 minuten.`}
+          onApprove={() => {
+            approveNl(page.id)
+            finish('script', { pageId: page.id, langCount: talen })
+          }}
+          onSave={() => finish('summary', { pageId: page.id })}
+        />
+          )}
     </SpokeFrame>
   )
 }

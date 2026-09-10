@@ -3,8 +3,10 @@ import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { ApproveBox, HowBox, Player, SceneBlock } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
+import { Bekijkbalk } from '../../components/feedback/Bekijkbalk'
 import { HelpTray } from '../../components/feedback/HelpTray'
 import { useStore } from '../../state/store'
+import { useBekijkstand } from '../../state/useBekijkstand'
 import { useFinishSpoke } from '../../state/flow'
 import { findPage } from '../../state/selectors'
 import { avatarById } from '../../data/avatars'
@@ -19,6 +21,7 @@ const MAX_WOORDEN = 55
 export default function Vertaling() {
   const { id, lang } = useParams()
   const page = useStore((s) => findPage(s.pages, id))
+  const bekijken = useBekijkstand()
   const config = useStore((s) => s.config)
   const editTranslation = useStore((s) => s.editTranslation)
   const approveLang = useStore((s) => s.approveLang)
@@ -33,6 +36,7 @@ export default function Vertaling() {
 
   return (
     <SpokeFrame
+      locked={bekijken}
       help={<HelpTray sectionId="avatars" tips={HOE.vertaling} />}
       preview={
         <div className="flex w-full max-w-xl flex-col gap-3">
@@ -97,14 +101,18 @@ export default function Vertaling() {
         ))}
       </div>
 
-      <ApproveBox
-        consequence={`Na akkoord wordt de video in het ${langLabel(lang)} gemaakt. Dat duurt ongeveer 20 minuten. Daarna controleer je de ondertiteling.`}
-        onApprove={() => {
-          approveLang(page.id, lang)
-          finish('lang', { pageId: page.id, lang })
-        }}
-        onSave={() => finish('lang', { pageId: page.id, lang })}
-      />
+      {bekijken ? (
+            <Bekijkbalk />
+          ) : (
+            <ApproveBox
+          consequence={`Na akkoord wordt de video in het ${langLabel(lang)} gemaakt. Dat duurt ongeveer 20 minuten. Daarna controleer je de ondertiteling.`}
+          onApprove={() => {
+            approveLang(page.id, lang)
+            finish('lang', { pageId: page.id, lang })
+          }}
+          onSave={() => finish('lang', { pageId: page.id, lang })}
+        />
+          )}
     </SpokeFrame>
   )
 }

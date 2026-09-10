@@ -89,7 +89,6 @@ export default function Beheer() {
                 lang={l}
                 status={page.langs[l]!.status}
                 reviewer={page.langs[l]!.reviewer}
-                views={live ? page.views[l] : undefined}
               />
             ))}
           </Card>

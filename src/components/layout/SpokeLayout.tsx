@@ -52,7 +52,9 @@ export function SpokeFrame({
         <div className="lg:sticky lg:top-6 lg:h-[calc(100svh-120px)]">
           <div className="flex h-full items-center justify-center">{preview}</div>
         </div>
-        <div className={cn('flex flex-col gap-6 py-2', locked && 'pointer-events-none opacity-60')}>
+        {/* In kijkstand zijn de velden dood, maar de balk onderin blijft
+            bedienbaar — anders kun je niet meer terug. */}
+        <div className={cn('flex flex-col gap-6 py-2', locked && '[&>*:not(:last-child)]:pointer-events-none [&>*:not(:last-child)]:opacity-60')}>
           {children}
         </div>
       </div>

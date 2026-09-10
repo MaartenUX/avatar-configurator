@@ -145,3 +145,14 @@
     box-shadow: 0 0 0 12px rgba(70, 186, 216, 0);
   }
 }
+
+/* Trage puls voor "video wordt gemaakt": rustiger dan animate-pulse, zodat
+   hij als loader leest en niet als iets dat aandacht vraagt. */
+@keyframes traag-pulseren {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
