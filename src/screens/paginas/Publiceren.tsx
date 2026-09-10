@@ -1,14 +1,13 @@
 import { useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
-import { Check, Copy, Download, Share2, Sparkles } from 'lucide-react'
+import { Check, Copy, Sparkles } from 'lucide-react'
 import {
-  ApproveBox, Button, Card, Celebration, PreviewGrid, VideoPreview,
+  ApproveBox, Button, Card, Celebration, Distributie, EmbedBlok, PreviewGrid, VideoPreview,
 } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
 import { useStore } from '../../state/store'
 import { useFinishSpoke } from '../../state/flow'
 import { canPublish, findPage } from '../../state/selectors'
-import { langLabel } from '../../data/langs'
 import type { Lang } from '../../state/types'
 
 /** S6: publiceren en afsluiten. */
@@ -17,12 +16,9 @@ export default function Publiceren() {
   const page = useStore((s) => findPage(s.pages, id))
   const config = useStore((s) => s.config)
   const publish = useStore((s) => s.publish)
-  const fast = useStore((s) => s.fast)
   const finish = useFinishSpoke()
 
   const [gekopieerd, setGekopieerd] = useState(false)
-  const [socialBezig, setSocialBezig] = useState(false)
-  const [socialKlaar, setSocialKlaar] = useState(false)
 
   if (!page) return <Navigate to="/" replace />
 
@@ -31,14 +27,6 @@ export default function Publiceren() {
   const live = page.status === 'live'
 
   const script = page.scenes.map((s, i) => `${i + 1}. ${s.title}\n${s.text}`).join('\n\n')
-
-  const maakSocials = () => {
-    setSocialBezig(true)
-    window.setTimeout(() => {
-      setSocialBezig(false)
-      setSocialKlaar(true)
-    }, fast ? 400 : 3000)
-  }
 
   return (
     <SpokeFrame
@@ -89,41 +77,10 @@ export default function Publiceren() {
             </p>
           </Card>
 
-          <Card className="flex flex-col gap-3">
-            <h2 className="text-h3 text-gray-1">Downloads</h2>
-            <p className="text-body-sm text-gray-3">
-              Elke download heeft een AI-label, zodat kijkers weten dat de video automatisch is
-              gemaakt.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {talen.map((l) => (
-                <Button key={l} size="sm" variant="secondary" iconLeft={Download}>
-                  {langLabel(l)}
-                </Button>
-              ))}
-            </div>
-          </Card>
-
-          <Card className="flex flex-col gap-3">
-            <h2 className="text-h3 text-gray-1">Ook voor socials?</h2>
-            <p className="text-body-sm text-gray-2">
-              We maken een vierkante en een staande versie, geschikt voor Facebook, Instagram en
-              WhatsApp.
-            </p>
-            <span className="flex items-center gap-3">
-              <Button
-                size="sm" variant="secondary" iconLeft={socialKlaar ? Check : Share2}
-                loading={socialBezig} onClick={maakSocials}
-              >
-                {socialKlaar ? 'Social-versies klaar' : 'Maak social-versies'}
-              </Button>
-              {socialKlaar && (
-                <Button size="sm" variant="ghost" iconLeft={Download}>
-                  Download social-versies
-                </Button>
-              )}
-            </span>
-          </Card>
+          <div className="grid items-stretch gap-4 xl:grid-cols-2">
+            <EmbedBlok page={page} langs={talen} live={live} />
+            <Distributie langs={talen} beschikbaar={mag || live} />
+          </div>
 
           <ApproveBox
             title="Publiceren"

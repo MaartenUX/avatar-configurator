@@ -43,12 +43,12 @@ if (await nl.count()) { await nl.click(); await page.waitForTimeout(1200) }
 await check('alle talen goedgekeurd', 'Publiceer')
 
 await page.goto(`${base}?fast=1#/paginas/${P}/publiceren`, { waitUntil: 'load' })
-await check('publiceerscherm', 'Downloads')
+await check('publiceerscherm', 'Toevoegen aan je website')
 await page.screenshot({ path: 'shots/pub-1-publiceren.png', fullPage: true })
 
-await page.getByRole('button', { name: /Maak social-versies/ }).click()
+await page.getByRole('button', { name: /Maak downloadversies/ }).click()
 await page.waitForTimeout(1200)
-await check('social-versies gemaakt', 'Download social-versies')
+await check('downloadversies gemaakt', 'Zo deed Gemeente Eindhoven het')
 
 await page.getByRole('button', { name: 'Publiceer', exact: true }).click()
 await page.waitForTimeout(900)
