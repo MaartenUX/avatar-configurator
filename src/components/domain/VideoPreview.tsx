@@ -102,7 +102,7 @@ export function VideoPreview({
 
       {logo && (
         <span className="absolute right-3 top-3 rounded-sm bg-white/90 px-2 py-1 text-body-sm font-semibold text-gray-1">
-          Bergrode
+          AI-gegenereerd
         </span>
       )}
 

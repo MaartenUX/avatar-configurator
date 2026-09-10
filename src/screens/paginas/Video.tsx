@@ -86,6 +86,9 @@ export default function Video() {
 
           <HowBox points={HOE.video} />
 
+          {/* Eigen scrollgebied: bij bijna dertig regels schuift anders het
+              hele paneel weg onder de akkoordbalk. */}
+          <div className="max-h-[46vh] overflow-y-auto rounded-md">
           <SubtitleEditor
             lines={regels}
             currentTime={tijd}
@@ -93,6 +96,7 @@ export default function Video() {
             dir={dir}
             onChange={(lines) => editSubtitles(page.id, lang, lines)}
           />
+          </div>
 
           <SpraakTips soort="ondertitel" />
 

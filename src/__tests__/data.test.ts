@@ -33,15 +33,26 @@ describe('content', () => {
     }
   })
 
-  it('geeft ondertitels 8 tot 10 regels met oplopende tijdcodes binnen 1:50', () => {
+  it('geeft ondertitels oplopende tijdcodes binnen 1:50', () => {
     for (const page of PAGE_CONTENT) {
       for (const [lang, lines] of Object.entries(page.subtitles)) {
         expect(lines!.length, `${page.id} ${lang}`).toBeGreaterThanOrEqual(8)
-        expect(lines!.length, `${page.id} ${lang}`).toBeLessThanOrEqual(10)
+        expect(lines!.length, `${page.id} ${lang}`).toBeLessThanOrEqual(32)
 
         const times = lines!.map((l) => parseTimecode(l.t))
         expect(times, `${page.id} ${lang}`).toEqual([...times].sort((a, b) => a - b))
         expect(times.at(-1), `${page.id} ${lang}`).toBeLessThanOrEqual(110)
+      }
+    }
+  })
+
+  it('geeft de tracks die de test opent een realistisch tempo', () => {
+    // Vier seconden per regel, niet elf. Deze vier komen in testtaak b, c en d
+    // daadwerkelijk in beeld.
+    for (const id of ['p-parkeervergunning', 'p-bijstand']) {
+      const page = PAGE_CONTENT.find((p) => p.id === id)!
+      for (const lang of ['nl', 'tr'] as const) {
+        expect(page.subtitles[lang]!.length, `${id} ${lang}`).toBeGreaterThanOrEqual(24)
       }
     }
   })

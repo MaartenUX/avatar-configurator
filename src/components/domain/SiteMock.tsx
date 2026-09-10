@@ -201,7 +201,7 @@ function VideoFrame({ config, shot }: { config: Config; shot: number }) {
 
       {config.logo && (
         <span className="absolute right-2 top-2 rounded-sm bg-white/90 px-1.5 py-0.5 text-[10px] font-semibold text-gray-1">
-          Bergrode
+          AI-gegenereerd
         </span>
       )}
 

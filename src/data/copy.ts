@@ -53,10 +53,12 @@ export const HOE = {
     'Klopt de betekenis met het Nederlands?',
     'Klinkt het als spreektaal, niet als een vertaling?',
   ],
+  // Alleen over ondertitels: voor hoe de avatar eruitziet is er
+  // "Video is niet oké?" onder de preview.
   video: [
     'Lopen de ondertitels gelijk met de spraak?',
     'Klopt de spelling van namen en plaatsen?',
-    'Ziet de avatar er natuurlijk uit?',
+    'Is geen regel te lang om in één blik te lezen?',
   ],
 }
 
