@@ -37,7 +37,7 @@ export function SpokeFrame({
 }: SpokeFrameProps) {
   return (
     <div className="flex min-h-svh flex-col">
-      <div className="flex h-[72px] shrink-0 items-center justify-between px-6">
+      <div className="flex h-[72px] shrink-0 items-center justify-between bg-bg px-6">
         <Link
           to={backTo}
           className="flex items-center gap-2 rounded-sm px-2 py-1.5 text-body text-gray-2 hover:text-blue-shade"
@@ -48,13 +48,22 @@ export function SpokeFrame({
         {help}
       </div>
 
-      <div className="grid flex-1 grid-cols-1 gap-8 px-6 pb-10 lg:grid-cols-[55fr_45fr]">
-        <div className="lg:sticky lg:top-6 lg:h-[calc(100svh-120px)]">
+      {/* Twee helften tot de schermrand: links de preview op grijs, rechts
+          het werk op wit. De padding zit binnen de kolommen, zodat de
+          kleurscheiding niet onderbroken wordt. */}
+      <div className="grid flex-1 grid-cols-1 lg:grid-cols-2">
+        <div className="bg-bg px-8 pb-10 lg:sticky lg:top-6 lg:h-[calc(100svh-120px)]">
           <div className="flex h-full items-center justify-center">{preview}</div>
         </div>
         {/* In kijkstand zijn de velden dood, maar de balk onderin blijft
             bedienbaar — anders kun je niet meer terug. */}
-        <div className={cn('flex flex-col gap-6 py-2', locked && '[&>*:not(:last-child)]:pointer-events-none [&>*:not(:last-child)]:opacity-60')}>
+        <div
+          className={cn(
+            'flex flex-col gap-6 bg-white px-8 py-8',
+            locked &&
+              '[&>*:not(:last-child)]:pointer-events-none [&>*:not(:last-child)]:opacity-60',
+          )}
+        >
           {children}
         </div>
       </div>

@@ -2,7 +2,7 @@ import type { LearnMoreDef } from './types'
 
 /**
  * Inhoud van de "Meer weten"-overlay per configuratiesectie, en van de
- * HelpTray in de spaken. Dezelfde vragen staan in de FAQ op /hulp, zodat een
+ * de FAQ op /hulp. Dezelfde vragen staan op beide plekken, zodat een
  * antwoord altijd op twee plekken vindbaar is.
  */
 export const LEARN_MORE: LearnMoreDef[] = [

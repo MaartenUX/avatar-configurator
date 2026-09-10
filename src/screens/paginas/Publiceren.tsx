@@ -5,7 +5,6 @@ import {
   ApproveBox, Button, Card, Celebration, PreviewGrid, VideoPreview,
 } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
-import { HelpTray } from '../../components/feedback/HelpTray'
 import { useStore } from '../../state/store'
 import { useFinishSpoke } from '../../state/flow'
 import { canPublish, findPage } from '../../state/selectors'
@@ -43,7 +42,6 @@ export default function Publiceren() {
 
   return (
     <SpokeFrame
-      help={<HelpTray sectionId="widget" />}
       preview={
         live ? (
           <div className="w-full max-w-xl"><PreviewGrid config={config} /></div>

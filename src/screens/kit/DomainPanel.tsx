@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import {
   AdviceBox, ApproveBox, AvatarTile, Celebration, ChoiceTile, EmptyState,
-  HelpTray, HowBox, LanguageRow, LearnMore, PageCard, Player, PreviewGrid,
+  HowBox, LanguageRow, LearnMore, PageCard, Player, PreviewGrid,
   SceneBlock, SiteMock, SubtitleEditor, VideoPreview, WaitScreen,
 } from '../../components'
 import { FileVideo, Gauge, Timer } from 'lucide-react'
+import { SpraakTips } from '../../components/feedback/SpraakTips'
 import { KitBlock, KitRow } from './KitBlock'
 import { useStore } from '../../state/store'
 import { AVATARS, ADVICE, avatarsFor } from '../../data/avatars'
@@ -196,11 +197,12 @@ export function DomainPanel() {
         </div>
       </KitBlock>
 
-      <KitBlock title="LearnMore en HelpTray">
+      <KitBlock title="LearnMore en SpraakTips">
         <KitRow>
           <LearnMore sectionId="avatars" />
           <LearnMore sectionId="videotype" label="Waarom maximaal 3 minuten?" />
-          <HelpTray sectionId="talen" />
+          <SpraakTips />
+          <SpraakTips soort="ondertitel" />
         </KitRow>
       </KitBlock>
 

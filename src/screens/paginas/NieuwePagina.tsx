@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { AlertTriangle, FileVideo, Megaphone, Video } from 'lucide-react'
 import { Button, Card, ChoiceTile, Input, PipelineStep, SiteMock } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
-import { HelpTray } from '../../components/feedback/HelpTray'
 import { useStore } from '../../state/store'
 import { PRODUCTIE_STAPPEN } from '../../data/copy'
 import { PAGE_CONTENT } from '../../data'
@@ -28,7 +27,6 @@ export default function NieuwePagina() {
 
   return (
     <SpokeFrame
-      help={<HelpTray sectionId="videotype" />}
       preview={<SiteMock config={config} pageTitle={titel || 'Je pagina'} className="max-w-xl" />}
     >
       <h1 className="text-h2 text-gray-1">Pagina toevoegen</h1>

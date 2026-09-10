@@ -5,7 +5,7 @@ import {
 } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
 import { Bekijkbalk } from '../../components/feedback/Bekijkbalk'
-import { HelpTray } from '../../components/feedback/HelpTray'
+import { SpraakTips } from '../../components/feedback/SpraakTips'
 import { useStore } from '../../state/store'
 import { useBekijkstand } from '../../state/useBekijkstand'
 import { useFinishSpoke } from '../../state/flow'
@@ -38,7 +38,6 @@ export default function Samenvatting() {
   return (
     <SpokeFrame
       locked={bekijken}
-      help={<HelpTray sectionId="videotype" tips={WACHT_TIPS.samenvatting} />}
       preview={<Voorbeeld avatarFace={avatar?.face} naam={avatar?.name} />}
     >
       {wacht ? (
@@ -76,12 +75,19 @@ export default function Samenvatting() {
             ))}
           </div>
 
-          <Button
-            variant="secondary" iconLeft={RefreshCw}
-            onClick={() => rerun(page.id)}
-          >
-            Opnieuw genereren
-          </Button>
+          <span className="flex flex-wrap items-center gap-3">
+            <Button
+              variant="secondary" iconLeft={RefreshCw}
+              onClick={() => rerun(page.id)}
+            >
+              Opnieuw genereren
+            </Button>
+            <span className="text-body-sm text-gray-3">
+              Dit gaat van je gezamenlijke pot om opnieuw te maken.
+            </span>
+          </span>
+
+          <SpraakTips />
 
           {bekijken ? (
             <Bekijkbalk />
@@ -101,15 +107,22 @@ export default function Samenvatting() {
   )
 }
 
-/** Links: het frame is nog wazig, want er is nog geen audio en geen video. */
+/**
+ * Links: onherkenbaar wazig. De avatar mag niet te zien zijn zolang de video
+ * er niet is — anders lijkt het alsof er al iets klaarstaat.
+ */
 function Voorbeeld({ avatarFace, naam }: { avatarFace?: string; naam?: string }) {
   return (
     <div className="relative aspect-video w-full max-w-xl overflow-hidden rounded-md bg-gradient-to-br from-turq-tint to-blue-tint shadow-card">
       <span className="absolute inset-0 grid place-items-end justify-center">
-        <Avatar face={avatarFace} name={naam} className="h-4/5 w-48 blur-[2px] opacity-70" />
+        <Avatar face={avatarFace} name={naam} className="h-4/5 w-56 scale-110 opacity-80 blur-[28px]" />
       </span>
-      <span className="absolute inset-x-4 bottom-4 rounded-sm bg-white/80 px-3 py-2 text-center text-body-sm text-gray-2">
-        De video wordt gemaakt zodra de tekst klaar is
+      {/* Donkere sluier: zonder dit valt witte tekst weg op het lichte deel. */}
+      <span className="absolute inset-0 bg-gray-1/35" aria-hidden />
+      <span className="absolute inset-0 grid place-items-center px-8">
+        <span className="text-center text-h3 text-white">
+          De video wordt gemaakt zodra de tekst klaar is
+        </span>
       </span>
     </div>
   )

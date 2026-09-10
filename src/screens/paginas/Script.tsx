@@ -3,7 +3,7 @@ import { RefreshCw } from 'lucide-react'
 import { ApproveBox, Button, HowBox, Player, SceneBlock } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
 import { Bekijkbalk } from '../../components/feedback/Bekijkbalk'
-import { HelpTray } from '../../components/feedback/HelpTray'
+import { SpraakTips } from '../../components/feedback/SpraakTips'
 import { useStore } from '../../state/store'
 import { useBekijkstand } from '../../state/useBekijkstand'
 import { useFinishSpoke } from '../../state/flow'
@@ -36,7 +36,6 @@ export default function Script() {
   return (
     <SpokeFrame
       locked={bekijken}
-      help={<HelpTray sectionId="avatars" tips={HOE.script} />}
       preview={
         <div className="flex w-full max-w-xl flex-col gap-3">
           <Voorbeeld avatarFace={avatar?.face} naam={avatar?.name} />
@@ -74,12 +73,15 @@ export default function Script() {
       </div>
 
       <Button
+        className="w-fit"
         variant="secondary" iconLeft={RefreshCw}
         loading={audioBezig}
         onClick={() => regenerateAudio(page.id)}
       >
         {audioBezig ? 'Audio wordt gemaakt' : 'Audio opnieuw maken (gratis)'}
       </Button>
+
+      <SpraakTips />
 
       {bekijken ? (
             <Bekijkbalk />

@@ -6,7 +6,7 @@ import {
 } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
 import { Bekijkbalk } from '../../components/feedback/Bekijkbalk'
-import { HelpTray } from '../../components/feedback/HelpTray'
+import { SpraakTips } from '../../components/feedback/SpraakTips'
 import { useStore } from '../../state/store'
 import { useBekijkstand } from '../../state/useBekijkstand'
 import { useFinishSpoke } from '../../state/flow'
@@ -46,7 +46,6 @@ export default function Video() {
   return (
     <SpokeFrame
       locked={bekijken}
-      help={<HelpTray sectionId="widget" tips={HOE.video} />}
       preview={
         <div className="flex w-full max-w-2xl flex-col gap-3">
           <VideoPreview
@@ -94,6 +93,8 @@ export default function Video() {
             dir={dir}
             onChange={(lines) => editSubtitles(page.id, lang, lines)}
           />
+
+          <SpraakTips soort="ondertitel" />
 
           {bekijken ? (
             <Bekijkbalk />

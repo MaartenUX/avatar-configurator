@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { ApproveBox, HowBox, Player, SceneBlock } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
 import { Bekijkbalk } from '../../components/feedback/Bekijkbalk'
-import { HelpTray } from '../../components/feedback/HelpTray'
+import { SpraakTips } from '../../components/feedback/SpraakTips'
 import { useStore } from '../../state/store'
 import { useBekijkstand } from '../../state/useBekijkstand'
 import { useFinishSpoke } from '../../state/flow'
@@ -37,7 +37,6 @@ export default function Vertaling() {
   return (
     <SpokeFrame
       locked={bekijken}
-      help={<HelpTray sectionId="avatars" tips={HOE.vertaling} />}
       preview={
         <div className="flex w-full max-w-xl flex-col gap-3">
           <Voorbeeld avatarFace={avatar?.face} naam={avatar?.name} />
@@ -100,6 +99,8 @@ export default function Vertaling() {
           />
         ))}
       </div>
+
+      <SpraakTips />
 
       {bekijken ? (
             <Bekijkbalk />
