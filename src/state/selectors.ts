@@ -39,9 +39,9 @@ export function nextAction(page: Page, user: 'esmee' | 'emre' = 'esmee'): NextAc
       }
     case 'review-nl':
       return {
-        label: 'Finetune het script',
+        label: 'Finetune script en audio',
         to: `/paginas/${page.id}/script`,
-        hint: 'Het Nederlandse script staat klaar',
+        hint: 'Het Nederlandse script en de audio staan klaar',
       }
     case 'ready-to-publish':
       return { label: 'Publiceer', to: `/paginas/${page.id}/publiceren`, hint: 'Alle talen zijn goedgekeurd' }

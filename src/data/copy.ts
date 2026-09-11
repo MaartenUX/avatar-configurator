@@ -3,7 +3,7 @@
 export const PRODUCTIE_STAPPEN = [
   { label: 'Samenvatting maken', meta: '1 min · automatisch' },
   { label: 'Basissamenvatting controleren', meta: '3 min · jij' },
-  { label: 'Nederlands script finetunen', meta: '5 min · jij' },
+  { label: 'Nederlands script en audio finetunen', meta: '5 min · jij' },
   { label: 'Vertalingen controleren', meta: '5 min per taal · collega’s' },
   { label: 'Video’s maken', meta: '20 min · automatisch' },
   { label: 'Ondertiteling controleren en publiceren', meta: '5 min · jij' },

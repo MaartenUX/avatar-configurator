@@ -156,6 +156,53 @@ Bij hover op een goedgekeurde taalregel verschijnt "Bekijk", die de spaak opent
 met `?bekijk=1`. De velden zijn dan dood en een balk vervangt de akkoordknop.
 De `locked`-prop op `SpokeFrame` bestond al maar werd nergens doorgegeven.
 
+---
+
+# CHANGES-02 — 11 september
+
+Alle 22 punten verwerkt. Wat daarbij een keuze vroeg:
+
+### 24. De container is 1040 px, behalve waar het niet past
+Het overzicht en de configuratie-intro staan op 1040. De beheerpagina en `/kit`
+krijgen `breed` (1440): vier statistiekkaarten, vier videotegels en een
+codeveld naast de social-tips passen niet in 1040 zonder te verschralen.
+
+### 25. Het advieslabel staat inline naast de titel, het vinkje in de hoek
+Zo raken ze elkaar nooit, ongeacht de lengte van de titel. Bij een lange titel
+wikkelt het label naar de volgende regel in plaats van over het vinkje te
+schuiven.
+
+### 26. "Goed om te weten" staat in de sectie-registry, niet in de secties
+`SectionShell` rendert het blok altijd direct onder de intro. De tekst staat
+per sectie in `sections.ts`, zodat een sectie hem niet kan vergeten of op een
+andere plek kan zetten.
+
+### 27. Het advies verschijnt pas na een keuze
+Vooraf bij alle opties is het ruis: je leest dan drie adviezen tegelijk. Geldt
+voor avatars en voor het videotype.
+
+### 28. De contentpagina is een echte tweede layout
+De alternatieve suggestie (alleen een andere paginatitel) was goedkoper, maar
+het verschil tussen een homepage en een informatiepagina is juist waar de
+widget anders valt. `SiteMock` heeft nu een `soort`-prop met broodkruimel,
+tekstkolom en zijbalk.
+
+### 29. De widgetmarge schaalt mee met de mock
+De marge is in echte pixels (default 24), maar de preview is kleiner dan een
+echte pagina. Die wordt met een factor geschaald, anders duwt 24 px de widget
+in de mini-previews half uit beeld.
+
+### 30. De demo zit vóór het vastleggen, in dezelfde scrollpagina
+Zoals in CHANGES-02 D20 aangegeven. De route `/configuratie/demo` is vervallen;
+na vastleggen land je op het overzicht met een toast.
+
+## Vervallen door CHANGES-02
+
+- De screenshot-upload in sectie 5. We hebben de URL al; een tweede URL voor
+  een contentpagina zegt meer dan een geüpload plaatje.
+- Het blok met de drie fases op het eerste-keer-overzicht.
+- De losse demo-pagina uit CHANGES-01 punt 24.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

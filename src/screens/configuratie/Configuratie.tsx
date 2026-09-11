@@ -6,8 +6,10 @@ import { ProgressBar } from '../../components/layout/ProgressBar'
 import { useStore } from '../../state/store'
 import { SECTIONS, doneSections, firstOpenSection } from './sections'
 import { SectionShell } from './SectionShell'
-import { S1Talen, S2Avatars, S3VideoType, S4Personaliseren, S5Widget } from './secties'
-import { S6Vastleggen } from './S6Vastleggen'
+import { S1Talen, S2Avatars, S3VideoType, S4Scenes, S5Widget } from './secties'
+import { S6Demo } from './S6Demo'
+import { DemoPreview } from './DemoPreview'
+import type { Lang } from '../../state/types'
 import { cn } from '../../lib/cn'
 
 /** Hoe lang de observer een klik op "Verder" laat winnen van het scrollen. */
@@ -17,6 +19,7 @@ export default function Configuratie() {
   const config = useStore((s) => s.config)
   const setScrollY = useStore((s) => s.setScrollY)
   const startConfig = useStore((s) => s.startConfig)
+  const flash = useStore((s) => s.flash)
   const navigate = useNavigate()
 
   const els = useRef(new Map<number, HTMLElement>())
@@ -26,6 +29,8 @@ export default function Configuratie() {
 
   const [active, setActive] = useState(() => firstOpenSection(config))
   const [previewMode, setPreviewMode] = useState<'site' | 'grid'>('site')
+  // Zodra de demo klaar is, wordt hij links afspeelbaar.
+  const [demoTaal, setDemoTaal] = useState<Lang | null>(null)
 
   const gedaan = doneSections(config)
   const vergrendeld = config.status === 'locked'
@@ -124,13 +129,17 @@ export default function Configuratie() {
     talen: <S1Talen />,
     avatars: <S2Avatars />,
     videotype: <S3VideoType />,
-    personaliseren: <S4Personaliseren />,
+    personaliseren: <S4Scenes />,
     widget: <S5Widget />,
     vastleggen: (
-      <S6Vastleggen
+      <S6Demo
         gridSentinel={gridSentinel}
         onWijzig={scrollNaar}
-        onVastgelegd={() => navigate('/configuratie/demo')}
+        onDemo={setDemoTaal}
+        onVastgelegd={() => {
+          flash({ text: 'Instellingen vastgelegd — voeg je eerste pagina toe', tone: 'success' })
+          navigate('/')
+        }}
       />
     ),
   }
@@ -155,8 +164,10 @@ export default function Configuratie() {
 
       <div className="grid lg:grid-cols-2">
         {/* Links: de preview die meegroeit met wat rechts gekozen wordt. */}
-        <div className="hidden bg-bg px-8 py-8 lg:block">
-          <div className="sticky top-[152px] flex flex-col gap-4">
+        <div className="hidden bg-bg px-8 lg:block">
+          {/* Verticaal gecentreerd in de halve hoogte, op driekwart formaat. */}
+          <div className="sticky top-[130px] flex h-[calc(100svh-160px)] items-center justify-center">
+            <div className="w-[75%]">
             <div className="relative">
               <div
                 className={cn(
@@ -164,7 +175,15 @@ export default function Configuratie() {
                   previewMode === 'grid' ? 'pointer-events-none absolute inset-0 scale-95 opacity-0' : 'opacity-100',
                 )}
               >
-                <SiteMock config={config} expanded={active >= 3 && active <= 4} />
+                {demoTaal ? (
+                  <DemoPreview config={config} />
+                ) : (
+                <SiteMock
+                  config={config}
+                  soort={config.contentUrl ? 'content' : 'home'}
+                  expanded={active >= 3 && active <= 4}
+                />
+                )}
               </div>
               <div
                 className={cn(
@@ -174,8 +193,8 @@ export default function Configuratie() {
               >
                 <PreviewGrid config={config} />
               </div>
+              </div>
             </div>
-
           </div>
         </div>
 
@@ -185,11 +204,9 @@ export default function Configuratie() {
             <div className="mb-8 rounded-md bg-white p-5 shadow-card">
               <h1 className="text-h2 text-gray-1">Voordat je begint</h1>
               <p className="mt-1.5 text-body text-gray-2">
-                Dit duurt ongeveer een kwartier. Je hebt nodig: het webadres van je website, en
-                eventueel eigen achtergrondfoto’s.
-              </p>
-              <p className="mt-1.5 text-body-sm text-gray-3">
-                Je kunt altijd stoppen en later verdergaan.
+                Dit zijn de eenmalige basisinstellingen voor al je uitlegvideo’s. Aan het eind
+                maak je een demo om alles te controleren. Daarna leg je de instellingen vast en
+                maak je pagina voor pagina de echte video’s.
               </p>
             </div>
           )}
@@ -208,6 +225,7 @@ export default function Configuratie() {
             <SectionShell
               key={def.id}
               def={def}
+              weten={def.weten}
               register={register(def.index)}
               state={def.index === active ? 'active' : def.index < active ? 'past' : 'future'}
               onNext={i < SECTIONS.length - 1 ? () => scrollNaar(def.index + 1) : undefined}

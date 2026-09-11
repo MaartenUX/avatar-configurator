@@ -33,7 +33,7 @@ export default function Beheer() {
   const klaarVoorDownload = talen.every((l) => page.langs[l]?.status === 'approved')
 
   return (
-    <ShellContainer>
+    <ShellContainer breed>
       <div className="flex flex-col gap-8">
         <header className="flex flex-col gap-1">
           <h1 className="text-h1 text-gray-1">{page.title}</h1>

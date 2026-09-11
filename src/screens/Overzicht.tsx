@@ -2,12 +2,11 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CircleHelp, MessageCircle, Plus, Settings2, Sparkles, Users } from 'lucide-react'
 import {
-  Button, Card, Chip, EmptyState, LockedBanner, PageCard, PipelineStep, ShellContainer,
+  Button, Card, Chip, EmptyState, LockedBanner, PageCard, ShellContainer,
 } from '../components'
 import { useStore } from '../state/store'
 import { useNow } from '../state/TickProvider'
 import { langLabel } from '../data/langs'
-import { FASES } from '../data/copy'
 import type { Lang } from '../state/types'
 
 /** Hoe lang een net bijgewerkte kaart gemarkeerd blijft. */
@@ -148,70 +147,39 @@ export default function Overzicht() {
   )
 }
 
-/** Eerste keer: nog geen configuratie, dus één duidelijke volgende stap. */
+/** Eerste keer: nog geen configuratie, dus precies één volgende stap. */
 function EersteKeer() {
   const videos = useStore((s) => s.videos)
 
   return (
     <ShellContainer>
-    <div className="flex flex-col gap-8">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-display text-gray-1">Welkom bij Bergrode</h1>
-        <p className="text-body text-gray-2">
-          Je richt het eenmalig in. Daarna maak je zelf video’s bij je pagina’s.
-        </p>
-      </header>
-
-      <Card className="flex flex-col gap-6">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-h2 text-gray-1">Begin met de configuratie</h2>
+      <div className="flex flex-col gap-8">
+        <header className="flex flex-col gap-1">
+          <h1 className="text-display text-gray-1">Welkom bij Bergrode</h1>
           <p className="text-body text-gray-2">
-            Dit duurt ongeveer een kwartier. Je kunt tussendoor stoppen en later verdergaan.
+            Je richt het eenmalig in. Daarna maak je zelf video’s bij je pagina’s.
           </p>
-        </div>
+        </header>
 
-        <ol className="grid gap-4 md:grid-cols-3">
-          {FASES.map((f, i) => (
-            <li key={f.title} className="flex flex-col gap-1.5 rounded-md bg-gray-6 p-4">
-              <span className="type-label text-gray-3">Fase {i + 1}</span>
-              <span className="text-h3 text-gray-1">{f.title}</span>
-              <span className="text-body-sm text-gray-2">{f.body}</span>
-            </li>
-          ))}
-        </ol>
+        <Card className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-h2 text-gray-1">Begin met de configuratie</h2>
+            <p className="text-body text-gray-2">
+              Je stelt eenmalig in hoe je uitlegvideo’s eruitzien. Je kunt tussendoor stoppen en
+              later verdergaan.
+            </p>
+          </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <Button to="/configuratie" iconLeft={Settings2}>Start de configuratie</Button>
-          <span className="text-body-sm text-gray-3">
-            Je kunt {videos.total} uitlegvideo’s maken. Elke pagina kost er één.
-          </span>
-        </div>
-      </Card>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button to="/configuratie" iconLeft={Settings2}>Start de configuratie</Button>
+            <span className="text-body-sm text-gray-3">
+              Je kunt {videos.total} uitlegvideo’s maken. Elke pagina kost er één.
+            </span>
+          </div>
+        </Card>
 
-      <Card className="flex flex-col gap-3">
-        <h2 className="text-h3 text-gray-1">Wat er daarna gebeurt</h2>
-        <ol>
-          {[
-            { label: 'Je voegt een pagina toe', meta: 'Jij · 1 min' },
-            { label: 'Wij maken een samenvatting', meta: 'Automatisch · 1 min' },
-            { label: 'Jij controleert de tekst', meta: 'Jij · 8 min' },
-            { label: 'Je collega’s controleren hun taal', meta: 'Collega’s · 5 min per taal' },
-            { label: 'De video’s gaan live', meta: 'Automatisch · 20 min', last: true },
-          ].map((s, i, arr) => (
-            <PipelineStep
-              key={s.label}
-              index={i + 1}
-              label={s.label}
-              meta={s.meta}
-              status="todo"
-              isLast={i === arr.length - 1}
-            />
-          ))}
-        </ol>
-      </Card>
-
-      <Voettekst />
-    </div>
+        <Voettekst />
+      </div>
     </ShellContainer>
   )
 }

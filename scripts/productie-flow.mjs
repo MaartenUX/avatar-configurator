@@ -40,8 +40,8 @@ await check('03-samenvatting', 'Basissamenvatting controleren')
 await page.getByRole('button', { name: 'Akkoord', exact: true }).click()
 await check('04-terug-op-overzicht', 'Basissamenvatting goedgekeurd')
 
-await page.getByRole('link', { name: /Finetune het script/ }).first().click()
-await check('05-script', 'Nederlands script finetunen')
+await page.getByRole('link', { name: /Finetune script en audio/ }).first().click()
+await check('05-script', 'Nederlands script en audio finetunen')
 
 await page.getByRole('button', { name: 'Akkoord', exact: true }).click()
 await check('06-script-akkoord', 'Script goedgekeurd')

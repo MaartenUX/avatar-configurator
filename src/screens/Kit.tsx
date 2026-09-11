@@ -31,7 +31,7 @@ export default function Kit() {
   const [tab, setTab] = useState<Tab>('componenten')
 
   return (
-    <ShellContainer>
+    <ShellContainer breed>
     <section className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
         <h1 className="text-h1 text-gray-1">Componenten en tokens</h1>

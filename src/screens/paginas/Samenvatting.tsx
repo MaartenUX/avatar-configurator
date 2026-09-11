@@ -60,6 +60,8 @@ export default function Samenvatting() {
 
           <HowBox points={HOE.samenvatting} />
 
+          <SpraakTips />
+
           <div className="flex flex-col gap-3">
             {page.scenes.map((scene, i) => (
               <SceneBlock
@@ -86,8 +88,6 @@ export default function Samenvatting() {
               Dit gaat van je gezamenlijke pot om opnieuw te maken.
             </span>
           </span>
-
-          <SpraakTips />
 
           {bekijken ? (
             <Bekijkbalk />

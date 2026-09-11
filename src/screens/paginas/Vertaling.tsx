@@ -82,6 +82,8 @@ export default function Vertaling() {
 
       <HowBox points={HOE.vertaling} />
 
+      <SpraakTips />
+
       <div className="flex flex-col gap-3">
         {scenes.map((scene, i) => (
           <SceneBlock
@@ -99,8 +101,6 @@ export default function Vertaling() {
           />
         ))}
       </div>
-
-      <SpraakTips />
 
       {bekijken ? (
             <Bekijkbalk />

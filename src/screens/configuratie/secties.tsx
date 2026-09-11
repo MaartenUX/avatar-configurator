@@ -1,13 +1,11 @@
 import { useState } from 'react'
-import { Building2, Check, Gauge, ImageUp, Timer, Upload } from 'lucide-react'
-import {
-  AdviceBox, AvatarTile, Button, Card, ChoiceTile, Chip, Input,
-} from '../../components'
+import { Building2, Check, ChevronDown, Gauge, Images, Timer, Upload } from 'lucide-react'
+import { AdviceBox, AvatarTile, Button, Card, ChoiceTile, Chip, Input } from '../../components'
 import { useStore } from '../../state/store'
 import { ADVICE, advisedFor, avatarsFor } from '../../data/avatars'
 import { MAX_EXTRA_LANGS, OPTIONAL_LANGS, langLabel } from '../../data/langs'
 import { backgroundImage } from '../../lib/assets'
-import type { Config, Lang, WidgetCorner } from '../../state/types'
+import type { Lang, WidgetCorner } from '../../state/types'
 import { cn } from '../../lib/cn'
 
 /* ---------------------------------------------------------------- 1. talen */
@@ -50,11 +48,10 @@ export function S1Talen() {
       <div className="flex flex-col gap-2">
         <h3 className="text-h3 text-gray-1">Talen</h3>
         <p className="text-body-sm text-gray-2">
-          Nederlands staat vast en is de basis voor elke vertaling. Kies er maximaal{' '}
-          {MAX_EXTRA_LANGS} bij. Elke taal heeft een collega nodig die hem controleert.
+          Kies er maximaal {MAX_EXTRA_LANGS} bij naast Nederlands.
         </p>
         <div className="flex flex-wrap gap-2">
-          <Chip label="Nederlands" selected count={undefined} />
+          <Chip label="Nederlands" selected />
           {OPTIONAL_LANGS.map((l) => {
             const on = config.languages.includes(l)
             return (
@@ -75,13 +72,6 @@ export function S1Talen() {
           </p>
         )}
       </div>
-
-      {config.languages.length > 1 && (
-        <AdviceBox label="Goed om te weten">
-          Je kiest {config.languages.length} talen. Voor elke taal behalve Nederlands heb je
-          straks een collega nodig die de tekst controleert voordat de video gemaakt wordt.
-        </AdviceBox>
-      )}
     </>
   )
 }
@@ -94,25 +84,33 @@ export function S2Avatars() {
 
   return (
     <>
-      {config.languages.map((lang) => (
-        <div key={lang} className="flex flex-col gap-2">
-          <h3 className="text-h3 text-gray-1">{langLabel(lang)}</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {avatarsFor(lang).map((a) => (
-              <AvatarTile
-                key={a.id}
-                avatar={a}
-                selected={config.avatars[lang] === a.id}
-                advised={a.advised}
-                onSelect={() => patch({ avatars: { ...config.avatars, [lang]: a.id } })}
-              />
-            ))}
+      {config.languages.map((lang) => {
+        const gekozen = config.avatars[lang]
+        return (
+          <div key={lang} className="flex flex-col gap-2">
+            <h3 className="text-h3 text-gray-1">{langLabel(lang)}</h3>
+            {/* Half formaat: twee talen passen zo naast elkaar in beeld. */}
+            <div className="grid max-w-md grid-cols-2 gap-3">
+              {avatarsFor(lang).map((a) => (
+                <AvatarTile
+                  key={a.id}
+                  avatar={a}
+                  compact
+                  selected={gekozen === a.id}
+                  advised={a.advised}
+                  onSelect={() => patch({ avatars: { ...config.avatars, [lang]: a.id } })}
+                />
+              ))}
+            </div>
+            {/* Het advies komt pas als er iets gekozen is; vooraf is het ruis. */}
+            {gekozen && (
+              <AdviceBox>
+                {advisedFor(lang)?.name}. {ADVICE[lang]}
+              </AdviceBox>
+            )}
           </div>
-          <AdviceBox>
-            {advisedFor(lang)?.name}. {ADVICE[lang]}
-          </AdviceBox>
-        </div>
-      ))}
+        )
+      })}
     </>
   )
 }
@@ -139,92 +137,123 @@ export function S3VideoType() {
           onSelect={() => patch({ videoType: 'adaptief' })}
         />
       </div>
-      <AdviceBox>
-        Vast is de aanbeveling. Bij informatieve video’s haakt het grootste deel van de kijkers na
-        drie minuten af; wat daarna komt wordt zelden gezien.
-      </AdviceBox>
+      {config.videoType && (
+        <AdviceBox>
+          {config.videoType === 'vast'
+            ? 'Vast is de aanbeveling. Wat na drie minuten komt, wordt zelden gezien.'
+            : 'Adaptief werkt goed bij lange pagina’s. De samenvatting blijft wel een samenvatting; details laten we weg.'}
+        </AdviceBox>
+      )}
     </>
   )
 }
 
-/* ------------------------------------------------- 4. personaliseer de video */
+/* ------------------------------------------- 4. scènes en achtergronden */
 
-const EIGEN_FOTOS = ['kantoor-2', 'kantoor-3', 'kantoor-4', 'kantoor-1']
+const EIGEN_FOTOS = ['kantoor-2', 'kantoor-3', 'kantoor-4', 'kantoor-1', 'kantoor-2', 'kantoor-3']
 
-export function S4Personaliseren() {
+export function S4Scenes() {
   const config = useStore((s) => s.config)
   const patch = useStore((s) => s.patchConfig)
   const [eenFoto, setEenFoto] = useState(false)
 
-  // Zolang er niets gekozen is tonen we de standaardshots, maar staat er nog
-  // niets in de state: de sectie is dan ook nog niet af.
-  const shots = config.backgrounds.length === 4 ? config.backgrounds : [null, null, null, null]
+  const aantal = config.videoType === 'adaptief' ? 6 : 4
+  const eigen = config.achtergrondModus === 'eigen'
+  const shots = config.backgrounds.length === aantal
+    ? config.backgrounds
+    : Array.from({ length: aantal }, () => null)
 
   const zet = (index: number, slug: string | null) => {
-    const next = eenFoto
-      ? shots.map(() => slug)
-      : shots.map((b, i) => (i === index ? slug : b))
+    const next = eenFoto ? shots.map(() => slug) : shots.map((b, i) => (i === index ? slug : b))
     patch({ backgrounds: next })
   }
 
   return (
     <>
-      <label className="flex w-fit items-center gap-2.5 rounded-sm border border-gray-5 bg-white px-3 py-2.5 text-body text-gray-1">
-        <input
-          type="checkbox"
-          checked={eenFoto}
-          onChange={(e) => {
-            setEenFoto(e.target.checked)
-            if (e.target.checked) patch({ backgrounds: shots.map(() => shots[0]) })
-          }}
-          className="accent-[#46BAD8]"
-        />
-        Gebruik één beeld voor alle scènes
-      </label>
-
+      {/* Eerst de keuze, dan pas de tegels. */}
       <div className="grid gap-3 sm:grid-cols-2">
-        {shots.map((slug, i) => {
-          const standaard = slug === null
-          const src = backgroundImage(slug ?? `kantoor-${i + 1}`)
-          return (
-            <Card key={i} className="flex flex-col gap-3 p-4">
-              <span className="type-label text-gray-3">Scène {i + 1}</span>
-              <span className="overflow-hidden rounded-sm">
-                {src ? (
-                  <img src={src} alt="" className="aspect-video w-full scale-105 object-cover blur-[6px]" />
-                ) : (
-                  <span className="grid aspect-video w-full place-items-center bg-turq-tint text-body-sm text-turq-shade">
-                    Kantoorshot {i + 1}
-                  </span>
-                )}
-              </span>
-              <span className="flex flex-wrap gap-2">
-                <Button
-                  size="sm"
-                  variant={standaard ? 'primary' : 'secondary'}
-                  iconLeft={standaard ? Check : Building2}
-                  onClick={() => zet(i, null)}
-                >
-                  Kantoorshot
-                </Button>
-                <Button
-                  size="sm"
-                  variant={!standaard ? 'primary' : 'secondary'}
-                  iconLeft={!standaard ? Check : Upload}
-                  onClick={() => zet(i, EIGEN_FOTOS[i])}
-                >
-                  Eigen foto
-                </Button>
-              </span>
-            </Card>
-          )
-        })}
+        <ChoiceTile
+          title="Standaard kantoorshots" icon={Building2} tag="Aanbevolen"
+          selected={config.achtergrondModus === 'standaard'}
+          description="Rustige kantoorinterieurs, per scène een ander. Je hoeft niets aan te leveren."
+          onSelect={() => patch({ achtergrondModus: 'standaard', backgrounds: [] })}
+        />
+        <ChoiceTile
+          title="Personaliseer met eigen foto’s" icon={Images}
+          selected={eigen}
+          description="Bijvoorbeeld het gemeentehuis of een plek buiten in de gemeente."
+          onSelect={() =>
+            patch({
+              achtergrondModus: 'eigen',
+              backgrounds: Array.from({ length: aantal }, () => null),
+            })
+          }
+        />
       </div>
 
-      <AdviceBox label="Waar let je op">
-        Rustige beelden zonder mensen op de voorgrond werken het best. De avatar staat er half
-        voor, dus houd het midden vrij.
-      </AdviceBox>
+      {eigen && (
+        <>
+          <AdviceBox label="Handig om te weten">
+            Een leuke manier om de video’s persoonlijker te maken. Foto’s hoeven niet van
+            topkwaliteit te zijn — ze worden altijd licht geblurd.
+          </AdviceBox>
+
+          <label className="flex w-fit items-center gap-2.5 rounded-sm border border-gray-5 bg-white px-3 py-2.5 text-body text-gray-1">
+            <input
+              type="checkbox"
+              checked={eenFoto}
+              onChange={(e) => {
+                setEenFoto(e.target.checked)
+                if (e.target.checked) patch({ backgrounds: shots.map(() => shots[0]) })
+              }}
+              className="accent-[#46BAD8]"
+            />
+            Gebruik één beeld voor alle scènes
+          </label>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            {shots.map((slug, i) => {
+              const standaard = slug === null
+              const src = backgroundImage(slug ?? `kantoor-${(i % 4) + 1}`)
+              const rol = i === 0 ? 'Intro' : i === shots.length - 1 ? 'Outro' : `Inhoud ${i}`
+              return (
+                <Card key={i} className="flex flex-col gap-3 p-4">
+                  <span className="type-label text-gray-3">
+                    Scène {i + 1} · {rol}
+                  </span>
+                  <span className="overflow-hidden rounded-sm">
+                    {src ? (
+                      <img src={src} alt="" className="aspect-video w-full scale-105 object-cover blur-[6px]" />
+                    ) : (
+                      <span className="grid aspect-video w-full place-items-center bg-turq-tint text-body-sm text-turq-shade">
+                        Kantoorshot {i + 1}
+                      </span>
+                    )}
+                  </span>
+                  <span className="flex flex-wrap gap-2">
+                    <Button
+                      size="sm"
+                      variant={standaard ? 'primary' : 'secondary'}
+                      iconLeft={standaard ? Check : Building2}
+                      onClick={() => zet(i, null)}
+                    >
+                      Kantoorshot
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant={!standaard ? 'primary' : 'secondary'}
+                      iconLeft={!standaard ? Check : Upload}
+                      onClick={() => zet(i, EIGEN_FOTOS[i])}
+                    >
+                      Eigen foto
+                    </Button>
+                  </span>
+                </Card>
+              )
+            })}
+          </div>
+        </>
+      )}
     </>
   )
 }
@@ -244,9 +273,12 @@ const HUISSTIJL = { logo: 'bergrode', primary: '#1F5E58', secondary: '#FF996D' }
 export function S5Widget() {
   const config = useStore((s) => s.config)
   const patch = useStore((s) => s.patchConfig)
-  const [url, setUrl] = useState(config.siteUrl || 'https://www.bergrode.nl')
-  const [bezig, setBezig] = useState(false)
   const fast = useStore((s) => s.fast)
+  const [url, setUrl] = useState(config.siteUrl || 'https://www.bergrode.nl')
+  const [contentUrl, setContentUrl] = useState(config.contentUrl ?? '')
+  const [contentOpen, setContentOpen] = useState(Boolean(config.contentUrl))
+  const [specs, setSpecs] = useState(false)
+  const [bezig, setBezig] = useState(false)
 
   const ophalen = () => {
     setBezig(true)
@@ -258,6 +290,7 @@ export function S5Widget() {
   }
 
   const opgehaald = Boolean(config.primary)
+  const marge = config.widgetMargin ?? { x: 24, y: 24 }
 
   return (
     <>
@@ -274,7 +307,7 @@ export function S5Widget() {
         </div>
 
         {opgehaald && (
-          <Card className="flex items-center gap-4 p-4">
+          <Card className="flex flex-wrap items-center gap-4 p-4">
             <span className="flex items-center gap-2">
               <span className="grid size-10 place-items-center rounded-sm bg-gray-6 text-body-sm font-semibold text-gray-1">
                 B
@@ -293,39 +326,108 @@ export function S5Widget() {
         )}
       </div>
 
+      {/* De preview toont een homepage; een informatiepagina ziet er anders uit. */}
       <div className="flex flex-col gap-2">
-        <h3 className="text-h3 text-gray-1">Plek op de pagina</h3>
-        <div className="grid grid-cols-2 gap-3">
-          {HOEKEN.map((h) => (
-            <ChoiceTile
-              key={h.id}
-              title={h.label}
-              selected={config.widgetCorner === h.id}
-              onSelect={() => patch({ widgetCorner: h.id })}
-              visual={<HoekSchets corner={h.id} />}
+        {contentOpen ? (
+          <>
+            <Input
+              label="Adres van een contentpagina"
+              value={contentUrl}
+              onChange={(v) => {
+                setContentUrl(v)
+                patch({ contentUrl: v })
+              }}
+              type="url"
+              placeholder="https://www.bergrode.nl/parkeervergunning-bewoners"
+              hint="De preview links wisselt dan naar een pagina met tekst en een zijbalk."
             />
-          ))}
-        </div>
+            <Button
+              variant="ghost" size="sm"
+              onClick={() => {
+                setContentOpen(false)
+                setContentUrl('')
+                patch({ contentUrl: undefined })
+              }}
+              className="w-fit"
+            >
+              Terug naar de homepage-preview
+            </Button>
+          </>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setContentOpen(true)}
+            className="w-fit text-body text-blue-shade hover:underline"
+          >
+            Preview verbeteren: voeg de URL van een contentpagina toe
+          </button>
+        )}
       </div>
 
       <div className="flex flex-col gap-2">
-        <h3 className="text-h3 text-gray-1">Je eigen pagina zien</h3>
-        <p className="text-body-sm text-gray-2">
-          Upload een schermafbeelding van je site, dan zie je de widget op je echte pagina staan.
-        </p>
-        <span className="flex gap-2">
-          <Button
-            variant="secondary" iconLeft={ImageUp}
-            onClick={() => patch({ siteScreenshot: backgroundImage('kantoor-1') })}
-          >
-            Schermafbeelding uploaden
-          </Button>
-          {config.siteScreenshot && (
-            <Button variant="ghost" onClick={() => patch({ siteScreenshot: undefined })}>
-              Terug naar de schets
-            </Button>
-          )}
-        </span>
+        <button
+          type="button"
+          onClick={() => setSpecs(!specs)}
+          aria-expanded={specs}
+          className="inline-flex w-fit items-center gap-1.5 rounded-sm py-1.5 text-body text-gray-2 hover:text-blue-shade"
+        >
+          Meer specificaties
+          <ChevronDown size={16} aria-hidden className={cn('transition-transform', specs && 'rotate-180')} />
+        </button>
+
+        {specs && (
+          <div className="flex flex-col gap-4 rounded-md border border-gray-5 p-4">
+            <div className="flex flex-col gap-2">
+              <h4 className="type-label text-gray-3">Plek op de pagina</h4>
+              <div className="flex flex-wrap gap-2">
+                {HOEKEN.map((h) => (
+                  <button
+                    key={h.id}
+                    type="button"
+                    onClick={() => patch({ widgetCorner: h.id })}
+                    aria-pressed={config.widgetCorner === h.id}
+                    className={cn(
+                      'flex w-[120px] flex-col gap-1.5 rounded-sm border-2 p-2 text-left transition-colors',
+                      config.widgetCorner === h.id
+                        ? 'border-blue bg-blue-tint'
+                        : 'border-gray-5 hover:border-gray-4',
+                    )}
+                  >
+                    <HoekSchets corner={h.id} />
+                    <span className="text-body-sm text-gray-2">{h.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <h4 className="type-label text-gray-3">Afstand tot de rand</h4>
+              <div className="flex flex-wrap gap-3">
+                {(['x', 'y'] as const).map((as) => (
+                  <label key={as} className="flex items-center gap-2 text-body-sm text-gray-2">
+                    {as === 'x' ? 'Horizontaal' : 'Verticaal'}
+                    <input
+                      type="number"
+                      min={0}
+                      max={96}
+                      value={marge[as]}
+                      onChange={(e) =>
+                        patch({ widgetMargin: { ...marge, [as]: Number(e.target.value) || 0 } })
+                      }
+                      className="w-20 rounded-sm border border-gray-4 px-2 py-1.5 text-body text-gray-1 outline-none focus:border-blue"
+                    />
+                    px
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <p className="text-body-sm text-gray-3">
+              Je krijgt straks standaardcode voor je website. Je webdeveloper kan die naar eigen
+              inzicht aanpassen.
+            </p>
+          </div>
+        )}
       </div>
     </>
   )
@@ -344,5 +446,3 @@ function HoekSchets({ corner }: { corner: WidgetCorner }) {
     </span>
   )
 }
-
-export type { Config }

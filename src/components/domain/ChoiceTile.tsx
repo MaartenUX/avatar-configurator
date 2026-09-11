@@ -44,24 +44,26 @@ export function ChoiceTile({
         className,
       )}
     >
-      {tag && (
-        <span className="type-label absolute right-3 top-3 rounded-pill bg-green-tint px-2 py-0.5 text-green-shade">
-          {tag}
+      {/* Vinkje in de hoek, advieslabel inline bij de titel: zo overlappen ze
+          elkaar nooit, ongeacht de lengte van de titel. */}
+      {selected && (
+        <span className="absolute right-3 top-3 grid size-5 place-items-center rounded-pill bg-blue text-white">
+          <Check size={13} strokeWidth={3} aria-hidden />
         </span>
       )}
 
       {visual && <div className="overflow-hidden rounded-sm">{visual}</div>}
 
-      <span className="flex min-w-0 items-center gap-2">
+      <span className="flex min-w-0 flex-wrap items-center gap-2 pr-7">
         {Icon && (
           <Icon size={18} className={selected ? 'text-blue-shade' : 'text-gray-3'} aria-hidden />
         )}
         <span className={cn('min-w-0 break-words text-h3', selected ? 'text-blue-shade' : 'text-gray-1')}>
           {title}
         </span>
-        {selected && (
-          <span className="ml-auto grid size-5 place-items-center rounded-pill bg-blue text-white">
-            <Check size={13} strokeWidth={3} aria-hidden />
+        {tag && (
+          <span className="type-label rounded-pill bg-green-tint px-2 py-0.5 text-green-shade">
+            {tag}
           </span>
         )}
       </span>

@@ -8,9 +8,9 @@ page.on('pageerror', (e) => errors.push(e.message))
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
 
 // Leeg beginnen, anders is de configuratie al vastgelegd.
-await page.goto(`${base}#/?reset=empty`, { waitUntil: 'load' })
+await page.goto(`${base}?fast=1&scenario=eerste#/`, { waitUntil: 'load' })
 await page.waitForTimeout(400)
-await page.goto(`${base}#/configuratie`, { waitUntil: 'load' })
+await page.goto(`${base}?fast=1#/configuratie`, { waitUntil: 'load' })
 await page.waitForTimeout(600)
 
 const stap = async (naam) => {
@@ -46,12 +46,25 @@ await page.getByRole('button', { name: 'Ophalen' }).click()
 await page.waitForTimeout(2000)
 await stap('5-widget')
 
+// Scène-keuze, anders is stap 4 niet af en blijft "Maak demo" uit.
+await page.locator('#sectie-personaliseren').scrollIntoViewIfNeeded()
+await page.waitForTimeout(700)
+await page.getByRole('button', { name: /Standaard kantoorshots/ }).click()
+await stap('4-scenes')
+
 await page.locator('#sectie-vastleggen').scrollIntoViewIfNeeded()
 await page.waitForTimeout(900)
+await stap('6-demo-start')
+
+await page.getByRole('button', { name: 'Maak demo', exact: true }).click()
+await page.waitForTimeout(2000)
+await stap('6-demo-klaar')
+
+const body = await page.textContent('body')
+console.log(body.includes('Je keuzes') ? '  ok  demo gemaakt' : 'FAIL demo niet gemaakt')
+await page.mouse.wheel(0, 1400)
+await page.waitForTimeout(800)
 await stap('6-vastleggen')
-await page.mouse.wheel(0, 1200)
-await page.waitForTimeout(900)
-await stap('6-raster')
 
 console.log('consolefouten:', errors.length ? [...new Set(errors)] : 'geen')
 await browser.close()

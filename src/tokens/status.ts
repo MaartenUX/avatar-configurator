@@ -115,7 +115,7 @@ export const pageStatusStyle = (s: PageStatus) => STATUS[PAGE_STATUS[s]]
 
 /** Nederlandse labels per taalstatus, specifieker dan het generieke statuslabel. */
 export const LANG_STATUS_LABEL: Record<LangStatus, string> = {
-  waiting: 'Wacht op het script',
+  waiting: 'Wacht op script & audio',
   'review-text': 'Script controleren',
   generating: 'Video wordt gemaakt',
   'review-video': 'Video controleren',

@@ -47,13 +47,15 @@ export default function Script() {
         </div>
       }
     >
-      <h1 className="text-h2 text-gray-1">Nederlands script finetunen</h1>
+      <h1 className="text-h2 text-gray-1">Nederlands script en audio finetunen</h1>
       <p className="text-body text-gray-2">
         De tekst staat vast; hier maak je de zinnen mooi om uit te spreken. Wat je hier verandert,
         verandert niet de betekenis voor de andere talen.
       </p>
 
       <HowBox points={HOE.script} />
+
+      <SpraakTips />
 
       <div className="flex flex-col gap-3">
         {page.scenes.map((scene, i) => (
@@ -80,8 +82,6 @@ export default function Script() {
       >
         {audioBezig ? 'Audio wordt gemaakt' : 'Audio opnieuw maken (gratis)'}
       </Button>
-
-      <SpraakTips />
 
       {bekijken ? (
             <Bekijkbalk />

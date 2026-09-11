@@ -5,6 +5,7 @@ import { ToastHost } from '../feedback/Toast'
 import { useStore } from '../../state/store'
 import { SCENARIOS } from '../../data/seed'
 import type { ScenarioId } from '../../data/seed'
+import { cn } from '../../lib/cn'
 
 /**
  * De schil. Geen zijbalk: het overzicht is de hub en alles hangt daaronder.
@@ -29,7 +30,10 @@ export function ShellLayout() {
             <SquarePlay size={19} />
           </span>
           <span className="flex flex-col leading-tight">
-            <span className="text-h3 font-semibold text-gray-1">Uitlegvideo’s</span>
+            <span className="text-h3 text-gray-1">
+              <span className="font-semibold">Uitlegvideo’s</span>{' '}
+              <span className="font-normal">voor gemeente Bergrode</span>
+            </span>
             <span className="text-body-sm text-gray-3">door ReadSpeaker en XS2Content</span>
           </span>
         </Link>
@@ -37,23 +41,29 @@ export function ShellLayout() {
         <div className="flex items-center gap-6">
           <VideoMeter videos={videos} reruns={reruns} />
 
-          {/* Alleen in dit prototype: springen tussen vier standen. */}
-          <label className="flex items-center gap-2">
-            <span className="type-label text-gray-3">Scenario</span>
+          {/* Het account hoort bij de interface; het kader ernaast niet. */}
+          <span className="flex items-center gap-2.5">
+            <span className="grid size-9 shrink-0 place-items-center rounded-pill bg-violet-tint text-body-sm font-semibold text-violet-shade">
+              {actief.user === 'emre' ? 'E' : 'E'}
+            </span>
+            <span className="text-body-sm text-gray-1">
+              {actief.user === 'emre' ? 'Emre Yılmaz' : 'Esmee de Vries'}
+            </span>
+          </span>
+
+          {/* Zwart kader: dit is de testopstelling, geen onderdeel van het product. */}
+          <label className="flex items-center gap-2 rounded-sm border-2 border-gray-1 px-2.5 py-1.5">
+            <span className="type-label text-gray-1">Testscenario</span>
             <select
               value={scenario}
               onChange={(e) => setScenario(e.target.value as ScenarioId)}
-              className="rounded-sm border border-gray-5 bg-white px-2.5 py-1.5 text-body-sm text-gray-1"
+              className="rounded-sm border border-gray-5 bg-white px-2 py-1 text-body-sm text-gray-1"
             >
               {SCENARIOS.map((s) => (
                 <option key={s.id} value={s.id}>{s.label}</option>
               ))}
             </select>
           </label>
-
-          <span className="grid size-9 shrink-0 place-items-center rounded-pill bg-violet-tint text-body-sm font-semibold text-violet-shade">
-            {actief.user === 'emre' ? 'E' : 'E'}
-          </span>
         </div>
       </header>
 
@@ -67,6 +77,17 @@ export function ShellLayout() {
 }
 
 /** Standaardbreedte voor schermen die geen volle breedte nodig hebben. */
-export function ShellContainer({ children }: { children: React.ReactNode }) {
-  return <div className="mx-auto w-full max-w-[1440px] px-6 py-8">{children}</div>
+export function ShellContainer({
+  children,
+  breed,
+}: {
+  children: React.ReactNode
+  /** Breder dan de standaard 1040, voor schermen met veel naast elkaar. */
+  breed?: boolean
+}) {
+  return (
+    <div className={cn('mx-auto w-full px-6 py-8', breed ? 'max-w-[1440px]' : 'max-w-[1040px]')}>
+      {children}
+    </div>
+  )
 }

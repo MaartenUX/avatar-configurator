@@ -27,6 +27,7 @@ export const EMPTY_CONFIG: Config = {
   scrollY: 0,
   siteUrl: '',
   widgetCorner: 'rb',
+  widgetMargin: { x: 24, y: 24 },
   level: 'B1',
   languages: ['nl'],
   avatars: {},
@@ -43,6 +44,8 @@ export const SEED_CONFIG: Config = {
   primary: '#1F5E58',
   secondary: '#FF996D',
   widgetCorner: 'rb',
+  widgetMargin: { x: 24, y: 24 },
+  achtergrondModus: 'standaard',
   level: 'B1',
   languages: ['nl', 'en', 'tr', 'ar'],
   avatars: { nl: 'nl-sanne', en: 'en-emma', tr: 'tr-zeynep', ar: 'ar-nour' },
@@ -121,7 +124,12 @@ export function snapshotFor(id: ScenarioId): Snapshot {
 
   if (id === 'eerste') {
     return {
-      config: { ...EMPTY_CONFIG, languages: [...EMPTY_CONFIG.languages], backgrounds: [] },
+      config: {
+        ...EMPTY_CONFIG,
+        languages: [...EMPTY_CONFIG.languages],
+        backgrounds: [],
+        widgetMargin: { ...EMPTY_CONFIG.widgetMargin },
+      },
       pages: [],
       videos: { used: 0, total: VIDEOS_TOTAL },
       reruns: { used: 0, total: RERUNS_TOTAL },
@@ -134,6 +142,7 @@ export function snapshotFor(id: ScenarioId): Snapshot {
     languages: [...SEED_CONFIG.languages] as Lang[],
     avatars: { ...SEED_CONFIG.avatars },
     backgrounds: [...SEED_CONFIG.backgrounds],
+    widgetMargin: { ...SEED_CONFIG.widgetMargin },
   }
 
   if (id === 'derde') {

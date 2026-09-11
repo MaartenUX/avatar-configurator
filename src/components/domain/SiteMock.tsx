@@ -16,6 +16,8 @@ export interface SiteMockProps {
   expanded?: boolean
   /** Welke scène-achtergrond in het frame staat. */
   shot?: number
+  /** Contentpagina in plaats van homepage: kop, broodkruimel, tekst, zijbalk. */
+  soort?: 'home' | 'content'
   className?: string
 }
 
@@ -30,10 +32,10 @@ const FIGURE_WIDTH: Record<number, string> = {
 }
 
 const CORNER: Record<Config['widgetCorner'], string> = {
-  lb: 'bottom-4 left-4',
-  rb: 'bottom-4 right-4',
-  lt: 'top-4 left-4',
-  rt: 'top-4 right-4',
+  lb: 'bottom-0 left-0',
+  rb: 'bottom-0 right-0',
+  lt: 'top-0 left-0',
+  rt: 'top-0 right-0',
 }
 
 /**
@@ -47,6 +49,7 @@ export function SiteMock({
   mini,
   expanded,
   shot = 0,
+  soort = 'home',
   className,
 }: SiteMockProps) {
   const primary = config.primary ?? '#BDBDBD'
@@ -62,48 +65,43 @@ export function SiteMock({
         className,
       )}
     >
-      {config.siteScreenshot ? (
-        <img src={config.siteScreenshot} alt="" className="size-full scale-105 object-cover object-top blur-[4px]" />
-      ) : (
-        <>
-          {/* Sitekop: krijgt de opgehaalde huisstijlkleur zodra die er is. */}
-          <div
-            className="flex items-center gap-2 px-3 py-2 transition-colors duration-500"
-            style={{ background: hasBrand ? primary : '#F2F2F2' }}
-          >
+      {/* Sitekop: krijgt de opgehaalde huisstijlkleur zodra die er is. */}
+      <div
+        className="flex items-center gap-2 px-3 py-2 transition-colors duration-500"
+        style={{ background: hasBrand ? primary : '#F2F2F2' }}
+      >
+        <div
+          className={cn('rounded-sm transition-all duration-500', mini ? 'h-2 w-8' : 'h-3.5 w-16')}
+          style={{ background: hasBrand ? '#ffffff' : '#BDBDBD' }}
+        />
+        <div className="ml-auto flex gap-1.5">
+          {[0, 1, 2].map((i) => (
             <div
-              className={cn(
-                'rounded-sm transition-all duration-500',
-                mini ? 'h-2 w-8' : 'h-3.5 w-16',
-              )}
-              style={{ background: hasBrand ? '#ffffff' : '#BDBDBD' }}
+              key={i}
+              className={cn('rounded-pill', mini ? 'h-1 w-4' : 'h-1.5 w-8')}
+              style={{ background: hasBrand ? 'rgba(255,255,255,.55)' : '#E0E0E0' }}
             />
-            <div className="ml-auto flex gap-1.5">
-              {[0, 1, 2].map((i) => (
-                <div
-                  key={i}
-                  className={cn('rounded-pill', mini ? 'h-1 w-4' : 'h-1.5 w-8')}
-                  style={{ background: hasBrand ? 'rgba(255,255,255,.55)' : '#E0E0E0' }}
-                />
-              ))}
-            </div>
-          </div>
+          ))}
+        </div>
+      </div>
 
-          <div className="flex flex-1 flex-col gap-2 p-3">
+      {soort === 'content' ? (
+        <ContentPagina mini={mini} pageTitle={pageTitle} secondary={hasBrand ? secondary : '#BDBDBD'} />
+      ) : (
+        <div className="flex flex-1 flex-col gap-2 p-3">
+          <div
+            className={cn('rounded-sm', mini ? 'h-2 w-2/3' : 'h-3 w-3/5')}
+            style={{ background: hasBrand ? secondary : '#BDBDBD' }}
+          />
+          {!mini && <p className="text-body-sm text-gray-3">{pageTitle}</p>}
+          {[1, 0.92, 0.97, 0.6].map((w, i) => (
             <div
-              className={cn('rounded-sm', mini ? 'h-2 w-2/3' : 'h-3 w-3/5')}
-              style={{ background: hasBrand ? secondary : '#BDBDBD' }}
+              key={i}
+              className={cn('rounded-pill bg-gray-6', mini ? 'h-1' : 'h-2')}
+              style={{ width: `${w * 100}%` }}
             />
-            {!mini && <p className="text-body-sm text-gray-3">{pageTitle}</p>}
-            {[1, 0.92, 0.97, 0.6].map((w, i) => (
-              <div
-                key={i}
-                className={cn('rounded-pill bg-gray-6', mini ? 'h-1' : 'h-2')}
-                style={{ width: `${w * 100}%` }}
-              />
-            ))}
-          </div>
-        </>
+          ))}
+        </div>
       )}
 
       {expanded ? (
@@ -111,6 +109,53 @@ export function SiteMock({
       ) : (
         <Widget config={config} langs={langs} mini={mini} primary={hasBrand ? primary : '#828282'} />
       )}
+    </div>
+  )
+}
+
+/** Een informatiepagina ziet er anders uit dan een homepage. */
+function ContentPagina({
+  mini,
+  pageTitle,
+  secondary,
+}: {
+  mini?: boolean
+  pageTitle: string
+  secondary: string
+}) {
+  return (
+    <div className="flex flex-1 gap-3 p-3">
+      <div className="flex flex-[2] flex-col gap-2">
+        {/* Broodkruimel */}
+        <div className="flex items-center gap-1">
+          {[10, 14, 18].map((w, i) => (
+            <span key={i} className="flex items-center gap-1">
+              {i > 0 && <span className="text-[8px] text-gray-4">›</span>}
+              <span className="h-1 rounded-pill bg-gray-5" style={{ width: w }} />
+            </span>
+          ))}
+        </div>
+        <div
+          className={cn('rounded-sm', mini ? 'h-2 w-3/4' : 'h-3 w-4/5')}
+          style={{ background: secondary }}
+        />
+        {!mini && <p className="text-body-sm text-gray-3">{pageTitle}</p>}
+        {[1, 0.95, 0.98, 0.9, 0.7].map((w, i) => (
+          <div
+            key={i}
+            className={cn('rounded-pill bg-gray-6', mini ? 'h-1' : 'h-1.5')}
+            style={{ width: `${w * 100}%` }}
+          />
+        ))}
+      </div>
+
+      {/* Zijbalk met verwante links */}
+      <div className="flex flex-1 flex-col gap-1.5 rounded-sm bg-gray-6 p-2">
+        <div className="h-1.5 w-2/3 rounded-pill bg-gray-4" />
+        {[0.9, 0.75, 0.85].map((w, i) => (
+          <div key={i} className="h-1 rounded-pill bg-gray-5" style={{ width: `${w * 100}%` }} />
+        ))}
+      </div>
     </div>
   )
 }
@@ -127,6 +172,9 @@ function Widget({
   primary: string
 }) {
   const shown = langs.slice(0, 5)
+  const marge = config.widgetMargin ?? { x: 24, y: 24 }
+  // De marge is in pixels op een echte pagina; hier schalen we mee met de mock.
+  const schaal = mini ? 0.18 : 0.34
 
   return (
     <div
@@ -135,6 +183,7 @@ function Widget({
         CORNER[config.widgetCorner],
         mini ? 'w-[42%]' : 'w-[38%]',
       )}
+      style={{ margin: `${marge.y * schaal}px ${marge.x * schaal}px` }}
     >
       {/* Videokaartje: de gekozen avatars naast elkaar op één grondlijn.
           Zolang er niets gekozen is staan er silhouetten, één per taal. */}
@@ -151,20 +200,29 @@ function Widget({
           )
         })}
 
+        {/* Play in het midden, zoals bij elke videospeler. */}
         <span
           className={cn(
-            'absolute grid place-items-center rounded-pill text-white shadow-card',
-            mini ? 'left-1 top-1 size-3.5' : 'left-2 top-2 size-6',
+            'absolute left-1/2 top-1/2 grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-pill text-white shadow-card',
+            mini ? 'size-4' : 'size-9',
           )}
           style={{ background: primary }}
         >
-          <Play size={mini ? 7 : 12} aria-hidden />
+          <Play size={mini ? 8 : 16} aria-hidden />
         </span>
       </div>
 
-      {/* Ondertitelbalk onder het beeld. */}
-      <div className={cn('flex items-center bg-gray-5', mini ? 'h-3 px-1' : 'h-6 px-2')}>
-        {!mini && <span className="h-1.5 w-3/5 rounded-pill bg-gray-4" />}
+      {/* Ondertitelbalk: kleurt mee zodra de huisstijl is opgehaald. */}
+      <div
+        className={cn('flex items-center transition-colors duration-500', mini ? 'h-3 px-1' : 'h-6 px-2')}
+        style={{ background: config.primary ?? '#E0E0E0' }}
+      >
+        {!mini && (
+          <span
+            className="h-1.5 w-3/5 rounded-pill"
+            style={{ background: config.primary ? 'rgba(255,255,255,.6)' : '#BDBDBD' }}
+          />
+        )}
       </div>
     </div>
   )
@@ -175,7 +233,7 @@ function VideoFrame({ config, shot }: { config: Config; shot: number }) {
   const avatar = avatarById(config.avatars[config.languages[0] ?? 'nl'])
   const slug = config.backgrounds[shot] ?? `kantoor-${(shot % 4) + 1}`
   const bg = backgroundImage(slug)
-  const scenes = config.videoType === 'vast' ? 4 : 6
+  const scenes = config.videoType === 'adaptief' ? 6 : 4
 
   return (
     <div className="absolute inset-2 overflow-hidden rounded-sm bg-gray-1">
@@ -187,15 +245,10 @@ function VideoFrame({ config, shot }: { config: Config; shot: number }) {
             : { background: 'linear-gradient(135deg, #CDEFEC 0%, #E6FAFF 100%)' }
         }
       />
-      {!bg && (
-        <span className="absolute left-2 top-2 rounded-pill bg-white/80 px-2 py-0.5 text-[10px] text-gray-2">
-          {slug}
-        </span>
-      )}
 
       {avatar && (
-        <span className="absolute bottom-8 left-1/2 -translate-x-1/2">
-          <Avatar face={avatar.face} name={avatar.name} className="h-32 w-32" />
+        <span className="absolute bottom-6 left-1/2 -translate-x-1/2">
+          <Avatar face={avatar.face} name={avatar.name} className="h-48 w-44" />
         </span>
       )}
 
@@ -218,7 +271,7 @@ function VideoFrame({ config, shot }: { config: Config; shot: number }) {
             />
           ))}
           <span className="ml-1 text-[10px] text-white/80">
-            {config.videoType === 'vast' ? '1:50' : '3:10'}
+            {config.videoType === 'adaptief' ? '3:10' : '1:50'}
           </span>
         </span>
       </div>
@@ -236,7 +289,7 @@ export function PreviewGrid({ config }: { config: Config }) {
     <div className="flex flex-col gap-3">
       <div className="grid grid-cols-3 gap-2">
         {titles.map((t) => (
-          <SiteMock key={t} config={config} pageTitle={t} mini />
+          <SiteMock key={t} config={config} pageTitle={t} mini soort="content" />
         ))}
       </div>
       <p className="text-center text-body-sm text-gray-3">

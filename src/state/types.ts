@@ -72,7 +72,12 @@ export interface Config {
   primary?: string
   secondary?: string
   widgetCorner: WidgetCorner
-  siteScreenshot?: string
+  /** Marge vanaf de rand van de pagina, in pixels. */
+  widgetMargin: { x: number; y: number }
+  /** Tweede URL: een contentpagina ziet er anders uit dan een homepage. */
+  contentUrl?: string
+  /** Standaard kantoorshots of eigen foto's per scène. */
+  achtergrondModus?: 'standaard' | 'eigen'
   level: 'B1' | 'B2'
   languages: Lang[]
   avatars: Partial<Record<Lang, string>>

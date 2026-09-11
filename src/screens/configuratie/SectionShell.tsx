@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { ArrowDown } from 'lucide-react'
-import { LearnMore } from '../../components'
+import { HowBox, LearnMore } from '../../components'
 import type { SectionDef } from './sections'
 import { cn } from '../../lib/cn'
 
@@ -9,6 +9,8 @@ export interface SectionShellProps {
   state: 'past' | 'active' | 'future'
   register: (el: HTMLElement | null) => void
   onNext?: () => void
+  /** Staat altijd direct onder de intro, vóór de keuzes. */
+  weten?: string[]
   children: ReactNode
 }
 
@@ -19,7 +21,7 @@ export interface SectionShellProps {
  * kop van de volgende sectie onderin al meekijkt. Toekomstige secties dimmen
  * wel, maar blijven klikbaar: dimmen is een hint, geen slot.
  */
-export function SectionShell({ def, state, register, onNext, children }: SectionShellProps) {
+export function SectionShell({ def, state, register, onNext, weten, children }: SectionShellProps) {
   return (
     <section
       ref={register}
@@ -41,17 +43,23 @@ export function SectionShell({ def, state, register, onNext, children }: Section
         </span>
       </header>
 
+      {weten && weten.length > 0 && <HowBox title="Goed om te weten" points={weten} />}
+
       <div className="flex flex-col gap-5">{children}</div>
 
-      {onNext && (
-        <button
-          type="button"
-          onClick={onNext}
-          className="mt-auto inline-flex w-fit items-center gap-1.5 rounded-sm py-2 text-body text-gray-3 transition-colors hover:text-blue-shade"
-        >
-          Verder
-          <ArrowDown size={16} aria-hidden />
-        </button>
+      {/* Sticky onderin het paneel, zodat je nooit hoeft te zoeken waar je
+          verder klikt. Bij de laatste sectie is er niets meer om heen te gaan. */}
+      {onNext && state === 'active' && (
+        <div className="sticky bottom-0 -mx-8 mt-auto border-t border-gray-5 bg-white px-8 py-3 shadow-[0_-4px_16px_rgba(0,0,0,.06)]">
+          <button
+            type="button"
+            onClick={onNext}
+            className="inline-flex items-center gap-1.5 rounded-sm px-3 py-2 text-body text-gray-2 transition-colors hover:text-blue-shade"
+          >
+            Verder
+            <ArrowDown size={16} aria-hidden />
+          </button>
+        </div>
       )}
     </section>
   )

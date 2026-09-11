@@ -11,6 +11,8 @@ export interface AvatarTileProps {
   avatar: AvatarDef
   selected: boolean
   advised?: boolean
+  /** Half formaat: zo passen twee talen naast elkaar in beeld. */
+  compact?: boolean
   onSelect: () => void
 }
 
@@ -24,7 +26,7 @@ const SPEAK_MS = 3000
  * verschijnt de voorbeeldzin als ondertitel óver het portret, zoals in de
  * echte video, in plaats van eronder ruimte te reserveren.
  */
-export function AvatarTile({ avatar, selected, advised, onSelect }: AvatarTileProps) {
+export function AvatarTile({ avatar, selected, advised, compact, onSelect }: AvatarTileProps) {
   const [speaking, setSpeaking] = useState(false)
   const bars = waveformBars(avatar.id, 20)
   const dir = langDir(avatar.lang)
@@ -48,7 +50,8 @@ export function AvatarTile({ avatar, selected, advised, onSelect }: AvatarTilePr
       onClick={handle}
       aria-pressed={selected}
       className={cn(
-        'group relative flex w-full flex-col gap-3 rounded-md border-2 bg-white p-3 text-center transition-all',
+        'group relative flex w-full flex-col rounded-md border-2 bg-white text-center transition-all',
+        compact ? 'gap-2 p-2' : 'gap-3 p-3',
         selected
           ? 'border-blue shadow-card'
           : 'border-transparent shadow-card hover:border-gray-4',
@@ -56,7 +59,12 @@ export function AvatarTile({ avatar, selected, advised, onSelect }: AvatarTilePr
     >
       <span className="relative block aspect-[9/8] overflow-hidden rounded-sm bg-gray-6">
         {advised && (
-          <span className="type-label absolute left-2 top-2 z-10 whitespace-nowrap rounded-pill bg-green-tint px-2 py-1 text-green-shade">
+          <span
+            className={cn(
+              'type-label absolute left-2 top-2 z-10 whitespace-nowrap rounded-pill bg-green-tint text-green-shade',
+              compact ? 'px-1.5 py-0.5 text-[10px]' : 'px-2 py-1',
+            )}
+          >
             Meest gekozen
           </span>
         )}
@@ -71,11 +79,12 @@ export function AvatarTile({ avatar, selected, advised, onSelect }: AvatarTilePr
         {/* Beluister-affordance; verdwijnt zodra hij spreekt. */}
         <span
           className={cn(
-            'absolute bottom-2 right-2 grid size-8 place-items-center rounded-pill bg-white/90 text-blue-shade shadow-card transition-opacity',
+            'absolute bottom-2 right-2 grid place-items-center rounded-pill bg-white/90 text-blue-shade shadow-card transition-opacity',
+            compact ? 'size-6' : 'size-8',
             speaking ? 'opacity-0' : 'opacity-100',
           )}
         >
-          <Volume2 size={15} aria-hidden />
+          <Volume2 size={compact ? 12 : 15} aria-hidden />
         </span>
 
         {speaking && (
@@ -100,8 +109,12 @@ export function AvatarTile({ avatar, selected, advised, onSelect }: AvatarTilePr
       </span>
 
       <span className="flex flex-col gap-0.5">
-        <span className="text-h3 text-gray-1">{avatar.name}</span>
-        <span className="text-body-sm text-gray-3">{avatar.keywords.join(' • ')}</span>
+        <span className={cn(compact ? 'text-body font-medium' : 'text-h3', 'text-gray-1')}>
+          {avatar.name}
+        </span>
+        <span className={cn('text-gray-3', compact ? 'text-[12px] leading-snug' : 'text-body-sm')}>
+          {avatar.keywords.join(' • ')}
+        </span>
       </span>
     </button>
   )
