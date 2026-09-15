@@ -85,7 +85,21 @@ await page.waitForTimeout(500)
 const akkoord = await page.textContent('body')
 eis('akkoordstap noemt de consequentie', akkoord.includes('Na akkoord'))
 
-// 7. Elk shell-scherm is bereikbaar zonder zijbalk.
+// 7. De voettekst op een paginakaart herhaalt geen knop die er al staat,
+// maar blijft wel de enige ingang waar de taalregels er geen hebben.
+await page.goto(`${base}?fast=1&scenario=tweede#/`, { waitUntil: 'load' })
+await page.waitForTimeout(500)
+const kaarten = await page.textContent('body')
+eis('geen dubbele knop op een kaart met rijacties', !kaarten.includes('Controleer video Turks'))
+eis('rijacties staan er wel', kaarten.includes('Controleer video'))
+
+// 8. De stappenbalk noemt de sectie waar je bent.
+await page.goto(`${base}?fast=1&scenario=eerste#/configuratie`, { waitUntil: 'load' })
+await page.waitForTimeout(600)
+const cfg = await page.textContent('body')
+eis('stappenbalk noemt de sectietitel', cfg.includes('Stap 1 van 6') && cfg.includes('Taalniveau en talen'))
+
+// 9. Elk shell-scherm is bereikbaar zonder zijbalk.
 await page.goto(`${base}#/`, { waitUntil: 'load' })
 await page.waitForTimeout(400)
 const teamLink = await page.getByRole('link', { name: 'Team', exact: true }).count()

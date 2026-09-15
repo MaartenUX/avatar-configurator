@@ -84,7 +84,7 @@ export default function Video() {
             {langLabel(lang)}. Klik op een tijdcode om daar in de video te springen.
           </p>
 
-          <HowBox points={HOE.video} />
+          <HowBox points={HOE.video} actie={<SpraakTips soort="ondertitel" compact />} />
 
           {/* Eigen scrollgebied: bij bijna dertig regels schuift anders het
               hele paneel weg onder de akkoordbalk. */}
@@ -97,8 +97,6 @@ export default function Video() {
             onChange={(lines) => editSubtitles(page.id, lang, lines)}
           />
           </div>
-
-          <SpraakTips soort="ondertitel" />
 
           {bekijken ? (
             <Bekijkbalk />

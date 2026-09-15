@@ -151,9 +151,10 @@ export default function Configuratie() {
         <div className="flex items-center gap-6">
           <span className="min-w-0 flex-1">
             <ProgressBar
-              value={vergrendeld ? 6 : active}
-              max={6}
-              note={vergrendeld ? 'Vastgelegd' : `± ${Math.max(2, (6 - gedaan.length) * 2)} min te gaan`}
+              value={vergrendeld ? SECTIONS.length : active}
+              max={SECTIONS.length}
+              title={SECTIONS[active - 1]?.title}
+              note={vergrendeld ? 'Vastgelegd' : `± ${Math.max(2, (SECTIONS.length - gedaan.length) * 2)} min te gaan`}
             />
           </span>
           <Button variant="secondary" size="sm" iconLeft={Save} to="/">
@@ -200,17 +201,6 @@ export default function Configuratie() {
 
         {/* Rechts: één doorlopende scrollpagina. */}
         <div className="flex flex-col bg-white px-8 py-8">
-          {!vergrendeld && (
-            <div className="mb-8 rounded-md bg-white p-5 shadow-card">
-              <h1 className="text-h2 text-gray-1">Voordat je begint</h1>
-              <p className="mt-1.5 text-body text-gray-2">
-                Dit zijn de eenmalige basisinstellingen voor al je uitlegvideo’s. Aan het eind
-                maak je een demo om alles te controleren. Daarna leg je de instellingen vast en
-                maak je pagina voor pagina de echte video’s.
-              </p>
-            </div>
-          )}
-
           {vergrendeld && (
             <div className="mb-8 flex flex-col gap-3">
               <LockedBanner signedAt={config.signedAt} to="/" />

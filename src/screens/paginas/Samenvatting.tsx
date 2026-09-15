@@ -1,7 +1,7 @@
 import { Navigate, useParams } from 'react-router-dom'
 import { RefreshCw } from 'lucide-react'
 import {
-  ApproveBox, Avatar, Button, Card, HowBox, SceneBlock, WaitScreen,
+  ApproveBox, Avatar, Button, HowBox, SceneBlock, WaitScreen,
 } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
 import { Bekijkbalk } from '../../components/feedback/Bekijkbalk'
@@ -49,18 +49,15 @@ export default function Samenvatting() {
         />
       ) : (
         <>
-          <h1 className="text-h2 text-gray-1">Basissamenvatting controleren</h1>
-
-          <Card tone="tint" className="p-4">
-            <p className="text-body text-blue-shade">
+          <div className="flex flex-col gap-1.5">
+            <h1 className="text-h2 text-gray-1">Basissamenvatting controleren</h1>
+            <p className="text-body text-gray-2">
               Dit is de basis voor alle talen. Er staat alleen de essentiële informatie in —
               details van de pagina laten we bewust weg.
             </p>
-          </Card>
+          </div>
 
-          <HowBox points={HOE.samenvatting} />
-
-          <SpraakTips />
+          <HowBox points={HOE.samenvatting} actie={<SpraakTips compact />} />
 
           <div className="flex flex-col gap-3">
             {page.scenes.map((scene, i) => (

@@ -6,6 +6,8 @@ export interface ProgressBarProps {
   max: number
   /** Bijv. "± 10 min te gaan", rechts van het stap-label. */
   note?: string
+  /** Naam van de huidige stap, achter het nummer. */
+  title?: string
   showLabel?: boolean
   status?: StatusKey
   size?: 'sm' | 'md'
@@ -15,6 +17,7 @@ export function ProgressBar({
   value,
   max,
   note,
+  title,
   showLabel = true,
   status = 'review',
   size = 'md',
@@ -24,8 +27,14 @@ export function ProgressBar({
     <div className="flex flex-col gap-1.5">
       {showLabel && (
         <div className="flex items-baseline justify-between gap-4">
-          <span className="text-body-sm text-gray-2">
+          <span className="min-w-0 truncate text-body-sm text-gray-2">
             Stap {value} van {max}
+            {title && (
+              <>
+                <span className="text-gray-4"> · </span>
+                <span className="text-gray-1">{title}</span>
+              </>
+            )}
           </span>
           {note && <span className="text-body-sm text-gray-3">{note}</span>}
         </div>

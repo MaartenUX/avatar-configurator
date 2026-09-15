@@ -32,6 +32,13 @@ export function PageCard({ page, user = 'esmee', highlighted, langFilter }: Page
     (l) => !langFilter?.length || langFilter.includes(l),
   )
 
+  // Staat de knop al op een taalregel, dan herhaalt de voettekst hem alleen
+  // maar. En zonder actie is een balk met los tekstje ook geen balk waard.
+  // Blijft wel staan bij de samenvatting en het script: daar hebben de
+  // taalregels geen knoppen en is dit de enige ingang.
+  const rijActies = langs.some((l) => rowActionFor(page, l, user))
+  const toonVoettekst = isLive || (Boolean(action.to) && !rijActies)
+
   return (
     <div
       ref={ref}
@@ -94,6 +101,7 @@ export function PageCard({ page, user = 'esmee', highlighted, langFilter }: Page
           </div>
         )}
 
+        {toonVoettekst && (
         <footer className="flex flex-wrap items-center gap-3 border-t border-gray-6 pt-3">
           {isLive ? (
             <>
@@ -135,6 +143,7 @@ export function PageCard({ page, user = 'esmee', highlighted, langFilter }: Page
             </>
           )}
         </footer>
+        )}
       </Card>
     </div>
   )

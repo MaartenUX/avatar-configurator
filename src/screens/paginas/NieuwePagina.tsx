@@ -31,6 +31,18 @@ export default function NieuwePagina() {
     >
       <h1 className="text-h2 text-gray-1">Pagina toevoegen</h1>
 
+      <div className="flex flex-col gap-2">
+        <h2 className="text-h3 text-gray-1">Wat maak je?</h2>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <ChoiceTile title="Uitlegvideo" icon={FileVideo} selected onSelect={() => {}}
+            description="Bij een pagina." />
+          <ChoiceTile title="Alert-video" icon={Megaphone} selected={false} disabled onSelect={() => {}}
+            description="Binnenkort." />
+          <ChoiceTile title="Losse video" icon={Video} selected={false} disabled onSelect={() => {}}
+            description="Binnenkort." />
+        </div>
+      </div>
+
       <div className="flex flex-col gap-3">
         <Input
           label="Adres van de pagina" value={url} onChange={setUrl} type="url"
@@ -43,18 +55,6 @@ export default function NieuwePagina() {
             We herkennen deze pagina en hebben de tekst al opgehaald.
           </p>
         )}
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <h2 className="text-h3 text-gray-1">Wat maak je?</h2>
-        <div className="grid gap-3 sm:grid-cols-3">
-          <ChoiceTile title="Uitlegvideo" icon={FileVideo} selected onSelect={() => {}}
-            description="Bij een pagina." />
-          <ChoiceTile title="Alert-video" icon={Megaphone} selected={false} disabled onSelect={() => {}}
-            description="Binnenkort." />
-          <ChoiceTile title="Losse video" icon={Video} selected={false} disabled onSelect={() => {}}
-            description="Binnenkort." />
-        </div>
       </div>
 
       <Card className="flex flex-col gap-3">

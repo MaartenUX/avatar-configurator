@@ -25,10 +25,11 @@ export const FASES = [
 ]
 
 export const WACHT_TIPS = {
+  // Op dit moment is er nog geen audio; die komt pas bij het script.
   samenvatting: [
-    'Luister straks eerst naar de audio.',
-    'Pas zinnen aan als de essentie mist.',
-    'Controleer of het B1-niveau klopt.',
+    'Straks kijk je of de essentie erin staat.',
+    'Mist er iets wat een inwoner echt moet weten? Vul het aan.',
+    'Details van de pagina laten we bewust weg.',
   ],
   video: [
     'Je hoeft niet te wachten; we laten het weten zodra hij klaar is.',

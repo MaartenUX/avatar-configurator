@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
-import { Copy, ExternalLink, Eye, Play, RefreshCw, X } from 'lucide-react'
+import { ExternalLink, Eye, Play, RefreshCw, X } from 'lucide-react'
 import {
   Button, Card, Dialog, Distributie, EmbedBlok, ShellContainer, StatCard, VideoPreview,
 } from '../../components'
@@ -28,7 +28,6 @@ export default function Beheer() {
 
   const talen = Object.keys(page.langs) as Lang[]
   const live = page.status === 'live'
-  const script = page.scenes.map((s, i) => `${i + 1}. ${s.title}\n${s.text}`).join('\n\n')
   const geenReruns = reruns.used >= reruns.total
   const klaarVoorDownload = talen.every((l) => page.langs[l]?.status === 'approved')
 
@@ -112,21 +111,6 @@ export default function Beheer() {
             <EmbedBlok page={page} langs={talen} live={live} />
             <Distributie langs={talen} beschikbaar={live || klaarVoorDownload} />
           </div>
-        </section>
-
-        <section className="flex flex-col gap-3">
-          <span className="flex items-center gap-2">
-            <h2 className="flex-1 text-h2 text-gray-1">Het script</h2>
-            <Button
-              size="sm" variant="secondary" iconLeft={Copy}
-              onClick={() => void navigator.clipboard?.writeText(script).catch(() => {})}
-            >
-              Kopieer
-            </Button>
-          </span>
-          <Card>
-            <p className="whitespace-pre-line text-body text-gray-2">{script}</p>
-          </Card>
         </section>
 
         <Card className="flex flex-wrap items-center gap-4">

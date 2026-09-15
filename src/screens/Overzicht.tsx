@@ -149,8 +149,6 @@ export default function Overzicht() {
 
 /** Eerste keer: nog geen configuratie, dus precies één volgende stap. */
 function EersteKeer() {
-  const videos = useStore((s) => s.videos)
-
   return (
     <ShellContainer>
       <div className="flex flex-col gap-8">
@@ -162,20 +160,21 @@ function EersteKeer() {
         </header>
 
         <Card className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1.5">
             <h2 className="text-h2 text-gray-1">Begin met de configuratie</h2>
             <p className="text-body text-gray-2">
-              Je stelt eenmalig in hoe je uitlegvideo’s eruitzien. Je kunt tussendoor stoppen en
-              later verdergaan.
+              Dit zijn de eenmalige basisinstellingen voor al je uitlegvideo’s. Aan het eind maak
+              je een demo om alles te controleren. Daarna leg je de instellingen vast en maak je
+              pagina voor pagina de echte video’s.
+            </p>
+            <p className="text-body-sm text-gray-3">
+              Je kunt tussendoor stoppen en later verdergaan.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <Button to="/configuratie" iconLeft={Settings2}>Start de configuratie</Button>
-            <span className="text-body-sm text-gray-3">
-              Je kunt {videos.total} uitlegvideo’s maken. Elke pagina kost er één.
-            </span>
-          </div>
+          <Button to="/configuratie" iconLeft={Settings2} className="w-fit">
+            Start de configuratie
+          </Button>
         </Card>
 
         <Voettekst />

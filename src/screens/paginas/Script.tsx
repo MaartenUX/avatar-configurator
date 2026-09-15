@@ -53,9 +53,7 @@ export default function Script() {
         verandert niet de betekenis voor de andere talen.
       </p>
 
-      <HowBox points={HOE.script} />
-
-      <SpraakTips />
+      <HowBox points={HOE.script} actie={<SpraakTips compact />} />
 
       <div className="flex flex-col gap-3">
         {page.scenes.map((scene, i) => (

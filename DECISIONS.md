@@ -203,6 +203,42 @@ na vastleggen land je op het overzicht met een toast.
 - Het blok met de drie fases op het eerste-keer-overzicht.
 - De losse demo-pagina uit CHANGES-01 punt 24.
 
+---
+
+# CHANGES-03 — 15 september
+
+Alle twaalf punten verwerkt. Wat daarbij een keuze vroeg:
+
+### 31. De voettekst op een paginakaart verschijnt alleen als hij de enige ingang is
+Punt 11 letterlijk toepassen op elke niet-live kaart zou testtaak (b) breken:
+bij de basissamenvatting en het script hebben de taalregels geen knoppen, dus
+de voettekst is daar de enige weg naar binnen. De regel is nu: tonen als er
+een actie is (`action.to`) én geen enkele taalregel al een eigen knop heeft.
+Bij een gemengde kaart verdwijnt hij dus, bij "alles goedgekeurd" komt hij
+terug met Publiceer.
+
+### 32. Het advies noemde de verkeerde avatar
+Het "meest gekozen"-kader verscheen zodra je íets koos, maar noemde altijd de
+aanbevolen avatar — koos je Daan, dan stond er "Sanne. In Nederland wordt een
+vrouwenstem als betrouwbaar ervaren." Nu verschijnt het alleen als je de
+aanbevolen avatar ook echt kiest.
+
+### 33. Het introblok in de configurator is vervallen
+De alinea "Dit zijn de eenmalige basisinstellingen…" staat nu op het
+eerste-keer-scherm, waar hij de beslissing om te beginnen ondersteunt. Hem ook
+in de configurator laten staan betekende dezelfde tekst twee schermen achter
+elkaar. De configurator opent nu direct met stap 1. Afgestemd met Maarten.
+
+### 34. De scriptsectie is uit beheer weg, ook bij een pagina in productie
+Punt 12 noemde alleen de live-versie, maar het script is op de beheerpagina in
+beide standen niet te bewerken en staat al in de publiceerstap. Daar blijft hij
+dus staan.
+
+### 35. Twee blauwe blokken werden er één
+De tint-kaart met "Dit is de basis voor alle talen" stond direct boven de
+blauwe "Waar let je op"-box en verschilde daar alleen in dekking van. De zin
+staat nu als gewone tekst onder de kop.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

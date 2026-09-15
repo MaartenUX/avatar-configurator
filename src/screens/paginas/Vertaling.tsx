@@ -80,9 +80,7 @@ export default function Vertaling() {
         {langLabel(lang)} klopt en prettig klinkt om uit te spreken.
       </p>
 
-      <HowBox points={HOE.vertaling} />
-
-      <SpraakTips />
+      <HowBox points={HOE.vertaling} actie={<SpraakTips compact />} />
 
       <div className="flex flex-col gap-3">
         {scenes.map((scene, i) => (

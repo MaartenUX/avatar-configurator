@@ -102,8 +102,9 @@ export function S2Avatars() {
                 />
               ))}
             </div>
-            {/* Het advies komt pas als er iets gekozen is; vooraf is het ruis. */}
-            {gekozen && (
+            {/* Alleen als je de aanbevolen avatar ook echt kiest. Anders stond
+                er "Sanne is het meest gekozen" terwijl je Daan had aangeklikt. */}
+            {gekozen === advisedFor(lang)?.id && (
               <AdviceBox>
                 {advisedFor(lang)?.name}. {ADVICE[lang]}
               </AdviceBox>
@@ -137,11 +138,9 @@ export function S3VideoType() {
           onSelect={() => patch({ videoType: 'adaptief' })}
         />
       </div>
-      {config.videoType && (
+      {config.videoType === 'vast' && (
         <AdviceBox>
-          {config.videoType === 'vast'
-            ? 'Vast is de aanbeveling. Wat na drie minuten komt, wordt zelden gezien.'
-            : 'Adaptief werkt goed bij lange pagina’s. De samenvatting blijft wel een samenvatting; details laten we weg.'}
+          Vast is de aanbeveling. Wat na drie minuten komt, wordt zelden gezien.
         </AdviceBox>
       )}
     </>
@@ -155,8 +154,6 @@ const EIGEN_FOTOS = ['kantoor-2', 'kantoor-3', 'kantoor-4', 'kantoor-1', 'kantoo
 export function S4Scenes() {
   const config = useStore((s) => s.config)
   const patch = useStore((s) => s.patchConfig)
-  const [eenFoto, setEenFoto] = useState(false)
-
   const aantal = config.videoType === 'adaptief' ? 6 : 4
   const eigen = config.achtergrondModus === 'eigen'
   const shots = config.backgrounds.length === aantal
@@ -164,8 +161,7 @@ export function S4Scenes() {
     : Array.from({ length: aantal }, () => null)
 
   const zet = (index: number, slug: string | null) => {
-    const next = eenFoto ? shots.map(() => slug) : shots.map((b, i) => (i === index ? slug : b))
-    patch({ backgrounds: next })
+    patch({ backgrounds: shots.map((b, i) => (i === index ? slug : b)) })
   }
 
   return (
@@ -173,13 +169,13 @@ export function S4Scenes() {
       {/* Eerst de keuze, dan pas de tegels. */}
       <div className="grid gap-3 sm:grid-cols-2">
         <ChoiceTile
-          title="Standaard kantoorshots" icon={Building2} tag="Aanbevolen"
+          title="Standaard kantoorshots" icon={Building2}
           selected={config.achtergrondModus === 'standaard'}
           description="Rustige kantoorinterieurs, per scène een ander. Je hoeft niets aan te leveren."
           onSelect={() => patch({ achtergrondModus: 'standaard', backgrounds: [] })}
         />
         <ChoiceTile
-          title="Personaliseer met eigen foto’s" icon={Images}
+          title="Personaliseer met eigen foto’s" icon={Images} tag="Aanbevolen"
           selected={eigen}
           description="Bijvoorbeeld het gemeentehuis of een plek buiten in de gemeente."
           onSelect={() =>
@@ -197,19 +193,6 @@ export function S4Scenes() {
             Een leuke manier om de video’s persoonlijker te maken. Foto’s hoeven niet van
             topkwaliteit te zijn — ze worden altijd licht geblurd.
           </AdviceBox>
-
-          <label className="flex w-fit items-center gap-2.5 rounded-sm border border-gray-5 bg-white px-3 py-2.5 text-body text-gray-1">
-            <input
-              type="checkbox"
-              checked={eenFoto}
-              onChange={(e) => {
-                setEenFoto(e.target.checked)
-                if (e.target.checked) patch({ backgrounds: shots.map(() => shots[0]) })
-              }}
-              className="accent-[#46BAD8]"
-            />
-            Gebruik één beeld voor alle scènes
-          </label>
 
           <div className="grid gap-3 sm:grid-cols-2">
             {shots.map((slug, i) => {
@@ -365,6 +348,29 @@ export function S5Widget() {
       </div>
 
       <div className="flex flex-col gap-2">
+        <h3 className="text-h3 text-gray-1">Plek op de pagina</h3>
+        <div className="flex flex-wrap gap-2">
+          {HOEKEN.map((h) => (
+            <button
+              key={h.id}
+              type="button"
+              onClick={() => patch({ widgetCorner: h.id })}
+              aria-pressed={config.widgetCorner === h.id}
+              className={cn(
+                'flex w-[120px] flex-col gap-1.5 rounded-sm border-2 p-2 text-left transition-colors',
+                config.widgetCorner === h.id
+                  ? 'border-blue bg-blue-tint'
+                  : 'border-gray-5 hover:border-gray-4',
+              )}
+            >
+              <HoekSchets corner={h.id} />
+              <span className="text-body-sm text-gray-2">{h.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
         <button
           type="button"
           onClick={() => setSpecs(!specs)}
@@ -377,29 +383,6 @@ export function S5Widget() {
 
         {specs && (
           <div className="flex flex-col gap-4 rounded-md border border-gray-5 p-4">
-            <div className="flex flex-col gap-2">
-              <h4 className="type-label text-gray-3">Plek op de pagina</h4>
-              <div className="flex flex-wrap gap-2">
-                {HOEKEN.map((h) => (
-                  <button
-                    key={h.id}
-                    type="button"
-                    onClick={() => patch({ widgetCorner: h.id })}
-                    aria-pressed={config.widgetCorner === h.id}
-                    className={cn(
-                      'flex w-[120px] flex-col gap-1.5 rounded-sm border-2 p-2 text-left transition-colors',
-                      config.widgetCorner === h.id
-                        ? 'border-blue bg-blue-tint'
-                        : 'border-gray-5 hover:border-gray-4',
-                    )}
-                  >
-                    <HoekSchets corner={h.id} />
-                    <span className="text-body-sm text-gray-2">{h.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
             <div className="flex flex-col gap-2">
               <h4 className="type-label text-gray-3">Afstand tot de rand</h4>
               <div className="flex flex-wrap gap-3">
