@@ -126,6 +126,18 @@
   }
 }
 
+/*
+ * Bewust buiten @layer base. Ongelaagde CSS wint altijd van gelaagde, ook
+ * van een reset die een host om de pagina heen zet — en die zet meestal
+ * precies deze drie op body. Alleen deze drie: de rest hoort in de laag,
+ * anders verliezen de Tailwind-utilities het van de basisregels.
+ */
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-gray-1);
+}
+
 @keyframes toast-in {
   from {
     opacity: 0;

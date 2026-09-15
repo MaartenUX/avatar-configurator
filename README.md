@@ -45,6 +45,21 @@ opgebouwd, dus wat je in de ene doet lekt niet door naar de andere.
 Vlaggen werken zowel vóór als achter de hash: `index.html?fast=1#/` en
 `index.html#/?fast=1`.
 
+## Online zetten voor de test
+
+```bash
+npm run build && node scripts/maak-artifact.mjs
+```
+
+`dist/index.html` is het bestand dat zonder server opent. `artifact/index.html`
+is dezelfde build, maar zonder de eigen `<html>`/`<head>`/`<body>` — die zet de
+Artifact-publicatie er zelf omheen. Publiceer dat tweede bestand.
+
+Let op: een host die om de pagina heen een reset zet (`body { font: …; background: … }`)
+wint van alles in `@layer base`, want ongelaagde CSS gaat vóór gelaagde. Daarom
+staan lettertype, achtergrond en tekstkleur op `body` bewust buiten de laag in
+`src/tokens/theme.css`.
+
 ## Assets
 
 Portretten staan in `src/assets/avatars/` en heten naar het **gezicht**, niet

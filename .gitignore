@@ -5,3 +5,4 @@ shots
 *.local
 .claude/settings.local.json
 src/assets/avatars/_origineel/
+artifact
