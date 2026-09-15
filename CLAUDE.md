@@ -15,6 +15,7 @@ Nooit *summary*, *translate*, *run*, *pipeline*. Nergens lorem ipsum.
 ## Werkwijze
 
 - Werk direct op `main`. Commit per checkpoint, geen branches, geen PR's.
+- Push naar `origin` na elke commit: Vercel deployt vanaf `main`.
 - Maak nooit zelf een branch aan zonder dat erom gevraagd is.
 - Na elke wijziging: `npm run typecheck && npm test`.
 - Visuele controle: `node scripts/verify.mjs <url> --shots`. Werkt zowel tegen

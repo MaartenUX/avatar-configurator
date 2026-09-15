@@ -45,6 +45,12 @@ opgebouwd, dus wat je in de ene doet lekt niet door naar de andere.
 Vlaggen werken zowel vóór als achter de hash: `index.html?fast=1#/` en
 `index.html#/?fast=1`.
 
+## Hosting
+
+De repo staat op https://github.com/MaartenUX/avatar-configurator en is
+gekoppeld aan Vercel: elke push naar `main` deployt vanzelf. `vercel.json`
+regelt de build, de output en een catch-all rewrite naar `/`.
+
 ## Online zetten voor de test
 
 ```bash
