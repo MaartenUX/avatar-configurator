@@ -124,11 +124,11 @@ export function DomainPanel() {
 
       <KitBlock title="LanguageRow" note="losse rij, elke status">
         <div className="w-full max-w-2xl rounded-md bg-white p-3 shadow-card">
-                    <LanguageRow lang="en" status="review-text" reviewer="Vincent Bakker" actionTo="#" actionLabel="Controleer script" />
+                    <LanguageRow lang="en" status="review-text" reviewer="Esmee de Vries" actionTo="#" actionLabel="Controleer script" />
           <LanguageRow lang="tr" status="review-video" reviewer="Emre Yılmaz" actionTo="#" actionLabel="Controleer video" />
           <LanguageRow lang="ar" status="generating" reviewer="Layla Haddad" timer={startTimer('generate')} />
-          <LanguageRow lang="de" status="waiting" reviewer="Vincent Bakker" />
-          <LanguageRow lang="nl" status="approved" reviewer="Vincent Bakker" bekijkTo="#" />
+          <LanguageRow lang="de" status="waiting" reviewer="Esmee de Vries" />
+          <LanguageRow lang="nl" status="approved" reviewer="Esmee de Vries" bekijkTo="#" />
         </div>
       </KitBlock>
 

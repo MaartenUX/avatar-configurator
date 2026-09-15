@@ -1,8 +1,7 @@
 import type { TeamMember } from '../state/types'
 
 export const TEAM: TeamMember[] = [
-  { name: 'Esmee de Vries', email: 'e.devries@bergrode.nl', role: 'owner', langs: ['nl'] },
-  { name: 'Vincent Bakker', email: 'v.bakker@bergrode.nl', role: 'member', langs: ['nl', 'en'] },
+  { name: 'Esmee de Vries', email: 'e.devries@bergrode.nl', role: 'owner', langs: ['nl', 'en'] },
   { name: 'Marloes Jansen', email: 'm.jansen@bergrode.nl', role: 'member', langs: ['nl'] },
   { name: 'Emre Yılmaz', email: 'e.yilmaz@bergrode.nl', role: 'member', langs: ['tr'] },
   { name: 'Layla Haddad', email: 'l.haddad@bergrode.nl', role: 'member', langs: ['ar'] },

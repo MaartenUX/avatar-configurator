@@ -62,9 +62,15 @@ export interface Store {
   resetScenario: () => void
 }
 
-/** Reviewer per taal, uit het team. Valt terug op Esmee. */
-const reviewerFor = (lang: Lang) =>
-  TEAM.find((m) => m.langs?.includes(lang) && m.role === 'member')?.name ?? 'Esmee de Vries'
+/**
+ * Wie controleert deze taal? De beheerder gaat voor: zij doet Nederlands en
+ * Engels zelf. Pas daarna een collega, en anders de beheerder alsnog.
+ */
+const reviewerFor = (lang: Lang) => {
+  const kandidaten = TEAM.filter((m) => m.langs?.includes(lang))
+  const eigenaar = kandidaten.find((m) => m.role === 'owner')
+  return (eigenaar ?? kandidaten[0])?.name ?? TEAM.find((m) => m.role === 'owner')!.name
+}
 
 const newId = (title: string) => {
   const slug = title

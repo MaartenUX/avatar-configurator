@@ -264,6 +264,19 @@ Gevolg voor beslissing 31: bij `review-summary` en `review-nl` is er nu wél
 een rijactie, dus de voettekst verdwijnt daar ook. Dat klopt met de regel —
 hij verschijnt alleen als hij de enige ingang is — en maakt de kaart rustiger.
 
+### 38. De ondertitellijst scrollt niet meer in zijn eigen vak
+In CHANGES-02 kreeg de lijst `max-h` met een eigen scrollgebied, zodat het
+akkoordvak niet uit beeld zou schuiven bij dertig regels. Precies dat maakte
+het akkoordvak "soort van fixed": de lijst schoof eronder door terwijl het vak
+bleef staan. De lijst loopt nu gewoon door en het akkoordvak staat onder de
+laatste regel, net als op de andere controleschermen.
+
+### 39. Esmee tekent Nederlands en Engels zelf af
+Vincent Bakker is vervallen. `reviewerFor` pakte bovendien alleen leden en
+nooit de beheerder, waardoor Esmee nooit als controleur kon worden toegewezen;
+de beheerder gaat nu voor. Marloes blijft als tweede Nederlandse collega in het
+team staan, Emre doet Turks en Layla Arabisch.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

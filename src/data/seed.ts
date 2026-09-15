@@ -66,8 +66,10 @@ const contentOf = (id: string) => {
 }
 
 const REVIEWERS: Record<string, string> = {
-  nl: 'Vincent Bakker',
-  en: 'Vincent Bakker',
+  // Esmee tekent Nederlands en Engels zelf af; voor Turks en Arabisch heeft
+  // ze collega's nodig.
+  nl: 'Esmee de Vries',
+  en: 'Esmee de Vries',
   tr: 'Emre Yılmaz',
   ar: 'Layla Haddad',
 }
