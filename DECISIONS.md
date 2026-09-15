@@ -239,6 +239,15 @@ De tint-kaart met "Dit is de basis voor alle talen" stond direct boven de
 blauwe "Waar let je op"-box en verschilde daar alleen in dekking van. De zin
 staat nu als gewone tekst onder de kop.
 
+### 36. De widget-thumbnail toont de achtergrond zodra die gekozen is
+Bij stap 5 en 6 stonden de avatars op een wit vlak, terwijl stap 3 en 4 een
+volledig videoframe lieten zien. Naast de grijze wireframe-tekst las dat als
+"alles is grijs geworden", ook al waren de sitekop en accentbalk wel gekleurd.
+De thumbnail toont nu het eerste frame van de video — de geblurde kantoorshot
+achter de avatars — maar pas als `achtergrondModus` gezet is. In de lege staat
+blijft hij wit met silhouetten, zoals de Figma-referentie, zodat de preview
+blijft meegroeien met je keuzes.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

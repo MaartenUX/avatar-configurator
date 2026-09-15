@@ -176,6 +176,13 @@ function Widget({
   // De marge is in pixels op een echte pagina; hier schalen we mee met de mock.
   const schaal = mini ? 0.18 : 0.34
 
+  // De thumbnail toont het eerste frame van de video. Zolang er nog geen
+  // achtergrond gekozen is blijft hij wit, zoals in het ontwerp; daarna staat
+  // de avatar op het kantoorshot, net als in de echte video.
+  const bg = config.achtergrondModus
+    ? backgroundImage(config.backgrounds[0] ?? 'kantoor-1')
+    : undefined
+
   return (
     <div
       className={cn(
@@ -187,7 +194,21 @@ function Widget({
     >
       {/* Videokaartje: de gekozen avatars naast elkaar op één grondlijn.
           Zolang er niets gekozen is staan er silhouetten, één per taal. */}
-      <div className="relative flex aspect-[16/10] items-end justify-center bg-white">
+      <div className="relative flex aspect-[16/10] items-end justify-center overflow-hidden bg-white">
+        {bg && (
+          <span
+            className="absolute inset-0 scale-105 blur-[5px]"
+            style={{ backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+            aria-hidden
+          />
+        )}
+        {config.achtergrondModus && !bg && (
+          <span
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(135deg, #CDEFEC 0%, #E6FAFF 100%)' }}
+            aria-hidden
+          />
+        )}
         {shown.map((code, i) => {
           const avatar = avatarById(config.avatars[code])
           return (
@@ -195,7 +216,7 @@ function Widget({
               key={code}
               face={avatar?.face}
               name={avatar?.name}
-              className={cn('h-full', FIGURE_WIDTH[shown.length] ?? 'w-[28%]', i > 0 && '-ml-[7%]')}
+              className={cn('relative h-full', FIGURE_WIDTH[shown.length] ?? 'w-[28%]', i > 0 && '-ml-[7%]')}
             />
           )
         })}

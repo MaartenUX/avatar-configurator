@@ -151,7 +151,7 @@ export default function Configuratie() {
         <div className="flex items-center gap-6">
           <span className="min-w-0 flex-1">
             <ProgressBar
-              value={vergrendeld ? SECTIONS.length : active}
+              value={active}
               max={SECTIONS.length}
               title={SECTIONS[active - 1]?.title}
               note={vergrendeld ? 'Vastgelegd' : `± ${Math.max(2, (SECTIONS.length - gedaan.length) * 2)} min te gaan`}
