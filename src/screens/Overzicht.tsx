@@ -152,14 +152,11 @@ function EersteKeer() {
   return (
     <ShellContainer>
       <div className="flex flex-col gap-8">
-        <header className="flex flex-col gap-1">
-          <h1 className="text-display text-gray-1">Welkom bij Bergrode</h1>
-          <p className="text-body text-gray-2">
-            Je richt het eenmalig in. Daarna maak je zelf video’s bij je pagina’s.
-          </p>
+        <header>
+          <h1 className="text-display text-gray-1">De avatars voor de Gemeente Bergrode</h1>
         </header>
 
-        <Card className="flex flex-col gap-4">
+        <Card className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
             <h2 className="text-h2 text-gray-1">Begin met de configuratie</h2>
             <p className="text-body text-gray-2">
@@ -167,14 +164,31 @@ function EersteKeer() {
               je een demo om alles te controleren. Daarna leg je de instellingen vast en maak je
               pagina voor pagina de echte video’s.
             </p>
-            <p className="text-body-sm text-gray-3">
-              Je kunt tussendoor stoppen en later verdergaan.
-            </p>
           </div>
 
-          <Button to="/configuratie" iconLeft={Settings2} className="w-fit">
-            Start de configuratie
-          </Button>
+          {/* Vooraf de verwachting zetten: dit ga je instellen. */}
+          <div className="flex flex-col gap-2 rounded-md bg-gray-6 p-4">
+            <h3 className="type-label text-gray-3">Wat je instelt</h3>
+            <ul className="flex flex-col gap-1.5">
+              {[
+                'Welke talen je gebruikt, en op welk taalniveau',
+                'Welke avatar en stem bij elke taal horen',
+                'Hoe de widget eruitziet op je website',
+              ].map((punt) => (
+                <li key={punt} className="flex gap-2.5 text-body text-gray-2">
+                  <span className="mt-2 size-1.5 shrink-0 rounded-pill bg-blue" aria-hidden />
+                  {punt}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Button to="/configuratie" iconLeft={Settings2}>Start de configuratie</Button>
+            <span className="text-body-sm text-gray-3">
+              Je kunt tussendoor stoppen en later verdergaan.
+            </span>
+          </div>
         </Card>
 
         <Voettekst />
