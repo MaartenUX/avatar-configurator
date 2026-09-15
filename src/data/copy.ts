@@ -9,18 +9,28 @@ export const PRODUCTIE_STAPPEN = [
   { label: 'Ondertiteling controleren en publiceren', meta: '5 min · jij' },
 ]
 
+/**
+ * De drie fases op het eerste-keer-scherm. Fase 1 is waar je nu staat en
+ * krijgt daarom de helft van de breedte; de andere twee vertellen alleen wat
+ * er daarna komt.
+ */
 export const FASES = [
   {
-    title: 'Inrichten',
-    body: 'Je kiest eenmalig de talen, de avatars en hoe de video eruitziet. Ongeveer een kwartier.',
+    title: 'Configuratie',
+    body: 'Dit stel je eenmalig in, voor al je video’s:',
+    punten: [
+      'Welke talen je gebruikt, en op welk taalniveau',
+      'Welke avatar en stem bij elke taal horen',
+      'Hoe de widget eruitziet op je website',
+    ],
   },
   {
-    title: 'Video’s maken',
-    body: 'Per pagina controleer je de tekst, je collega’s hun taal. De video’s maken wij.',
+    title: 'Productie',
+    body: 'Pagina voor pagina maak je een video. Jij controleert de samenvatting; per taal controleert een collega het script dat de avatar uitspreekt.',
   },
   {
-    title: 'Live',
-    body: 'De video staat op je pagina. Je ziet hoe vaak hij per taal bekeken wordt.',
+    title: 'Beheer',
+    body: 'Je zet de video live op je pagina en houdt bij hoe vaak hij per taal bekeken wordt.',
   },
 ]
 

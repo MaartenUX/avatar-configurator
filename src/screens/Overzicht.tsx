@@ -7,7 +7,9 @@ import {
 import { useStore } from '../state/store'
 import { useNow } from '../state/TickProvider'
 import { langLabel } from '../data/langs'
+import { FASES } from '../data/copy'
 import type { Lang } from '../state/types'
+import { cn } from '../lib/cn'
 
 /** Hoe lang een net bijgewerkte kaart gemarkeerd blijft. */
 const HIGHLIGHT_MS = 3500
@@ -166,22 +168,36 @@ function EersteKeer() {
             </p>
           </div>
 
-          {/* Vooraf de verwachting zetten: dit ga je instellen. */}
-          <div className="flex flex-col gap-2 rounded-md bg-gray-6 p-4">
-            <h3 className="type-label text-gray-3">Wat je instelt</h3>
-            <ul className="flex flex-col gap-1.5">
-              {[
-                'Welke talen je gebruikt, en op welk taalniveau',
-                'Welke avatar en stem bij elke taal horen',
-                'Hoe de widget eruitziet op je website',
-              ].map((punt) => (
-                <li key={punt} className="flex gap-2.5 text-body text-gray-2">
-                  <span className="mt-2 size-1.5 shrink-0 rounded-pill bg-blue" aria-hidden />
-                  {punt}
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Drie fases op een rij. Fase 1 is waar je nu staat en krijgt de
+              helft van de breedte; de andere twee vertellen wat erna komt. */}
+          <ol className="grid gap-3 md:grid-cols-[2fr_1fr_1fr]">
+            {FASES.map((fase, i) => (
+              <li
+                key={fase.title}
+                className={cn(
+                  'flex flex-col gap-1.5 rounded-md p-4',
+                  i === 0 ? 'bg-blue-tint/60' : 'bg-gray-6',
+                )}
+              >
+                <span className={cn('type-label', i === 0 ? 'text-blue-shade' : 'text-gray-3')}>
+                  Fase {i + 1}
+                </span>
+                <span className="text-h3 text-gray-1">{fase.title}</span>
+                <span className="text-body-sm text-gray-2">{fase.body}</span>
+
+                {fase.punten && (
+                  <ul className="mt-1 flex flex-col gap-1">
+                    {fase.punten.map((punt) => (
+                      <li key={punt} className="flex gap-2 text-body-sm text-gray-2">
+                        <span className="mt-1.5 size-1.5 shrink-0 rounded-pill bg-blue" aria-hidden />
+                        {punt}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ol>
 
           <div className="flex flex-wrap items-center gap-3">
             <Button to="/configuratie" iconLeft={Settings2}>Start de configuratie</Button>
