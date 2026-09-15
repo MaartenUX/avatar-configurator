@@ -41,10 +41,10 @@ export function SpraakTips({ soort = 'spraak', compact }: SpraakTipsProps) {
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          'inline-flex w-fit items-center gap-2 rounded-sm transition-colors',
+          'inline-flex w-fit items-center gap-2 rounded-sm border bg-white transition-colors',
           compact
-            ? 'text-body-sm text-blue-shade hover:underline'
-            : 'border border-gray-5 bg-white px-4 py-2.5 text-body text-gray-2 hover:border-blue hover:text-blue-shade',
+            ? 'border-blue-tint px-3 py-1.5 text-body-sm text-blue-shade hover:border-blue'
+            : 'border-gray-5 px-4 py-2.5 text-body text-gray-2 hover:border-blue hover:text-blue-shade',
         )}
       >
         <Lightbulb size={compact ? 15 : 17} aria-hidden />

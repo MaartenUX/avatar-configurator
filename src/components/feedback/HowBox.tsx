@@ -20,7 +20,7 @@ export function HowBox({ title = 'Waar let je op?', points, actie }: HowBoxProps
           </li>
         ))}
       </ul>
-      {actie && <div className="mt-3 flex justify-end">{actie}</div>}
+      {actie && <div className="mt-3">{actie}</div>}
     </section>
   )
 }

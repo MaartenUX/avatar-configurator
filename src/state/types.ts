@@ -58,6 +58,8 @@ export interface Page {
   timer?: Timer
   /** Zet zodra de mock-audio voor het NL-script klaar is. */
   audioReady?: boolean
+  /** Wie de basissamenvatting heeft afgetekend. */
+  samenvattingDoor?: string
 }
 
 export type WidgetCorner = 'lb' | 'rb' | 'lt' | 'rt'

@@ -150,11 +150,26 @@ export const useStore = create<Store>()(
           ),
         })),
 
-      // Basissamenvatting akkoord -> Nederlandse audio wordt gemaakt.
+      /**
+       * Basissamenvatting akkoord. De Nederlandse audio wordt gemaakt, en
+       * Nederlands komt op review-text te staan: dat is de scriptstap, die
+       * daarmee als eigen actie op de paginakaart verschijnt. Esmee keurt die
+       * zelf goed, net als straks de Nederlandse ondertiteling.
+       */
       approveSummary: (id) =>
         set((s) => ({
           pages: s.pages.map((p) =>
-            p.id === id ? { ...p, status: 'review-nl', timer: startTimer('audio') } : p,
+            p.id === id
+              ? {
+                  ...p,
+                  status: 'review-nl',
+                  langs: p.langs.nl
+                    ? { ...p.langs, nl: { ...p.langs.nl, status: 'review-text' } }
+                    : p.langs,
+                  samenvattingDoor: TEAM.find((m) => m.role === 'owner')?.name,
+                  timer: startTimer('audio'),
+                }
+              : p,
           ),
         })),
 
@@ -270,6 +285,7 @@ export const useStore = create<Store>()(
           views: p.views,
           timer: p.timer,
           audioReady: p.audioReady,
+          samenvattingDoor: p.samenvattingDoor,
           // Alleen bewaren wat de gebruiker zelf heeft aangepast.
           scenes: p.scenes,
           translations: p.translations,

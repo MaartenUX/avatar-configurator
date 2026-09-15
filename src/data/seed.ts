@@ -84,6 +84,7 @@ const livePage = (id: string, views: Page['views'], createdAt: string): Page => 
   },
   views,
   createdAt,
+  samenvattingDoor: 'Esmee de Vries',
 })
 
 /** De pagina waar de statusmix uit het bouwplan op zit: elke taal een andere stand. */
@@ -99,6 +100,7 @@ const bijstandInProductie = (): Page => ({
   },
   views: {},
   createdAt: '2026-09-08T14:10:00.000Z',
+  samenvattingDoor: 'Esmee de Vries',
 })
 
 const wmo = () => livePage('p-wmo', { nl: 1240, en: 86, tr: 152, ar: 74 }, '2026-08-19T10:00:00.000Z')

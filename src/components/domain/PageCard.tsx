@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ChevronRight, Download, ExternalLink, SquarePlay } from 'lucide-react'
 import { Card } from '../primitives/Card'
 import { Badge } from '../primitives/Badge'
-import { LangViewTile, LanguageRow } from './LanguageRow'
+import { LangViewTile, LanguageRow, StapRow, type StapRowProps } from './LanguageRow'
 import { PAGE_STATUS } from '../../tokens/status'
 import { nextAction } from '../../state/selectors'
 import { formatNumber } from '../../lib/format'
@@ -36,7 +36,8 @@ export function PageCard({ page, user = 'esmee', highlighted, langFilter }: Page
   // maar. En zonder actie is een balk met los tekstje ook geen balk waard.
   // Blijft wel staan bij de samenvatting en het script: daar hebben de
   // taalregels geen knoppen en is dit de enige ingang.
-  const rijActies = langs.some((l) => rowActionFor(page, l, user))
+  const samenvatting = samenvattingStap(page, user)
+  const rijActies = Boolean(samenvatting.actionTo) || langs.some((l) => rowActionFor(page, l, user))
   const toonVoettekst = isLive || (Boolean(action.to) && !rijActies)
 
   return (
@@ -80,6 +81,10 @@ export function PageCard({ page, user = 'esmee', highlighted, langFilter }: Page
           </div>
         ) : (
           <div className="flex flex-col gap-0.5">
+            {/* De basissamenvatting is een eigen stap: Esmee keurt hem goed
+                voordat er ook maar iets vertaald of gemaakt wordt. */}
+            <StapRow {...samenvatting} />
+
             {langs.map((lang) => {
               const entry = page.langs[lang]!
               const rowAction = rowActionFor(page, lang, user)
@@ -154,9 +159,37 @@ function rowActionFor(page: Page, lang: Lang, user: 'esmee' | 'emre') {
   const status = page.langs[lang]?.status
   if (user === 'emre' && lang !== 'tr') return null
 
-  if (status === 'review-text') return { to: `/paginas/${page.id}/${lang}`, label: 'Controleer script' }
+  if (status === 'review-text') {
+    // Het Nederlandse script heeft zijn eigen scherm, met audio erbij.
+    const to = lang === 'nl' ? `/paginas/${page.id}/script` : `/paginas/${page.id}/${lang}`
+    return { to, label: 'Controleer script' }
+  }
   if (status === 'review-video') return { to: `/paginas/${page.id}/video/${lang}`, label: 'Controleer video' }
   return null
+}
+
+/** De stand van de basissamenvatting, als rij op de kaart. */
+function samenvattingStap(page: Page, user: 'esmee' | 'emre'): StapRowProps {
+  const basis = {
+    label: 'Samenvatting',
+    kort: 'B1',
+    door: page.samenvattingDoor,
+  }
+
+  if (page.status === 'summarizing') {
+    return { ...basis, status: 'generating' as const, statusLabel: 'Wordt gemaakt', pulse: true }
+  }
+  if (page.status === 'review-summary') {
+    return {
+      ...basis,
+      status: 'review' as const,
+      statusLabel: 'Controleren',
+      // Alleen de beheerder keurt de basis goed; die geldt voor alle talen.
+      actionTo: user === 'esmee' ? `/paginas/${page.id}/samenvatting` : null,
+      actionLabel: 'Controleer samenvatting',
+    }
+  }
+  return { ...basis, status: 'approved' as const, statusLabel: 'Goedgekeurd' }
 }
 
 /** Een afgetekende stap blijft terug te kijken, in kijkstand. */

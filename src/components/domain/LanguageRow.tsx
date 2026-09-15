@@ -1,7 +1,7 @@
 import { ChevronRight, Eye } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Badge } from '../primitives/Badge'
-import { LANG_STATUS, LANG_STATUS_LABEL } from '../../tokens/status'
+import { LANG_STATUS, LANG_STATUS_LABEL, type StatusKey } from '../../tokens/status'
 import { langLabel } from '../../data/langs'
 import { formatNumber } from '../../lib/format'
 import type { Lang, LangStatus, Timer } from '../../state/types'
@@ -86,6 +86,58 @@ export function LanguageRow({
         >
           <Eye size={14} aria-hidden />
           Bekijk
+        </Link>
+      )}
+    </div>
+  )
+}
+
+export interface StapRowProps {
+  label: string
+  /** Korte aanduiding links, waar bij een taal de code staat. */
+  kort: string
+  status: StatusKey
+  statusLabel: string
+  door?: string
+  actionTo?: string | null
+  actionLabel?: string
+  pulse?: boolean
+}
+
+/**
+ * Een stap die geen taal is — nu alleen de basissamenvatting. Zelfde vorm als
+ * een taalregel, zodat de kaart één lijst blijft in plaats van twee.
+ */
+export function StapRow({
+  label,
+  kort,
+  status,
+  statusLabel,
+  door,
+  actionTo,
+  actionLabel,
+  pulse,
+}: StapRowProps) {
+  const afgerond = status === 'approved' || status === 'live'
+
+  return (
+    <div className="group flex items-center gap-3 rounded-sm px-2.5 py-2 transition-colors hover:bg-gray-6">
+      <span className="type-label w-8 shrink-0 text-gray-3">{kort}</span>
+      <span className="w-24 shrink-0 text-body text-gray-1">{label}</span>
+
+      <Badge status={status} dot pulse={pulse}>
+        {statusLabel}
+      </Badge>
+
+      {afgerond && door && <span className="truncate text-body-sm text-gray-3">door {door}</span>}
+
+      {actionTo && (
+        <Link
+          to={actionTo}
+          className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-sm border border-gray-4 bg-white px-3 py-1.5 text-body-sm text-gray-1 transition-colors hover:border-blue hover:text-blue-shade"
+        >
+          {actionLabel ?? 'Controleer'}
+          <ChevronRight size={15} aria-hidden />
         </Link>
       )}
     </div>

@@ -248,6 +248,22 @@ achter de avatars — maar pas als `achtergrondModus` gezet is. In de lege staat
 blijft hij wit met silhouetten, zoals de Figma-referentie, zodat de preview
 blijft meegroeien met je keuzes.
 
+### 37. De basissamenvatting is een eigen rij op de paginakaart
+Hij stond alleen in de voettekst, waardoor hij als doorgeefluik voelde in
+plaats van als een stap die Esmee zelf aftekent. Nu staat hij als eerste rij
+(B1 · Samenvatting) boven de talen, met eigen status en eigen knop — zoals
+paragraaf 7.1 van het bouwplan hem ook beschreef.
+
+Daarmee wordt Nederlands na dat akkoord `review-text`, zodat het script
+evengoed een eigen rijactie krijgt. Voor Nederlands wijst die naar het
+scriptscherm met audio, voor de andere talen naar het vertaalscherm. Esmee
+tekent zo achtereenvolgens de samenvatting, het Nederlandse script en de
+Nederlandse ondertiteling af; de collega's doen hun eigen taal.
+
+Gevolg voor beslissing 31: bij `review-summary` en `review-nl` is er nu wél
+een rijactie, dus de voettekst verdwijnt daar ook. Dat klopt met de regel —
+hij verschijnt alleen als hij de enige ingang is — en maakt de kaart rustiger.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

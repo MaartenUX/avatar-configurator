@@ -27,7 +27,7 @@ const check = async (n, t) => { if (!(await stap(n, t))) fouten++ }
 await page.goto(`${base}?fast=1&scenario=tweede#/`, { waitUntil: 'load' })
 await page.waitForTimeout(600)
 
-// (b) Pagina toevoegen, samenvatting goedkeuren, script finetunen.
+// (b) Pagina toevoegen, samenvatting goedkeuren als eigen stap, script finetunen.
 await page.getByRole('link', { name: /Pagina toevoegen/ }).first().click()
 await check('01-toevoegen', 'Dit gaat er gebeuren')
 
@@ -40,7 +40,8 @@ await check('03-samenvatting', 'Basissamenvatting controleren')
 await page.getByRole('button', { name: 'Akkoord', exact: true }).click()
 await check('04-terug-op-overzicht', 'Basissamenvatting goedgekeurd')
 
-await page.getByRole('link', { name: /Finetune script en audio/ }).first().click()
+// Het script hangt nu aan de Nederlandse rij, niet meer aan de voettekst.
+await page.getByRole('link', { name: 'Controleer script' }).first().click()
 await check('05-script', 'Nederlands script en audio finetunen')
 
 await page.getByRole('button', { name: 'Akkoord', exact: true }).click()
