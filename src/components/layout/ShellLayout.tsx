@@ -30,10 +30,7 @@ export function ShellLayout() {
             <SquarePlay size={19} />
           </span>
           <span className="flex flex-col leading-tight">
-            <span className="text-h3 text-gray-1">
-              <span className="font-semibold">Uitlegvideo’s</span>{' '}
-              <span className="font-normal">voor gemeente Bergrode</span>
-            </span>
+            <span className="text-h3 font-semibold text-gray-1">Uitlegvideo’s</span>
             <span className="text-body-sm text-gray-3">door ReadSpeaker en XS2Content</span>
           </span>
         </Link>
@@ -53,6 +50,9 @@ export function ShellLayout() {
 
           {/* Zwart kader: dit is de testopstelling, geen onderdeel van het product. */}
           <label className="flex items-center gap-2 rounded-sm border-2 border-gray-1 px-2.5 py-1.5">
+            <span className="type-label rounded-pill bg-gray-1 px-2 py-0.5 text-white">
+              Prototype
+            </span>
             <span className="type-label text-gray-1">Testscenario</span>
             <select
               value={scenario}
