@@ -6,7 +6,7 @@ Het bouwplan (v5, 9 sep 2026) beschrijft een klikbaar React-prototype voor XS2Co
 
 De huidige werkmap (`lumi-prototype-2`) bevat het **Lumi**-prototype: 6.355 regels JS met inline styles, framer-motion, geen router, geen Tailwind, dirty working tree op `experiment/v3`. Nul overlap met dit product en een botsende stack. Daarom bouwen we naast Lumi.
 
-**Doel:** een `dist/index.html` van één bestand dat zonder server opent, waarin de vier testtaken uit §11 van het bouwplan zonder hulp uit te voeren zijn.
+**Doel:** een build waarin de vier testtaken uit §11 van het bouwplan zonder hulp uit te voeren zijn. Sinds CHANGES-03 H is dat een map (`dist/`) in plaats van één bestand: de video's horen als losse bestanden geserveerd te worden.
 
 ### Afgesproken kaders
 
@@ -299,6 +299,6 @@ Commit na elk checkpoint.
 - `npm run test` — smoke-test itereert het `ROUTES`-manifest, mount elke route onder `MemoryRouter` met de seed-state, plus unit-tests voor `advancePage()` (alle drie de overgangen, idempotentie, `fast`-modus) en `nextAction()` (elke `page.status` × taalcombinatie).
 - **Timer-duurzaamheid handmatig:** start een pagina op `/paginas/nieuw`, herlaad tijdens het aftellen → de teller loopt door op de juiste stand. Wacht de tijd uit met de tab op de achtergrond → bij terugkeer staat de status al door.
 - **Browser pane** (`preview_start` met `.claude/launch.json`) na checkpoint 4 en verder: console en netwerk op fouten, `read_page` op de scrollflow, screenshots op 1280 en 1440.
-- **De vier testtaken uit §11** helemaal doorlopen als eindcontrole: (a) Bergrode inrichten en vastleggen, (b) Parkeervergunning toevoegen + basissamenvatting + NL-script, (c) als Emre de Turkse tekst en video goedkeuren, (d) publiceren en de social-versie downloaden.
+- **De vier testtaken uit §11** helemaal doorlopen als eindcontrole: (a) Bergrode inrichten met Engels, Turks en Arabisch, een demovideo maken en vastleggen (CHANGES-03 G29), (b) Parkeervergunning toevoegen + basissamenvatting + NL-script, (c) als Emre de Turkse tekst en video goedkeuren, (d) publiceren en de social-versie downloaden.
 - **`?fast=1`** versnelt elke timer naar 1 s — verplicht voor het doorlopen van (b) t/m (d) in redelijke tijd.
-- **Single file:** `npm run build`, dan `open dist/index.html` vanaf `file://` — moet volledig werken inclusief deeplinks, zonder server.
+- **De build:** `npm run build`, dan de map `dist/` serveren (`scripts/serve.mjs` doet dat zelf) — moet volledig werken inclusief deeplinks.

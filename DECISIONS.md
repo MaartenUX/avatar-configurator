@@ -277,6 +277,80 @@ nooit de beheerder, waardoor Esmee nooit als controleur kon worden toegewezen;
 de beheerder gaat nu voor. Marloes blijft als tweede Nederlandse collega in het
 team staan, Emre doet Turks en Layla Arabisch.
 
+---
+
+# CHANGES-03.md — 1 oktober, na review met Sebastiaan
+
+Niet te verwarren met de losse lijst van 15 september hierboven. Dit bestand
+wint van PLAN.md, CHANGES-01 en CHANGES-02 waar het afwijkt. Alle punten A t/m
+H zijn verwerkt:
+
+- **A** productwaarheid: 1 t/m 5 ✓
+- **B** header: 6, 7 ✓
+- **C** scènes en overgangen: 8 t/m 15 ✓
+- **D** avatar en stem: 16, 17 ✓
+- **E** demo: 18, 19, 20 ✓
+- **F** productieflow: 21 t/m 27 ✓
+- **G** seed, testtaken, definition of done: 28, 29, 30 ✓
+- **H** assets met fallbacks ✓
+
+Omdat de typewijzigingen doorwerkten, zijn C8–C11, C13–C15 en F21, F22, F26 en
+F27 meegegaan in de commit van A; het commitbericht zegt dat.
+
+### 40. De build is een map geworden
+Video's zijn te zwaar om in te bakken, dus `public/media/` wordt als losse
+bestanden geserveerd en `vite-plugin-singlefile` is eruit. De controlescripts
+starten daarom zelf een kleine statische server (`scripts/serve.mjs`) in plaats
+van `file://` te openen. PLAN §3 en §11 en de README zijn hierop bijgewerkt.
+
+### 41. Elke taal heeft een eigen timer
+Na akkoord op de basissamenvatting komen de scripts van álle talen tegelijk
+klaar (F21). Dat kan niet met één paginatimer: zodra een taal akkoord is, loopt
+de video van die taal op zijn eigen klok door terwijl een andere taal nog op
+controle wacht. `LangState` heeft daarom een eigen `timer`; de paginatimer doet
+alleen nog de samenvatting en het aanmaken van de scripts.
+
+### 42. De demotimer staat in de config, niet in het scherm
+Je mag het wachtscherm verlaten en later terugkomen (E19). Een timer in de
+component zou dat niet overleven. `config.demoTimer` en `config.demoKlaar`
+worden bewaard, de ticker rondt hem af en laat de toast zien — ook als je de
+app tussendoor hebt afgesloten.
+
+### 43. De preview bij sectie 3 doet de overgang voor
+C12 vraagt een frame dat elke 2,5 s wisselt. Dat is geen afspeelbare video maar
+een demonstratie, dus `OvergangPreview` loopt vanzelf rond op de gedeelde klok,
+zonder knop. Sectie 4 houdt de website-preview met het uitgeklapte videoframe,
+zodat de twee stappen allebei iets anders laten zien (C13).
+
+### 44. De voorbeeldzin blijft als ondertitel ín de avatartegel staan
+D16 noemt "ondertitel met de zin eronder". Onder de tegel zou de ruimte
+gereserveerd moeten worden voor drie regels tekst die je maar drie seconden
+ziet; in de halve tegels van sectie 2 kost dat meer dan het oplevert. De zin
+staat daarom onderin het kader, precies waar een ondertitel in de video ook
+staat.
+
+### 45. De demovideo duurt veertig seconden
+E18 noemt het zelf een korte video met een voorbeeldtekst. Twee minuten
+voorbeeldtekst in vier talen schrijven levert niets op voor de test. De demo
+heeft zes scènes, twaalf ondertitelregels en duurt veertig seconden; de echte
+video's blijven maximaal twee minuten. De tekst staat in `src/data/demo.ts` en
+noemt de gemeente niet.
+
+### 46. Een taalrij heeft een eigen tint
+D16 vraagt om "de tint-achtergrond van de taalrij", maar die bestond nog niet.
+`langTint()` geeft per taal een letterlijke classnaam — geen samengestelde,
+want de Tailwind-scanner leest broncode als tekst.
+
+### 47. PipelineStep heet ProductieStap
+"Pipeline" hoort volgens de projectafspraken niet in deze app en stond
+zichtbaar als componentnaam in de kit.
+
+### 48. Twee bugs die bij de controle boven kwamen
+Het staande videoframe werd op zijn hoogte gemeten (`h-full`), en klapte in een
+kolom zonder eigen hoogte tot niets in: op het videocontrolescherm was de
+preview 0 bij 0 pixels. Het meet nu de breedte. Daarnaast wees het Meer
+weten-blok van sectie 4 naar het verdwenen id `personaliseren`.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een
@@ -296,3 +370,11 @@ team staan, Emre doet Turks en Layla Arabisch.
    ondertiteling — die toont het beheerscherm — maar geen vertalingen. Klikt
    een deelnemer bij zo'n pagina op een niet-Nederlandse taal, dan valt de
    tekst terug op het Nederlands.
+
+5. Er zijn nog maar twee kantoorshots zonder mensen (`kantoor-1` en
+   `kantoor-3`); CHANGES-03 A5 vraagt er zes, staand en leeg. De zes scènes
+   wisselen die twee nu af. Zichtbaar in de preview en in sectie 4.
+
+6. De media uit `public/media/` ontbreken nog: acht avatarclips, vier
+   demovideo's en de echte widget-knop. Alles valt netjes terug op de mock, dus
+   de bestanden erin zetten is genoeg — zie `public/media/LEESMIJ.md`.

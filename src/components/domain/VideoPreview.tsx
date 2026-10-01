@@ -98,7 +98,9 @@ export function VideoPreview({
   return (
     <div
       className={cn(
-        'relative mx-auto aspect-[9/16] h-full max-h-full overflow-hidden rounded-md bg-gray-1 shadow-card',
+        // Staand, en gemeten aan de breedte: in een kolom zonder eigen hoogte
+        // zou een hoogte-gestuurd kader tot niets inklappen.
+        'relative mx-auto aspect-[9/16] w-full max-w-[280px] overflow-hidden rounded-md bg-gray-1 shadow-card',
         className,
       )}
     >

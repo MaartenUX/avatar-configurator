@@ -85,12 +85,12 @@ export const LEARN_MORE: LearnMoreDef[] = [
     ],
   },
   {
-    id: 'personaliseren',
-    title: 'Personaliseer de video',
+    id: 'achtergronden',
+    title: 'Achtergronden',
     body:
       'Achter de avatar staat per scène een achtergrond. Standaard is dat een rustig kantoorinterieur, per scène een ander, zodat de video visueel afwisselt zonder af te leiden. U kunt per scène een eigen foto gebruiken, bijvoorbeeld van uw gemeentehuis of van de wijk waar de pagina over gaat.',
     features: [
-      { icon: 'Image', label: 'Vier scènes' },
+      { icon: 'Image', label: 'Zes scènes' },
       { icon: 'Upload', label: 'Eigen foto per scène' },
       { icon: 'Building2', label: 'Neutrale kantoorshots' },
       { icon: 'Copy', label: 'Eén foto voor alles' },
@@ -98,7 +98,7 @@ export const LEARN_MORE: LearnMoreDef[] = [
     faq: [
       {
         q: 'Welke foto’s werken goed?',
-        a: 'Rustige beelden zonder mensen op de voorgrond, liggend en minstens 1280 pixels breed. De avatar staat er half voor, dus houd het midden vrij.',
+        a: 'Rustige beelden zonder mensen, staand en minstens 1080 pixels breed. Liggend mag ook: we snijden er een staand stuk uit. De avatar staat er half voor, dus houd het midden vrij.',
       },
       {
         q: 'Mag ik foto’s van inwoners gebruiken?',

@@ -4,7 +4,7 @@
  */
 import { chromium } from 'playwright'
 import { serveer } from './serve.mjs'
-import { readFileSync, readdirSync } from 'node:fs'
+import { globSync, readFileSync, readdirSync } from 'node:fs'
 
 const dist = process.argv[2] ?? 'dist'
 const { url: base } = await serveer(dist)
@@ -43,7 +43,11 @@ const nietFonts = extern.filter((u) => !u.includes('fonts.g'))
 eis('laadt niets van buiten behalve fonts', nietFonts.length === 0, nietFonts.join(', '))
 
 // 3. Geen Engelse UI-termen of lorem op de schermen.
-const verboden = ['lorem', 'summary', 'translate', 'pipeline', 'credit']
+const verboden = [
+  'lorem', 'summary', 'translate', 'pipeline', 'credit',
+  // CHANGES-03 A3 en C8: één lengte, geen keuze tussen vast en adaptief.
+  'adaptief', 'adaptieve', 'vaste samenvatting', '3 minuten', 'drie minuten',
+]
 const gevonden = new Set()
 for (const route of ['/', '/configuratie', '/paginas/nieuw', '/team', '/hulp',
                      '/paginas/p-bijstand', '/paginas/p-bijstand/tr', '/paginas/p-bijstand/video/tr']) {
@@ -111,6 +115,68 @@ eis('Team en Hulp bereikbaar vanaf het overzicht', teamLink > 0 && hulpLink > 0,
 await page.goto(`${base}#/paginas`, { waitUntil: 'load' })
 await page.waitForTimeout(500)
 eis('/paginas redirect naar het overzicht', page.url().endsWith('#/'), page.url().split('#')[1])
+
+// 10. CHANGES-03 G30. Geen liggend videoframe meer: aspect-video bestaat niet
+// meer in de broncode, en de schermen met een video tonen een staand kader.
+const bronnen = globSync('src/**/*.tsx')
+const liggend = bronnen.filter((f) => /aspect-video|aspect-\[16\/9\]/.test(readFileSync(f, 'utf8')))
+eis('geen liggend videoframe in de broncode', liggend.length === 0, liggend.join(', '))
+
+const staandOp = async (route) => {
+  await page.goto(`${base}?fast=1&scenario=tweede#${route}`, { waitUntil: 'load' })
+  await page.waitForTimeout(500)
+  return page.evaluate(() =>
+    [...document.querySelectorAll('[class*="aspect-[9/16]"]')].some((el) => {
+      const r = el.getBoundingClientRect()
+      return r.height > r.width
+    }),
+  )
+}
+eis('de beheerpagina toont staande video’s', await staandOp('/paginas/p-bijstand'))
+eis('de videocontrole toont een staand kader', await staandOp('/paginas/p-bijstand/video/tr'))
+
+// 11. Geen scènetitels: de seed heeft per pagina één titel, die van de pagina.
+const paginas = globSync('src/data/pages/*.ts')
+const metTitel = paginas.filter((f) => (readFileSync(f, 'utf8').match(/\btitle:/g) ?? []).length !== 1)
+eis('geen scènetitels in de seed', metTitel.length === 0, metTitel.join(', '))
+
+await page.goto(`${base}?fast=1&scenario=tweede#/paginas/p-bijstand/samenvatting`, { waitUntil: 'load' })
+await page.waitForTimeout(500)
+const scenes = await page.textContent('body')
+eis('intro- en outroscène staan in de samenvatting',
+  scenes.includes('Intro') && scenes.includes('Outro') && scenes.includes('Scène 2'))
+
+// 12. Na akkoord op de basissamenvatting staan álle talen op "Controleer script".
+await page.goto(`${base}?fast=1&scenario=tweede#/paginas/p-bijstand/samenvatting`, { waitUntil: 'load' })
+await page.waitForTimeout(500)
+await page.getByRole('button', { name: 'Akkoord', exact: true }).click()
+await page.waitForTimeout(1800)
+const klaarVoorScript = await page.getByRole('link', { name: 'Controleer script' }).count()
+eis('alle talen staan op "Controleer script"', klaarVoorScript >= 4, `${klaarVoorScript} talen`)
+
+// 13. Het demowachtscherm is te verlaten en komt terug via het overzicht. De
+// timer zetten we rechtstreeks in de bewaarde state; de rest is echte tijd.
+await page.goto(`${base}?scenario=eerste#/configuratie`, { waitUntil: 'load' })
+await page.waitForTimeout(600)
+await page.evaluate(() => {
+  const bewaard = JSON.parse(localStorage.getItem('avatar-proto-v1'))
+  bewaard.state.config.demoTimer = { kind: 'demo', startedAt: Date.now() }
+  bewaard.state.config.demoKlaar = false
+  localStorage.setItem('avatar-proto-v1', JSON.stringify(bewaard))
+})
+await page.goto(`${base}#/configuratie`, { waitUntil: 'load' })
+await page.waitForTimeout(700)
+const terugKnop = page.getByRole('link', { name: 'Terug naar het overzicht' })
+eis('het demowachtscherm is meteen te verlaten', (await terugKnop.count()) > 0 && (await terugKnop.isEnabled()))
+
+await terugKnop.click()
+await page.waitForTimeout(600)
+eis('het overzicht meldt dat de demo loopt',
+  (await page.textContent('body')).includes('Demovideo wordt gemaakt'))
+
+await page.waitForTimeout(8500)
+eis('het overzicht meldt dat de demo klaar is',
+  (await page.textContent('body')).includes('Demo klaar'))
 
 eis('geen consolefouten tijdens de controle', fouten.length === 0, [...new Set(fouten)].join(' | '))
 
