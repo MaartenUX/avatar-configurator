@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CircleHelp, MessageCircle, Plus, Settings2, Sparkles, Users } from 'lucide-react'
+import { Check, CircleHelp, MessageCircle, Plus, Settings2, Sparkles, Users } from 'lucide-react'
 import {
   Button, Card, Chip, EmptyState, LockedBanner, PageCard, ShellContainer,
 } from '../components'
 import { useStore } from '../state/store'
 import { useNow } from '../state/TickProvider'
+import { useCountdown } from '../state/useCountdown'
 import { langLabel } from '../data/langs'
 import { FASES } from '../data/copy'
 import type { Lang } from '../state/types'
@@ -151,12 +152,42 @@ export default function Overzicht() {
 
 /** Eerste keer: nog geen configuratie, dus precies één volgende stap. */
 function EersteKeer() {
+  const config = useStore((s) => s.config)
+  const demo = useCountdown(config.demoTimer)
+
   return (
     <ShellContainer>
       <div className="flex flex-col gap-8">
         <header>
           <h1 className="text-display text-gray-1">De avatars voor de Gemeente Bergrode</h1>
         </header>
+
+        {/* Loopt de demovideo, dan is dát het nieuws op het overzicht — niet
+            de uitnodiging om te beginnen (CHANGES-03 E19). */}
+        {demo ? (
+          <Card className="flex flex-wrap items-center gap-3">
+            <span className="flex items-center gap-2 text-body text-gray-1">
+              <span className="size-2.5 animate-pulse rounded-pill bg-turq" aria-hidden />
+              Demovideo wordt gemaakt · nog {demo.etaMin} min
+            </span>
+            <span className="flex-1 text-body-sm text-gray-3">
+              Je krijgt een mail zodra hij klaar is.
+            </span>
+            <Button variant="secondary" to="/configuratie">
+              Bekijk de configuratie
+            </Button>
+          </Card>
+        ) : config.demoKlaar ? (
+          <Card className="flex flex-wrap items-center gap-3 border-2 border-green-shade">
+            <span className="flex items-center gap-2 text-body text-gray-1">
+              <Check size={18} strokeWidth={3} className="text-green-shade" aria-hidden />
+              Demo klaar — bekijk en leg vast
+            </span>
+            <Button className="ml-auto" to="/configuratie" iconLeft={Settings2}>
+              Naar de demo
+            </Button>
+          </Card>
+        ) : null}
 
         <Card className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">

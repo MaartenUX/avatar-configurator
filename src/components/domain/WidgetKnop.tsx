@@ -6,6 +6,7 @@ import { avatarById } from '../../data/avatars'
 import { langDef, langLabel } from '../../data/langs'
 import { widgetKnop } from '../../lib/assets'
 import { pageContent } from '../../data'
+import { DEMO_DUUR, demoSubtitles } from '../../data/demo'
 import type { Config, Lang } from '../../state/types'
 import { cn } from '../../lib/cn'
 
@@ -99,7 +100,9 @@ export interface WidgetVensterProps {
 export function WidgetVenster({ config, pageId, onClose }: WidgetVensterProps) {
   const talen = (config.languages.length ? config.languages : ['nl']) as Lang[]
   const [taal, setTaal] = useState<Lang>(talen[0])
-  const inhoud = pageContent(pageId ?? 'p-parkeervergunning')
+  // Zonder pagina is dit de demo: een voorbeeldtekst die de gemeente niet
+  // noemt, want je kijkt naar je instellingen (CHANGES-03 E20).
+  const inhoud = pageId ? pageContent(pageId) : undefined
 
   return (
     <div className="flex w-full flex-col items-center gap-3">
@@ -107,7 +110,8 @@ export function WidgetVenster({ config, pageId, onClose }: WidgetVensterProps) {
         <VideoPreview
           avatarId={config.avatars[taal]}
           lang={taal}
-          subtitles={inhoud?.subtitles[taal] ?? inhoud?.subtitles.nl}
+          subtitles={inhoud ? inhoud.subtitles[taal] ?? inhoud.subtitles.nl : demoSubtitles(taal)}
+          durationSec={inhoud ? undefined : DEMO_DUUR}
           backgrounds={config.backgrounds}
           transition={config.transition}
           primary={config.primary}

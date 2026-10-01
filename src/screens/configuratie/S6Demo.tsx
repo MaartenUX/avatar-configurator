@@ -4,17 +4,12 @@ import { Button, Card, WaitScreen } from '../../components'
 import { useStore } from '../../state/store'
 import { avatarById } from '../../data/avatars'
 import { langDef, langLabel } from '../../data/langs'
-import { startTimer } from '../../state/timers'
-import { useCountdown } from '../../state/useCountdown'
 import { SECTIONS } from './sections'
-import type { Lang, Timer } from '../../state/types'
 
 export interface S6Props {
   /** Zodra dit in beeld komt wisselt de preview naar het 3x3-raster. */
   gridSentinel: RefObject<HTMLDivElement | null>
   onWijzig: (index: number) => void
-  /** Geeft de gemaakte demo door aan de linkerhelft. */
-  onDemo: (taal: Lang | null) => void
   onVastgelegd: () => void
 }
 
@@ -26,29 +21,18 @@ const HOEK_LABEL = {
  * De configurator eindigt in een echte demo, niet in een mail. Je maakt hem,
  * bekijkt hem links, en legt daarna pas vast.
  */
-export function S6Demo({ gridSentinel, onWijzig, onDemo, onVastgelegd }: S6Props) {
+export function S6Demo({ gridSentinel, onWijzig, onVastgelegd }: S6Props) {
   const config = useStore((s) => s.config)
   const lockConfig = useStore((s) => s.lockConfig)
+  const startDemo = useStore((s) => s.startDemo)
   const flash = useStore((s) => s.flash)
 
-  const [timer, setTimer] = useState<Timer | null>(null)
-  const [klaar, setKlaar] = useState(config.status === 'locked')
   const [begrepen, setBegrepen] = useState(false)
-  const countdown = useCountdown(timer ?? undefined)
 
   const vergrendeld = config.status === 'locked'
-  const bezig = timer !== null && !klaar && !(countdown?.done ?? false)
-
-  // De tick zet de teller op nul; dan is de demo klaar.
-  if (timer && countdown?.done && !klaar) {
-    setKlaar(true)
-    onDemo(config.languages[0] ?? 'nl')
-  }
-
-  const maak = () => {
-    setTimer(startTimer('generate'))
-    setKlaar(false)
-  }
+  // De timer staat in de config: je mag wegklikken en later terugkomen.
+  const bezig = Boolean(config.demoTimer)
+  const klaar = Boolean(config.demoKlaar) || vergrendeld
 
   const deel = () => {
     void navigator.clipboard
@@ -93,15 +77,20 @@ export function S6Demo({ gridSentinel, onWijzig, onDemo, onVastgelegd }: S6Props
   if (bezig) {
     return (
       <WaitScreen
-        title="We maken je demo"
-        subtitle="Een korte video met jouw instellingen, zodat je alles in het echt ziet voordat je vastlegt."
-        timer={timer ?? undefined}
+        title="We maken je demovideo"
+        subtitle="Dit duurt ongeveer een half uur. Je hoeft niet te wachten — je krijgt een mail zodra de demo klaar is."
+        timer={config.demoTimer}
         tips={[
-          'Straks kun je de demo afspelen in de preview hiernaast.',
-          'Je kunt de link delen met collega’s die meekijken.',
+          'Op het overzicht zie je hoelang het nog duurt.',
+          'Straks speel je de demo af in de preview hiernaast.',
           'Klopt er iets niet? Je kunt elke stap nog aanpassen.',
         ]}
-      />
+      >
+        {/* Direct actief: wachten hoeft niet. */}
+        <Button variant="secondary" to="/">
+          Terug naar het overzicht
+        </Button>
+      </WaitScreen>
     )
   }
 
@@ -109,14 +98,16 @@ export function S6Demo({ gridSentinel, onWijzig, onDemo, onVastgelegd }: S6Props
     return (
       <Card className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <h3 className="text-h3 text-gray-1">Maak een demo</h3>
+          <h3 className="text-h3 text-gray-1">Maak een demovideo</h3>
           <p className="text-body text-gray-2">
-            We maken nu een korte demo met jouw instellingen. Dat duurt een paar minuten.
+            We maken een korte video met jouw avatars, achtergronden en overgang. De tekst is een
+            voorbeeldtekst. Zo zie je precies hoe je video’s eruit gaan zien voordat je de
+            instellingen vastlegt.
           </p>
         </div>
         <span className="flex flex-wrap items-center gap-3">
-          <Button iconLeft={Sparkles} onClick={maak} disabled={!alleStappenAf}>
-            Maak demo
+          <Button iconLeft={Sparkles} onClick={startDemo} disabled={!alleStappenAf}>
+            Maak demovideo
           </Button>
           {!alleStappenAf && (
             <span className="text-body-sm text-orange-shade">Maak eerst alle stappen af.</span>
@@ -133,7 +124,7 @@ export function S6Demo({ gridSentinel, onWijzig, onDemo, onVastgelegd }: S6Props
           <Play size={17} aria-hidden />
         </span>
         <p className="min-w-48 flex-1 text-body text-gray-2">
-          Je demo staat klaar. Speel hem af in de preview hiernaast.
+          Je demovideo staat klaar. Klik links op de knop in de pagina om hem te bekijken.
         </p>
         <Button variant="secondary" iconLeft={Link2} onClick={deel}>
           Kopieer link

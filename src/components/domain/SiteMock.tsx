@@ -13,6 +13,8 @@ export interface SiteMockProps {
   expanded?: boolean
   /** Klik op de widget-knop. */
   onOpen?: () => void
+  /** Sluit het uitgeklapte venster weer. */
+  onClose?: () => void
   /** Contentpagina in plaats van homepage: kop, broodkruimel, tekst, zijbalk. */
   soort?: 'home' | 'content'
   className?: string
@@ -36,6 +38,7 @@ export function SiteMock({
   mini,
   expanded,
   onOpen,
+  onClose,
   soort = 'home',
   className,
 }: SiteMockProps) {
@@ -92,7 +95,7 @@ export function SiteMock({
 
       {expanded ? (
         <div className="absolute inset-0 grid place-items-center bg-gray-1/35 p-3">
-          <WidgetVenster config={config} />
+          <WidgetVenster config={config} onClose={onClose} />
         </div>
       ) : (
         <Widget config={config} mini={mini} onOpen={onOpen} />

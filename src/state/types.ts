@@ -86,8 +86,12 @@ export interface Config {
   level: 'B1' | 'B2'
   languages: Lang[]
   avatars: Partial<Record<Lang, string>>
-  /** Vier shots; null = standaard kantoorshot. Leeg = nog geen keuze. */
+  /** Zes shots; null = standaard kantoorshot. Leeg = nog geen keuze. */
   backgrounds: (string | null)[]
+  /** Loopt zolang de demovideo gemaakt wordt (CHANGES-03 E19). */
+  demoTimer?: Timer
+  /** De demovideo is klaar en staat op je te wachten. */
+  demoKlaar?: boolean
   signedAt?: string
 }
 

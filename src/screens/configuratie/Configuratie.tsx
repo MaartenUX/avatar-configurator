@@ -2,7 +2,6 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { useNavigate } from 'react-router-dom'
 import { Lock, Save } from 'lucide-react'
 import { Button, LockedBanner, PreviewGrid, SiteMock } from '../../components'
-import { WidgetVenster } from '../../components/domain/WidgetKnop'
 import { ProgressBar } from '../../components/layout/ProgressBar'
 import { useStore } from '../../state/store'
 import { SECTIONS, doneSections, firstOpenSection } from './sections'
@@ -10,7 +9,6 @@ import { SectionShell } from './SectionShell'
 import { S1Talen, S2Avatars, S3Scenes, S4Achtergronden, S5Widget } from './secties'
 import { S6Demo } from './S6Demo'
 import { OvergangPreview } from './OvergangPreview'
-import type { Lang } from '../../state/types'
 import { cn } from '../../lib/cn'
 
 /** Hoe lang de observer een klik op "Verder" laat winnen van het scrollen. */
@@ -30,8 +28,8 @@ export default function Configuratie() {
 
   const [active, setActive] = useState(() => firstOpenSection(config))
   const [previewMode, setPreviewMode] = useState<'site' | 'grid'>('site')
-  // Zodra de demo klaar is, wordt hij links afspeelbaar.
-  const [demoTaal, setDemoTaal] = useState<Lang | null>(null)
+  // De demo bekijk je zoals een inwoner dat doet: via de knop op de pagina.
+  const [demoOpen, setDemoOpen] = useState(false)
 
   const gedaan = doneSections(config)
   const vergrendeld = config.status === 'locked'
@@ -136,7 +134,6 @@ export default function Configuratie() {
       <S6Demo
         gridSentinel={gridSentinel}
         onWijzig={scrollNaar}
-        onDemo={setDemoTaal}
         onVastgelegd={() => {
           flash({ text: 'Instellingen vastgelegd — voeg je eerste pagina toe', tone: 'success' })
           navigate('/')
@@ -177,16 +174,16 @@ export default function Configuratie() {
                   previewMode === 'grid' ? 'pointer-events-none absolute inset-0 scale-95 opacity-0' : 'opacity-100',
                 )}
               >
-                {demoTaal ? (
-                  <WidgetVenster config={config} />
-                ) : active === 3 ? (
+                {active === 3 ? (
                   /* Sectie 3 kijkt naar de overgang, niet naar de website. */
                   <OvergangPreview config={config} />
                 ) : (
                   <SiteMock
                     config={config}
                     soort={config.contentUrl ? 'content' : 'home'}
-                    expanded={active === 4}
+                    expanded={active === 4 || demoOpen}
+                    onOpen={config.demoKlaar ? () => setDemoOpen(true) : undefined}
+                    onClose={demoOpen ? () => setDemoOpen(false) : undefined}
                   />
                 )}
               </div>

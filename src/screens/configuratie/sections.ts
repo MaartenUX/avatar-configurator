@@ -81,7 +81,7 @@ export const SECTIONS: SectionDef[] = [
   {
     id: 'vastleggen',
     index: 6,
-    title: 'Maak een demo',
+    title: 'Maak een demovideo',
     subtitle: 'Controleer alles in het echt voordat je het vastlegt.',
     isDone: (c) => c.status === 'locked',
   },

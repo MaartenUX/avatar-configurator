@@ -10,7 +10,7 @@ import type {
   ToastTone,
   TeamMember,
 } from './types'
-import { nextPageStatus, startTimer, tickPages } from './timers'
+import { deadlineOf, nextPageStatus, startTimer, tickPages } from './timers'
 import { snapshotFor, type ScenarioId } from '../data/seed'
 import { fallbackContent, pageContent, RESERVED_IDS } from '../data'
 import { TEAM } from '../data/team'
@@ -35,6 +35,7 @@ export interface Store {
   startConfig: () => void
   patchConfig: (patch: Partial<Config>) => void
   setScrollY: (y: number) => void
+  startDemo: () => void
   lockConfig: () => void
 
   // productie
@@ -104,6 +105,13 @@ export const useStore = create<Store>()(
         }),
 
       setScrollY: (y) => set((s) => ({ config: { ...s.config, scrollY: y } })),
+
+      /** De demovideo wordt gemaakt. De timer staat in de config en niet in het
+       *  scherm, want je mag wegklikken en later terugkomen (CHANGES-03 E19). */
+      startDemo: () =>
+        set((s) => ({
+          config: { ...s.config, demoTimer: startTimer('demo'), demoKlaar: false },
+        })),
 
       lockConfig: () =>
         set((s) => ({
@@ -262,6 +270,13 @@ export const useStore = create<Store>()(
         const s = get()
         const next = tickPages(s.pages, now, s.fast)
         if (next) set({ pages: next })
+
+        // De demo is klaar. Dit vuurt één keer: de timer gaat er meteen uit.
+        const demo = s.config.demoTimer
+        if (demo && now >= deadlineOf(demo, s.fast)) {
+          set({ config: { ...get().config, demoTimer: undefined, demoKlaar: true } })
+          get().flash({ text: 'Je demovideo is klaar', tone: 'success' })
+        }
       },
 
       setFast: (fast) => set({ fast }),
