@@ -9,6 +9,7 @@ import { SECTIONS, doneSections, firstOpenSection } from './sections'
 import { SectionShell } from './SectionShell'
 import { S1Talen, S2Avatars, S3Scenes, S4Achtergronden, S5Widget } from './secties'
 import { S6Demo } from './S6Demo'
+import { OvergangPreview } from './OvergangPreview'
 import type { Lang } from '../../state/types'
 import { cn } from '../../lib/cn'
 
@@ -178,12 +179,15 @@ export default function Configuratie() {
               >
                 {demoTaal ? (
                   <WidgetVenster config={config} />
+                ) : active === 3 ? (
+                  /* Sectie 3 kijkt naar de overgang, niet naar de website. */
+                  <OvergangPreview config={config} />
                 ) : (
-                <SiteMock
-                  config={config}
-                  soort={config.contentUrl ? 'content' : 'home'}
-                  expanded={active >= 3 && active <= 4}
-                />
+                  <SiteMock
+                    config={config}
+                    soort={config.contentUrl ? 'content' : 'home'}
+                    expanded={active === 4}
+                  />
                 )}
               </div>
               <div
