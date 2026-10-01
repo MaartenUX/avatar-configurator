@@ -3,23 +3,24 @@
  * browser tegen het gebouwde bestand.
  */
 import { chromium } from 'playwright'
+import { serveer } from './serve.mjs'
 import { readFileSync, readdirSync } from 'node:fs'
 
-const base = process.argv[2]
-const dist = process.argv[3]
+const dist = process.argv[2] ?? 'dist'
+const { url: base } = await serveer(dist)
 const browser = await chromium.launch()
 const uitslag = []
 const eis = (naam, ok, detail = '') =>
   uitslag.push({ naam, ok, detail })
 
-// 1. Eén bestand, geen losse assets ernaast.
-const bestanden = readdirSync(dist)
-eis('dist bevat alleen index.html', bestanden.length === 1 && bestanden[0] === 'index.html',
+// 1. De build is een map met index.html, de assets en de media (PLAN par. 3
+// en 11 aangepast door CHANGES-03 H).
+const bestanden = readdirSync(dist).sort()
+eis('build bevat index.html en assets', bestanden.includes('index.html') && bestanden.includes('assets'),
   bestanden.join(', '))
 
 const html = readFileSync(`${dist}/index.html`, 'utf8')
-eis('bestand blijft onder 8 MB', html.length < 8 * 1024 * 1024,
-  `${(html.length / 1024 / 1024).toFixed(2)} MB`)
+eis('index.html blijft klein', html.length < 64 * 1024, `${Math.round(html.length / 1024)} KB`)
 
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
 const fouten = []
@@ -29,7 +30,7 @@ page.on('console', (m) => m.type() === 'error' && fouten.push(m.text()))
 // 2. Opent vanaf file:// zonder server.
 await page.goto(`${base}#/`, { waitUntil: 'load' })
 await page.waitForTimeout(600)
-eis('opent vanaf file:// zonder server', (await page.$eval('#root', (e) => e.children.length)) > 0)
+eis('mount zonder fouten', (await page.$eval('#root', (e) => e.children.length)) > 0)
 
 // 3. Wat laadt de pagina echt van buiten? In de DOM kijken, niet in de tekst:
 // het embed-veld bevat een scripttag als tekst die de gebruiker kopieert.

@@ -37,24 +37,25 @@ export function nextAction(page: Page, user: 'esmee' | 'emre' = 'esmee'): NextAc
         to: `/paginas/${page.id}/samenvatting`,
         hint: 'De basissamenvatting is klaar om te controleren',
       }
-    case 'review-nl':
-      return {
-        label: 'Finetune script en audio',
-        to: `/paginas/${page.id}/script`,
-        hint: 'Het Nederlandse script en de audio staan klaar',
-      }
     case 'ready-to-publish':
       return { label: 'Publiceer', to: `/paginas/${page.id}/publiceren`, hint: 'Alle talen zijn goedgekeurd' }
     case 'live':
       return { label: 'Bekijk', to: `/paginas/${page.id}`, hint: 'Staat live op de website' }
-    case 'in-translation':
+    case 'in-production':
     default: {
       // Eerst kijken of Esmee zelf iets kan doen: een video controleren.
+      // Nederlands is gewoon één van de talen; Esmee doet die zelf.
+      if (langsWith(page, 'review-text').includes('nl'))
+        return {
+          label: 'Controleer script',
+          to: `/paginas/${page.id}/script`,
+          hint: 'Het Nederlandse script en de audio staan klaar',
+        }
       const video = langsWith(page, 'review-video')[0]
       if (video)
         return {
           label: `Controleer video ${langLabel(video)}`,
-          to: `/paginas/${page.id}/video/${video}`,
+          to: video === 'nl' ? `/paginas/${page.id}/video/nl` : `/paginas/${page.id}/video/${video}`,
           hint: 'Een video is klaar om te controleren',
         }
       const text = langsWith(page, 'review-text')

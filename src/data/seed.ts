@@ -49,8 +49,8 @@ export const SEED_CONFIG: Config = {
   level: 'B1',
   languages: ['nl', 'en', 'tr', 'ar'],
   avatars: { nl: 'nl-sanne', en: 'en-emma', tr: 'tr-zeynep', ar: 'ar-nour' },
-  videoType: 'vast',
-  backgrounds: ['kantoor-1', 'kantoor-2', 'kantoor-3', 'kantoor-4'],
+  transition: 'zoom',
+  backgrounds: ['kantoor-1', 'kantoor-3', 'kantoor-1', 'kantoor-3', 'kantoor-1', 'kantoor-3'],
   signedAt: '2026-09-09T09:20:00.000Z',
 }
 
@@ -93,7 +93,7 @@ const livePage = (id: string, views: Page['views'], createdAt: string): Page => 
 const bijstandInProductie = (): Page => ({
   id: 'p-bijstand',
   ...contentOf('p-bijstand'),
-  status: 'in-translation',
+  status: 'in-production',
   langs: {
     nl: { status: 'approved', reviewer: REVIEWERS.nl },
     en: { status: 'review-text', reviewer: REVIEWERS.en },

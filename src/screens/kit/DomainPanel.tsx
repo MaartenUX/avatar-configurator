@@ -25,8 +25,8 @@ const CORNERS: { id: WidgetCorner; label: string }[] = [
 export function DomainPanel() {
   const pages = useStore((s) => s.pages)
   const [avatar, setAvatar] = useState('nl-sanne')
-  const [videoType, setVideoType] = useState<Config['videoType']>('vast')
   const [stage, setStage] = useState(6)
+  const [overgang, setOvergang] = useState<'zoom' | 'logo'>('zoom')
   const [seek, setSeek] = useState<number | null>(null)
   const [time, setTime] = useState(0)
 
@@ -41,8 +41,7 @@ export function DomainPanel() {
     logo: stage >= 5 ? SEED_CONFIG.logo : undefined,
     primary: stage >= 5 ? SEED_CONFIG.primary : undefined,
     secondary: stage >= 5 ? SEED_CONFIG.secondary : undefined,
-    videoType,
-  }
+      }
 
   return (
     <div className="flex flex-col gap-8">
@@ -57,7 +56,7 @@ export function DomainPanel() {
         </label>
         <KitRow>
           <div className="w-[420px]"><SiteMock config={staged} /></div>
-          <div className="w-[420px]"><SiteMock config={staged} expanded shot={1} /></div>
+          <div className="w-[420px]"><SiteMock config={staged} expanded /></div>
         </KitRow>
         <KitRow>
           {CORNERS.map((c) => (
@@ -101,14 +100,14 @@ export function DomainPanel() {
       <KitBlock title="ChoiceTile" note="gekozen = blauwe rand met tintvlak">
         <KitRow>
           <ChoiceTile
-            title="Vaste samenvatting" icon={Timer} selected={videoType === 'vast'} tag="Aanbevolen"
-            description="Maximaal 3 minuten, 4 tot 6 scènes. De maximale spanningsboog."
-            onSelect={() => setVideoType('vast')} className="w-72"
+            title="Camerawissel" icon={Timer} selected={overgang === 'zoom'} tag="Aanbevolen"
+            description="De camera wisselt per scène tussen dichtbij en verder weg."
+            onSelect={() => setOvergang('zoom')} className="w-72"
           />
           <ChoiceTile
-            title="Adaptieve samenvatting" icon={Gauge} selected={videoType === 'adaptief'}
-            description="Ongeveer 10% van de leestijd, maximaal 6 minuten. Meer scènes."
-            onSelect={() => setVideoType('adaptief')} className="w-72"
+            title="Logo tussen de scènes" icon={Gauge} selected={overgang === 'logo'}
+            description="Tussen twee scènes komt je logo kort in beeld."
+            onSelect={() => setOvergang('logo')} className="w-72"
           />
           <ChoiceTile title="Alert-video" selected={false} disabled onSelect={() => {}} description="Binnenkort beschikbaar." className="w-56" />
         </KitRow>
@@ -132,15 +131,12 @@ export function DomainPanel() {
         </div>
       </KitBlock>
 
-      <KitBlock title="SceneBlock" note="inline bewerkbaar, met woordteller en optioneel audio">
+      <KitBlock title="SceneBlock" note="geen titel; label-pill voor intro, scène en outro">
         <div className="flex max-w-2xl flex-col gap-3">
-          <SceneBlock index={1} title={parkeren.scenes[0].title} text={parkeren.scenes[0].text} maxWords={50} />
-          <SceneBlock index={2} title={parkeren.scenes[1].title} text={parkeren.scenes[1].text} maxWords={50} audioId="nl-sanne" />
-          <SceneBlock
-            index={1} maxWords={50} dir="rtl"
-            title={parkeren.translations.ar![0].title}
-            text={parkeren.translations.ar![0].text}
-          />
+          <SceneBlock index={0} totaal={6} text={parkeren.scenes[0].text} />
+          <SceneBlock index={1} totaal={6} text={parkeren.scenes[1].text} audioId="nl-sanne" />
+          <SceneBlock index={5} totaal={6} text={parkeren.scenes[5].text} />
+          <SceneBlock index={1} totaal={6} dir="rtl" text={parkeren.translations.ar![1].text} />
         </div>
       </KitBlock>
 
@@ -154,13 +150,12 @@ export function DomainPanel() {
       <KitBlock title="VideoPreview en SubtitleEditor" note="klikken op een tijdcode springt in de preview">
         <div className="grid max-w-4xl gap-4 lg:grid-cols-2">
           <VideoPreview
-            avatarId="nl-sanne" lang="nl" subtitles={subs} logo="bergrode"
-            seekTo={seek} onTimeUpdate={setTime}
+            avatarId="nl-sanne" lang="nl" subtitles={subs} seekTo={seek} onTimeUpdate={setTime}
           />
           <SubtitleEditor lines={subs} currentTime={time} onSeek={setSeek} />
         </div>
         <div className="grid max-w-4xl gap-4 lg:grid-cols-2">
-          <VideoPreview avatarId="ar-nour" lang="ar" subtitles={parkeren.subtitles.ar} logo="bergrode" />
+          <VideoPreview avatarId="ar-nour" lang="ar" subtitles={parkeren.subtitles.ar} />
           <SubtitleEditor lines={parkeren.subtitles.ar ?? []} dir="rtl" />
         </div>
       </KitBlock>
@@ -200,7 +195,7 @@ export function DomainPanel() {
       <KitBlock title="LearnMore en SpraakTips">
         <KitRow>
           <LearnMore sectionId="avatars" />
-          <LearnMore sectionId="videotype" label="Waarom maximaal 3 minuten?" />
+          <LearnMore sectionId="scenes" label="Waarom maximaal 2 minuten?" />
           <SpraakTips />
           <SpraakTips soort="ondertitel" />
         </KitRow>

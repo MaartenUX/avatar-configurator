@@ -26,7 +26,7 @@ export default function Publiceren() {
   const mag = canPublish(page)
   const live = page.status === 'live'
 
-  const script = page.scenes.map((s, i) => `${i + 1}. ${s.title}\n${s.text}`).join('\n\n')
+  const script = page.scenes.map((s) => s.text).join('\n\n')
 
   return (
     <SpokeFrame
@@ -39,7 +39,8 @@ export default function Publiceren() {
             lang="nl"
             subtitles={page.subtitles.nl}
             backgrounds={config.backgrounds}
-            logo={config.logo}
+            transition={config.transition}
+            primary={config.primary}
             className="max-w-2xl"
           />
         )

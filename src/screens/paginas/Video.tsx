@@ -53,7 +53,8 @@ export default function Video() {
             lang={lang}
             subtitles={regels}
             backgrounds={config.backgrounds}
-            logo={config.logo}
+            transition={config.transition}
+            primary={config.primary}
             seekTo={spring}
             onTimeUpdate={setTijd}
           />

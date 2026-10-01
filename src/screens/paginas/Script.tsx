@@ -13,8 +13,6 @@ import { HOE } from '../../data/copy'
 import { Voorbeeld } from './Samenvatting'
 import { useCountdown } from '../../state/useCountdown'
 
-const MAX_WOORDEN = 50
-
 /** S2b: de Nederlandse zinnen mooi maken voor de spraak, mét audio. */
 export default function Script() {
   const { id } = useParams()
@@ -22,7 +20,7 @@ export default function Script() {
   const bekijken = useBekijkstand()
   const config = useStore((s) => s.config)
   const editScenes = useStore((s) => s.editScenes)
-  const approveNl = useStore((s) => s.approveNl)
+  const approveLang = useStore((s) => s.approveLang)
   const regenerateAudio = useStore((s) => s.regenerateAudio)
   const finish = useFinishSpoke()
   const countdown = useCountdown(page?.timer)
@@ -31,7 +29,6 @@ export default function Script() {
 
   const avatar = avatarById(config.avatars.nl)
   const audioBezig = page.timer?.kind === 'audio' && !countdown?.done
-  const talen = Object.keys(page.langs).length
 
   return (
     <SpokeFrame
@@ -59,10 +56,9 @@ export default function Script() {
         {page.scenes.map((scene, i) => (
           <SceneBlock
             key={i}
-            index={i + 1}
-            title={scene.title}
+            index={i}
             text={scene.text}
-            maxWords={MAX_WOORDEN}
+            totaal={page.scenes.length}
             audioId={`${config.avatars.nl ?? 'nl-sanne'}-${i}`}
             audioSec={28}
             onChange={(text) =>
@@ -87,8 +83,8 @@ export default function Script() {
             <ApproveBox
           consequence={`Na akkoord krijgen je collega's een bericht om hun taal te controleren, en worden de video's gemaakt. Dat duurt ongeveer 20 minuten.`}
           onApprove={() => {
-            approveNl(page.id)
-            finish('script', { pageId: page.id, langCount: talen })
+            approveLang(page.id, 'nl')
+            finish('script', { pageId: page.id })
           }}
           onSave={() => finish('summary', { pageId: page.id })}
         />

@@ -2,13 +2,13 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { useNavigate } from 'react-router-dom'
 import { Lock, Save } from 'lucide-react'
 import { Button, LockedBanner, PreviewGrid, SiteMock } from '../../components'
+import { WidgetVenster } from '../../components/domain/WidgetKnop'
 import { ProgressBar } from '../../components/layout/ProgressBar'
 import { useStore } from '../../state/store'
 import { SECTIONS, doneSections, firstOpenSection } from './sections'
 import { SectionShell } from './SectionShell'
-import { S1Talen, S2Avatars, S3VideoType, S4Scenes, S5Widget } from './secties'
+import { S1Talen, S2Avatars, S3Scenes, S4Achtergronden, S5Widget } from './secties'
 import { S6Demo } from './S6Demo'
-import { DemoPreview } from './DemoPreview'
 import type { Lang } from '../../state/types'
 import { cn } from '../../lib/cn'
 
@@ -128,8 +128,8 @@ export default function Configuratie() {
   const inhoud = {
     talen: <S1Talen />,
     avatars: <S2Avatars />,
-    videotype: <S3VideoType />,
-    personaliseren: <S4Scenes />,
+    scenes: <S3Scenes />,
+    achtergronden: <S4Achtergronden />,
     widget: <S5Widget />,
     vastleggen: (
       <S6Demo
@@ -177,7 +177,7 @@ export default function Configuratie() {
                 )}
               >
                 {demoTaal ? (
-                  <DemoPreview config={config} />
+                  <WidgetVenster config={config} />
                 ) : (
                 <SiteMock
                   config={config}

@@ -6,7 +6,7 @@ export interface PageContent {
   title: string
   /** Tekst van de gemeentepagina waar de video bij hoort. */
   sourceText: string
-  /** De B1-basissamenvatting in scenes. Vier bij een vaste samenvatting. */
+  /** De B1-basissamenvatting: zes scènes — intro, vier inhoud, outro. */
   scenes: Scene[]
   translations: Partial<Record<Lang, Scene[]>>
   subtitles: Partial<Record<Lang, SubtitleLine[]>>

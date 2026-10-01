@@ -1,9 +1,6 @@
-import { Play } from 'lucide-react'
-import type { Config, Lang } from '../../state/types'
-import { avatarById } from '../../data/avatars'
-import { Avatar } from './Avatar'
-import { backgroundImage } from '../../lib/assets'
+import type { Config } from '../../state/types'
 import { langDef } from '../../data/langs'
+import { WidgetKnop, WidgetVenster } from './WidgetKnop'
 import { cn } from '../../lib/cn'
 
 export interface SiteMockProps {
@@ -14,21 +11,11 @@ export interface SiteMockProps {
   mini?: boolean
   /** Toont de widget uitgeklapt als videoframe. */
   expanded?: boolean
-  /** Welke scène-achtergrond in het frame staat. */
-  shot?: number
+  /** Klik op de widget-knop. */
+  onOpen?: () => void
   /** Contentpagina in plaats van homepage: kop, broodkruimel, tekst, zijbalk. */
   soort?: 'home' | 'content'
   className?: string
-}
-
-/** Hoe breed één figuur is, afhankelijk van het aantal talen. Voluit
- *  geschreven, want de Tailwind-scanner leest broncode als tekst. */
-const FIGURE_WIDTH: Record<number, string> = {
-  1: 'w-[46%]',
-  2: 'w-[40%]',
-  3: 'w-[36%]',
-  4: 'w-[32%]',
-  5: 'w-[28%]',
 }
 
 const CORNER: Record<Config['widgetCorner'], string> = {
@@ -48,14 +35,13 @@ export function SiteMock({
   pageTitle = 'Parkeervergunning bewoners',
   mini,
   expanded,
-  shot = 0,
+  onOpen,
   soort = 'home',
   className,
 }: SiteMockProps) {
   const primary = config.primary ?? '#BDBDBD'
   const secondary = config.secondary ?? '#E0E0E0'
   const hasBrand = Boolean(config.primary)
-  const langs = config.languages.length ? config.languages : (['nl'] as Lang[])
 
   return (
     <div
@@ -105,9 +91,11 @@ export function SiteMock({
       )}
 
       {expanded ? (
-        <VideoFrame config={config} shot={shot} />
+        <div className="absolute inset-0 grid place-items-center bg-gray-1/35 p-3">
+          <WidgetVenster config={config} />
+        </div>
       ) : (
-        <Widget config={config} langs={langs} mini={mini} primary={hasBrand ? primary : '#828282'} />
+        <Widget config={config} mini={mini} onOpen={onOpen} />
       )}
     </div>
   )
@@ -160,142 +148,30 @@ function ContentPagina({
   )
 }
 
+/** De widget op de pagina: liggende knop, zonder eigen achtergrond. */
 function Widget({
   config,
-  langs,
   mini,
-  primary,
+  onOpen,
 }: {
   config: Config
-  langs: Lang[]
   mini?: boolean
-  primary: string
+  onOpen?: () => void
 }) {
-  const shown = langs.slice(0, 5)
   const marge = config.widgetMargin ?? { x: 24, y: 24 }
   // De marge is in pixels op een echte pagina; hier schalen we mee met de mock.
   const schaal = mini ? 0.18 : 0.34
 
-  // De thumbnail toont het eerste frame van de video. Zolang er nog geen
-  // achtergrond gekozen is blijft hij wit, zoals in het ontwerp; daarna staat
-  // de avatar op het kantoorshot, net als in de echte video.
-  const bg = config.achtergrondModus
-    ? backgroundImage(config.backgrounds[0] ?? 'kantoor-1')
-    : undefined
-
   return (
     <div
       className={cn(
-        'absolute flex flex-col overflow-hidden rounded-md bg-white shadow-pop transition-all duration-500',
+        'absolute transition-all duration-500',
         CORNER[config.widgetCorner],
         mini ? 'w-[42%]' : 'w-[38%]',
       )}
       style={{ margin: `${marge.y * schaal}px ${marge.x * schaal}px` }}
     >
-      {/* Videokaartje: de gekozen avatars naast elkaar op één grondlijn.
-          Zolang er niets gekozen is staan er silhouetten, één per taal. */}
-      <div className="relative flex aspect-[16/10] items-end justify-center overflow-hidden bg-white">
-        {bg && (
-          <span
-            className="absolute inset-0 scale-105 blur-[5px]"
-            style={{ backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-            aria-hidden
-          />
-        )}
-        {config.achtergrondModus && !bg && (
-          <span
-            className="absolute inset-0"
-            style={{ background: 'linear-gradient(135deg, #CDEFEC 0%, #E6FAFF 100%)' }}
-            aria-hidden
-          />
-        )}
-        {shown.map((code, i) => {
-          const avatar = avatarById(config.avatars[code])
-          return (
-            <Avatar
-              key={code}
-              face={avatar?.face}
-              name={avatar?.name}
-              className={cn('relative h-full', FIGURE_WIDTH[shown.length] ?? 'w-[28%]', i > 0 && '-ml-[7%]')}
-            />
-          )
-        })}
-
-        {/* Play in het midden, zoals bij elke videospeler. */}
-        <span
-          className={cn(
-            'absolute left-1/2 top-1/2 grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-pill text-white shadow-card',
-            mini ? 'size-4' : 'size-9',
-          )}
-          style={{ background: primary }}
-        >
-          <Play size={mini ? 8 : 16} aria-hidden />
-        </span>
-      </div>
-
-      {/* Ondertitelbalk: kleurt mee zodra de huisstijl is opgehaald. */}
-      <div
-        className={cn('flex items-center transition-colors duration-500', mini ? 'h-3 px-1' : 'h-6 px-2')}
-        style={{ background: config.primary ?? '#E0E0E0' }}
-      >
-        {!mini && (
-          <span
-            className="h-1.5 w-3/5 rounded-pill"
-            style={{ background: config.primary ? 'rgba(255,255,255,.6)' : '#BDBDBD' }}
-          />
-        )}
-      </div>
-    </div>
-  )
-}
-
-/** De widget uitgeklapt: avatar op de achtergrond, met scène-tijdlijn. */
-function VideoFrame({ config, shot }: { config: Config; shot: number }) {
-  const avatar = avatarById(config.avatars[config.languages[0] ?? 'nl'])
-  const slug = config.backgrounds[shot] ?? `kantoor-${(shot % 4) + 1}`
-  const bg = backgroundImage(slug)
-  const scenes = config.videoType === 'adaptief' ? 6 : 4
-
-  return (
-    <div className="absolute inset-2 overflow-hidden rounded-sm bg-gray-1">
-      <div
-        className="absolute inset-0 scale-105 blur-[6px]"
-        style={
-          bg
-            ? { backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-            : { background: 'linear-gradient(135deg, #CDEFEC 0%, #E6FAFF 100%)' }
-        }
-      />
-
-      {avatar && (
-        <span className="absolute bottom-6 left-1/2 -translate-x-1/2">
-          <Avatar face={avatar.face} name={avatar.name} className="h-48 w-44" />
-        </span>
-      )}
-
-      {config.logo && (
-        <span className="absolute right-2 top-2 rounded-sm bg-white/90 px-1.5 py-0.5 text-[10px] font-semibold text-gray-1">
-          AI-gegenereerd
-        </span>
-      )}
-
-      {/* Ondertitelbalk plus de scène-tijdlijn die met het videotype meebeweegt. */}
-      <div className="absolute inset-x-2 bottom-2 flex flex-col gap-1.5">
-        <span className="mx-auto rounded-sm bg-gray-1/80 px-2 py-1 text-center text-[11px] text-white">
-          Woont u in een straat met betaald parkeren?
-        </span>
-        <span className="flex items-center gap-1">
-          {Array.from({ length: scenes }, (_, i) => (
-            <span
-              key={i}
-              className={cn('h-1 flex-1 rounded-pill', i === shot ? 'bg-white' : 'bg-white/40')}
-            />
-          ))}
-          <span className="ml-1 text-[10px] text-white/80">
-            {config.videoType === 'adaptief' ? '3:10' : '1:50'}
-          </span>
-        </span>
-      </div>
+      <WidgetKnop config={config} mini={mini} onOpen={onOpen} />
     </div>
   )
 }

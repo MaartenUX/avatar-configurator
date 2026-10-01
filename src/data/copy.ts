@@ -1,5 +1,16 @@
 /** Gedeelde teksten. Eén plek, zodat de toon overal gelijk blijft. */
 
+/**
+ * Elke video heeft dezelfde opbouw: intro, vier inhoudsscènes, outro
+ * (CHANGES-03 A4). Scènes hebben geen titel; dit label staat erboven.
+ */
+export const sceneLabel = (index: number, totaal: number) =>
+  index === 0 ? 'Intro' : index === totaal - 1 ? 'Outro' : `Scène ${index + 1}`
+
+/** Intro en outro zijn kort; de inhoudsscènes mogen langer. */
+export const sceneMaxWoorden = (index: number, totaal: number) =>
+  index === 0 || index === totaal - 1 ? 25 : 50
+
 export const PRODUCTIE_STAPPEN = [
   { label: 'Samenvatting maken', meta: '1 min · automatisch' },
   { label: 'Basissamenvatting controleren', meta: '3 min · jij' },

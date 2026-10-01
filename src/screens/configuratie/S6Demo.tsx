@@ -68,13 +68,8 @@ export function S6Demo({ gridSentinel, onWijzig, onDemo, onVastgelegd }: S6Props
       sectie: 2,
     },
     {
-      label: 'Type video',
-      waarde:
-        config.videoType === 'adaptief'
-          ? 'Adaptief, max 6 min'
-          : config.videoType === 'vast'
-            ? 'Vaste samenvatting, max 3 min'
-            : '—',
+      label: 'Overgang',
+      waarde: config.transition === 'logo' ? 'Logo tussen de scènes' : 'Camerawissel',
       sectie: 3,
     },
     {

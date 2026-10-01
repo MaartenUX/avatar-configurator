@@ -2,20 +2,26 @@ import { useEffect, useState } from 'react'
 import { Play } from 'lucide-react'
 import { Avatar } from './Avatar'
 import { avatarById } from '../../data/avatars'
-import { backgroundImage } from '../../lib/assets'
+import { backgroundImage, demoVideo } from '../../lib/assets'
 import { langDir } from '../../data/langs'
 import { parseTimecode, formatTimecode } from '../../lib/format'
 import { useNow } from '../../state/TickProvider'
 import type { Lang, SubtitleLine } from '../../state/types'
 import { cn } from '../../lib/cn'
 
+/** Elke video duurt maximaal twee minuten (CHANGES-03 A3). */
+export const VIDEO_DUUR = 120
+
 export interface VideoPreviewProps {
   avatarId?: string
   lang: Lang
   subtitles?: SubtitleLine[]
-  /** Achtergrond-slugs per scène. */
+  /** Achtergrond-slugs per scène; er zijn er zes. */
   backgrounds?: (string | null)[]
-  logo?: string
+  /** Camerawissel of logo tussen de scènes. */
+  transition?: 'zoom' | 'logo'
+  /** Huisstijlkleur, voor het logovlak in de overgang. */
+  primary?: string
   durationSec?: number
   /** Springt naar dit moment; gebruikt door de ondertitel-editor. */
   seekTo?: number | null
@@ -23,18 +29,23 @@ export interface VideoPreviewProps {
   className?: string
 }
 
+const SCENES = 6
+
 /**
- * Stilstaand frame met play-overlay. Bij afspelen loopt de playhead tegen de
- * gedeelde klok en wisselen de ondertitels mee, zodat de mock hetzelfde
- * aanvoelt als een echte speler zonder dat er video is.
+ * Het videoframe. Staand (9:16), want zo ziet het echte product eruit: de
+ * video wordt op een telefoon bekeken (CHANGES-03 A1).
+ *
+ * Speelt `public/media/demo/{lang}.mp4` als dat bestand er is; anders de
+ * nagebootste weergave met de avatar op de achtergrond.
  */
 export function VideoPreview({
   avatarId,
   lang,
   subtitles = [],
   backgrounds = [],
-  logo,
-  durationSec = 110,
+  transition = 'zoom',
+  primary,
+  durationSec = VIDEO_DUUR,
   seekTo,
   onTimeUpdate,
   className,
@@ -44,10 +55,11 @@ export function VideoPreview({
   const now = useNow()
   const avatar = avatarById(avatarId)
   const dir = langDir(lang)
+  // De demovideo bestaat pas als Sebastiaan hem aanlevert.
+  const [filmFaalt, setFilmFaalt] = useState(false)
+  const film = filmFaalt ? undefined : demoVideo(lang)
 
-  const elapsed = startedAt
-    ? Math.min(durationSec, offset + (now - startedAt) / 1000)
-    : offset
+  const elapsed = startedAt ? Math.min(durationSec, offset + (now - startedAt) / 1000) : offset
   const playing = startedAt !== null && elapsed < durationSec
 
   useEffect(() => {
@@ -67,52 +79,79 @@ export function VideoPreview({
     }
   }, [startedAt, elapsed, durationSec])
 
-  // Welke ondertitelregel hoort bij dit moment?
   const current = subtitles.reduce<SubtitleLine | null>(
     (found, line) => (parseTimecode(line.t) <= elapsed ? line : found),
     null,
   )
 
-  // Vier scènes verdeeld over de duur bepalen de achtergrond.
-  const shot = Math.min(3, Math.floor((elapsed / durationSec) * 4))
-  const slug = backgrounds[shot] ?? `kantoor-${shot + 1}`
+  // Zes scènes verdeeld over de duur bepalen de achtergrond en de overgang.
+  const scene = Math.min(SCENES - 1, Math.floor((elapsed / durationSec) * SCENES))
+  const slug = backgrounds[scene] ?? (scene % 2 === 0 ? 'kantoor-1' : 'kantoor-3')
   const bg = backgroundImage(slug)
+
+  // Camerawissel: de camera wisselt per scène tussen dichtbij en verder weg.
+  const ingezoomd = playing && transition === 'zoom' && scene % 2 === 1
+  // Logo: een korte flits tussen twee scènes.
+  const sceneLengte = durationSec / SCENES
+  const inOvergang = playing && transition === 'logo' && elapsed % sceneLengte < 0.6 && scene > 0
 
   return (
     <div
       className={cn(
-        'relative aspect-video w-full overflow-hidden rounded-md bg-gray-1 shadow-card',
+        'relative mx-auto aspect-[9/16] h-full max-h-full overflow-hidden rounded-md bg-gray-1 shadow-card',
         className,
       )}
     >
-      {/* Licht geblurd, zoals in het echte product: de achtergrond mag de
-          avatar niet wegconcurreren. scale-105 voorkomt een doorschijnende
-          rand rond het geblurde vlak. */}
-      <div
-        className="absolute inset-0 scale-105 blur-[7px] transition-opacity duration-500"
-        style={
-          bg
-            ? { backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-            : { background: 'linear-gradient(135deg, #CDEFEC 0%, #E6FAFF 60%, #FFD9C8 100%)' }
-        }
-      />
+      {film ? (
+        <video
+          src={film}
+          className="size-full object-cover"
+          playsInline
+          controls={playing}
+          muted={!playing}
+          onError={() => setFilmFaalt(true)}
+        />
+      ) : (
+        <>
+          <div
+            className={cn(
+              'absolute inset-0 blur-[7px] transition-transform duration-[400ms] ease-[cubic-bezier(.22,1,.36,1)]',
+              ingezoomd ? 'scale-[1.35]' : 'scale-105',
+            )}
+            style={
+              bg
+                ? { backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                : { background: 'linear-gradient(160deg, #CDEFEC 0%, #E6FAFF 60%, #FFD9C8 100%)' }
+            }
+          />
 
-      {avatar && (
-        <span className="absolute bottom-14 left-1/2 -translate-x-1/2">
-          <Avatar face={avatar.face} name={avatar.name} speaking={playing} className="h-52 w-40" />
-        </span>
+          {avatar && (
+            <span
+              className={cn(
+                'absolute inset-x-0 bottom-16 flex justify-center transition-transform duration-[400ms] ease-[cubic-bezier(.22,1,.36,1)]',
+                ingezoomd && 'scale-[1.35]',
+              )}
+            >
+              <Avatar face={avatar.face} name={avatar.name} speaking={playing} className="h-72 w-56" />
+            </span>
+          )}
+
+          {/* Logovlak tussen twee scènes. */}
+          {inOvergang && (
+            <span
+              className="absolute inset-0 grid place-items-center"
+              style={{ background: primary ?? '#1F5E58' }}
+            >
+              <span className="text-h2 font-semibold text-white">Bergrode</span>
+            </span>
+          )}
+        </>
       )}
 
-      {logo && (
-        <span className="absolute right-3 top-3 rounded-sm bg-white/90 px-2 py-1 text-body-sm font-semibold text-gray-1">
-          AI-gegenereerd
-        </span>
-      )}
-
-      {current && (
+      {current && !film && (
         <span
           dir={dir}
-          className="absolute inset-x-6 bottom-10 mx-auto w-fit max-w-full rounded-sm bg-gray-1/85 px-3 py-1.5 text-center text-body-sm text-white"
+          className="absolute inset-x-4 bottom-12 mx-auto w-fit max-w-full rounded-sm bg-gray-1/85 px-3 py-1.5 text-center text-body-sm text-white"
         >
           {current.text}
         </span>

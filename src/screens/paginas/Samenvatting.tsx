@@ -13,8 +13,6 @@ import { findPage } from '../../state/selectors'
 import { avatarById } from '../../data/avatars'
 import { HOE, WACHT_TIPS } from '../../data/copy'
 
-const MAX_WOORDEN = 50
-
 /**
  * S1 en S2 in één route: wachten en daarna controleren. Dat is de enige
  * doorlopende keten in de flow, en het maakt de wachttijd bestand tegen een
@@ -63,10 +61,9 @@ export default function Samenvatting() {
             {page.scenes.map((scene, i) => (
               <SceneBlock
                 key={i}
-                index={i + 1}
-                title={scene.title}
+                index={i}
                 text={scene.text}
-                maxWords={MAX_WOORDEN}
+                totaal={page.scenes.length}
                 onChange={(text) =>
                   editScenes(page.id, page.scenes.map((s, j) => (j === i ? { ...s, text } : s)))
                 }

@@ -7,9 +7,10 @@
  *   node scripts/verify.mjs http://localhost:5174 --shots
  */
 import { chromium } from 'playwright'
+import { serveer } from './serve.mjs'
 import { mkdirSync } from 'node:fs'
 
-const base = process.argv[2] ?? 'http://localhost:5174'
+const { url: base } = await serveer(process.argv[2] ?? 'dist')
 const wantShots = process.argv.includes('--shots')
 const outDir = 'shots'
 

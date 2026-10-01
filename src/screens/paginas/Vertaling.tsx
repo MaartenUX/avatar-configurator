@@ -15,8 +15,6 @@ import { HOE } from '../../data/copy'
 import { Voorbeeld } from './Samenvatting'
 import { cn } from '../../lib/cn'
 
-const MAX_WOORDEN = 55
-
 /** S3: de collega-view. Zelfde anatomie als het NL-script, in zijn eigen taal. */
 export default function Vertaling() {
   const { id, lang } = useParams()
@@ -86,10 +84,9 @@ export default function Vertaling() {
         {scenes.map((scene, i) => (
           <SceneBlock
             key={i}
-            index={i + 1}
-            title={scene.title}
+            index={i}
             text={scene.text}
-            maxWords={MAX_WOORDEN}
+            totaal={scenes.length}
             dir={dir}
             audioId={`${config.avatars[lang] ?? lang}-${i}`}
             audioSec={28}

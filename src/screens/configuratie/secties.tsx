@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Building2, Check, ChevronDown, Gauge, Images, Timer, Upload } from 'lucide-react'
-import { AdviceBox, AvatarTile, Button, Card, ChoiceTile, Chip, Input } from '../../components'
+import { Building2, Camera, Check, ChevronDown, Images, Sparkle, Upload } from 'lucide-react'
+import { AdviceBox, Avatar, AvatarTile, Button, Card, ChoiceTile, Chip, Input } from '../../components'
+import { avatarById } from '../../data/avatars'
+import { sceneLabel } from '../../data/copy'
 import { useStore } from '../../state/store'
 import { ADVICE, advisedFor, avatarsFor } from '../../data/avatars'
 import { MAX_EXTRA_LANGS, OPTIONAL_LANGS, langLabel } from '../../data/langs'
@@ -116,9 +118,9 @@ export function S2Avatars() {
   )
 }
 
-/* ------------------------------------------------------------ 3. videotype */
+/* ------------------------------------------------------- 3. overgangen */
 
-export function S3VideoType() {
+export function S3Scenes() {
   const config = useStore((s) => s.config)
   const patch = useStore((s) => s.patchConfig)
 
@@ -126,21 +128,21 @@ export function S3VideoType() {
     <>
       <div className="grid gap-3 sm:grid-cols-2">
         <ChoiceTile
-          title="Vaste samenvatting" icon={Timer} tag="Aanbevolen"
-          selected={config.videoType === 'vast'}
-          description="Maximaal 3 minuten, vier tot zes scènes. Dit is ongeveer de grens van wat iemand aandachtig uitzit."
-          onSelect={() => patch({ videoType: 'vast' })}
+          title="Camerawissel" icon={Camera} tag="Aanbevolen"
+          selected={config.transition === 'zoom'}
+          description="De camera wisselt per scène tussen dichtbij en verder weg. Rustig en filmisch."
+          onSelect={() => patch({ transition: 'zoom' })}
         />
         <ChoiceTile
-          title="Adaptieve samenvatting" icon={Gauge}
-          selected={config.videoType === 'adaptief'}
-          description="Ongeveer tien procent van de leestijd, maximaal 6 minuten. Meer scènes bij een lange pagina."
-          onSelect={() => patch({ videoType: 'adaptief' })}
+          title="Logo tussen de scènes" icon={Sparkle}
+          selected={config.transition === 'logo'}
+          description="Tussen twee scènes komt je logo kort in beeld."
+          onSelect={() => patch({ transition: 'logo' })}
         />
       </div>
-      {config.videoType === 'vast' && (
+      {config.transition === 'zoom' && (
         <AdviceBox>
-          Vast is de aanbeveling. Wat na drie minuten komt, wordt zelden gezien.
+          Camerawissel. De video loopt door zonder onderbreking; kijkers haken minder snel af.
         </AdviceBox>
       )}
     </>
@@ -149,12 +151,13 @@ export function S3VideoType() {
 
 /* ------------------------------------------- 4. scènes en achtergronden */
 
-const EIGEN_FOTOS = ['kantoor-2', 'kantoor-3', 'kantoor-4', 'kantoor-1', 'kantoor-2', 'kantoor-3']
+const EIGEN_FOTOS = ['kantoor-3', 'kantoor-1', 'kantoor-3', 'kantoor-1', 'kantoor-3', 'kantoor-1']
 
-export function S4Scenes() {
+export function S4Achtergronden() {
   const config = useStore((s) => s.config)
   const patch = useStore((s) => s.patchConfig)
-  const aantal = config.videoType === 'adaptief' ? 6 : 4
+  // Elke video heeft zes scènes: intro, vier inhoud, outro (CHANGES-03 A4).
+  const aantal = 6
   const eigen = config.achtergrondModus === 'eigen'
   const shots = config.backgrounds.length === aantal
     ? config.backgrounds
@@ -191,27 +194,34 @@ export function S4Scenes() {
         <>
           <AdviceBox label="Handig om te weten">
             Een leuke manier om de video’s persoonlijker te maken. Foto’s hoeven niet van
-            topkwaliteit te zijn — ze worden altijd licht geblurd.
+            topkwaliteit te zijn — ze worden altijd licht geblurd. Staande foto’s werken het
+            best. Liggend mag ook: we snijden er een staand stuk uit.
           </AdviceBox>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-3">
             {shots.map((slug, i) => {
               const standaard = slug === null
-              const src = backgroundImage(slug ?? `kantoor-${(i % 4) + 1}`)
-              const rol = i === 0 ? 'Intro' : i === shots.length - 1 ? 'Outro' : `Inhoud ${i}`
+              const src = backgroundImage(slug ?? (i % 2 === 0 ? 'kantoor-1' : 'kantoor-3'))
+              const avatar = avatarById(config.avatars[config.languages[0] ?? 'nl'])
               return (
-                <Card key={i} className="flex flex-col gap-3 p-4">
-                  <span className="type-label text-gray-3">
-                    Scène {i + 1} · {rol}
-                  </span>
-                  <span className="overflow-hidden rounded-sm">
+                <Card key={i} className="flex flex-col gap-3 p-3">
+                  <span className="type-label text-gray-3">{sceneLabel(i, shots.length)}</span>
+                  {/* Staand, met de avatar ervoor: zo zie je wat hij afdekt. */}
+                  <span className="relative block aspect-[9/16] overflow-hidden rounded-sm bg-gray-6">
                     {src ? (
-                      <img src={src} alt="" className="aspect-video w-full scale-105 object-cover blur-[6px]" />
+                      <img src={src} alt="" className="size-full scale-105 object-cover blur-[6px]" />
                     ) : (
-                      <span className="grid aspect-video w-full place-items-center bg-turq-tint text-body-sm text-turq-shade">
-                        Kantoorshot {i + 1}
+                      <span className="grid size-full place-items-center bg-turq-tint text-body-sm text-turq-shade">
+                        Kantoorshot
                       </span>
                     )}
+                    <span className="absolute inset-x-0 bottom-0 flex justify-center">
+                      <Avatar
+                        face={avatar?.face}
+                        name={avatar?.name}
+                        className="h-[62%] w-3/4 opacity-45 grayscale"
+                      />
+                    </span>
                   </span>
                   <span className="flex flex-wrap gap-2">
                     <Button

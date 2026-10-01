@@ -155,7 +155,8 @@ export default function Beheer() {
               lang={speelt}
               subtitles={page.subtitles[speelt] ?? page.subtitles.nl}
               backgrounds={config.backgrounds}
-              logo={config.logo}
+              transition={config.transition}
+              primary={config.primary}
             />
           </div>
         </div>

@@ -29,42 +29,36 @@ describe('advancePage', () => {
     expect(next?.timer).toBeUndefined()
   })
 
-  it('markeert de audio als klaar', () => {
-    const p = basePage({ status: 'review-nl', timer: { kind: 'audio', startedAt: 0 } })
+  it('zet de scripts van álle talen tegelijk klaar', () => {
+    // Niet pas na het Nederlandse akkoord: elke taal krijgt meteen een script.
+    const p = basePage({
+      status: 'in-production',
+      timer: { kind: 'audio', startedAt: 0 },
+      langs: {
+        nl: { status: 'waiting' },
+        en: { status: 'waiting' },
+        tr: { status: 'waiting' },
+        ar: { status: 'waiting' },
+      },
+    })
     const next = advancePage(p, 3000, false)
-    expect(next?.audioReady).toBe(true)
-    expect(next?.status).toBe('review-nl')
+    for (const code of ['nl', 'en', 'tr', 'ar'] as const) {
+      expect(next?.langs[code]?.status, code).toBe('review-text')
+    }
   })
 
-  it('stuurt NL naar videocontrole en de andere talen naar tekstcontrole', () => {
+  it('laat elke taal zijn eigen video-timer lopen', () => {
     const p = basePage({
-      status: 'in-translation',
-      timer: { kind: 'generate', startedAt: 0 },
+      status: 'in-production',
       langs: {
-        nl: { status: 'generating' },
-        tr: { status: 'generating' },
-        ar: { status: 'generating' },
+        nl: { status: 'generating', timer: { kind: 'generate', startedAt: 0, lang: 'nl' } },
+        tr: { status: 'review-text' },
       },
     })
     const next = advancePage(p, 8000, false)
     expect(next?.langs.nl?.status).toBe('review-video')
+    expect(next?.langs.nl?.timer).toBeUndefined()
     expect(next?.langs.tr?.status).toBe('review-text')
-    expect(next?.langs.ar?.status).toBe('review-text')
-  })
-
-  it('raakt bij een taalspecifieke timer alleen die taal aan', () => {
-    const p = basePage({
-      status: 'in-translation',
-      timer: { kind: 'generate', startedAt: 0, lang: 'tr' },
-      langs: {
-        nl: { status: 'approved' },
-        tr: { status: 'generating' },
-        ar: { status: 'generating' },
-      },
-    })
-    const next = advancePage(p, 8000, false)
-    expect(next?.langs.tr?.status).toBe('review-video')
-    expect(next?.langs.ar?.status).toBe('generating')
   })
 
   it('is idempotent: na afhandelen valt er niets meer af te handelen', () => {
@@ -76,22 +70,25 @@ describe('advancePage', () => {
   it('gebruikt één seconde in de snelle modus', () => {
     expect(durationOf('generate', true)).toBe(1000)
     expect(durationOf('generate', false)).toBe(8000)
-    const p = basePage({ timer: { kind: 'generate', startedAt: 0 }, langs: { nl: { status: 'generating' } } })
-    expect(advancePage(p, 1000, true)).not.toBeNull()
-    expect(advancePage(p, 1000, false)).toBeNull()
+    expect(durationOf('demo', false)).toBe(8000)
   })
 })
 
 describe('nextPageStatus', () => {
+  it('laat de twee standen vóór de talen met rust', () => {
+    expect(nextPageStatus({ nl: { status: 'waiting' } }, 'summarizing')).toBe('summarizing')
+    expect(nextPageStatus({ nl: { status: 'waiting' } }, 'review-summary')).toBe('review-summary')
+  })
+
   it('is klaar om te publiceren zodra elke taal is goedgekeurd', () => {
     expect(nextPageStatus({ nl: { status: 'approved' }, tr: { status: 'approved' } })).toBe(
       'ready-to-publish',
     )
   })
 
-  it('blijft in vertaling zolang er één taal onderweg is', () => {
+  it('blijft in productie zolang er één taal onderweg is', () => {
     expect(nextPageStatus({ nl: { status: 'approved' }, tr: { status: 'generating' } })).toBe(
-      'in-translation',
+      'in-production',
     )
   })
 

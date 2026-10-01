@@ -1,7 +1,8 @@
 /** Controleert RTL, twee schermbreedtes, de lege staat en horizontaal scrollen. */
 import { chromium } from 'playwright'
+import { serveer } from './serve.mjs'
 
-const base = process.argv[2]
+const { url: base } = await serveer(process.argv[2] ?? 'dist')
 const browser = await chromium.launch()
 const problemen = []
 

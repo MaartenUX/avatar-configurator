@@ -104,8 +104,7 @@ export const LANG_STATUS: Record<LangStatus, StatusKey> = {
 export const PAGE_STATUS: Record<PageStatus, StatusKey> = {
   summarizing: 'generating',
   'review-summary': 'review',
-  'review-nl': 'review',
-  'in-translation': 'generating',
+  'in-production': 'generating',
   'ready-to-publish': 'approved',
   live: 'live',
 }

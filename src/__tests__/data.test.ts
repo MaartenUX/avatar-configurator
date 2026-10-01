@@ -8,13 +8,19 @@ import { nextAction } from '../state/selectors'
 import type { Page } from '../state/types'
 
 describe('content', () => {
-  it('geeft elke pagina vier scènes, ook in vertaling', () => {
-    // Ook de dunne pagina's: ze staan live, dus het beheerscherm toont hun
-    // script en ondertiteling.
+  it('geeft elke pagina zes scènes: intro, vier inhoud, outro', () => {
     for (const page of PAGE_CONTENT) {
-      expect(page.scenes, page.id).toHaveLength(4)
+      expect(page.scenes, page.id).toHaveLength(6)
       for (const [lang, scenes] of Object.entries(page.translations)) {
-        expect(scenes, `${page.id} ${lang}`).toHaveLength(4)
+        expect(scenes, `${page.id} ${lang}`).toHaveLength(6)
+      }
+    }
+  })
+
+  it('geeft scènes geen titel', () => {
+    for (const page of PAGE_CONTENT) {
+      for (const scene of page.scenes) {
+        expect(Object.keys(scene), page.id).toEqual(['text'])
       }
     }
   })
@@ -25,34 +31,37 @@ describe('content', () => {
     }
   })
 
-  it('houdt scènes binnen de 50 woorden', () => {
+  it('houdt scènes binnen hun woordgrens: intro en outro korter', () => {
     for (const page of PAGE_CONTENT) {
-      for (const scene of page.scenes) {
-        expect(scene.text.trim().split(/\s+/).length, `${page.id}: ${scene.title}`).toBeLessThanOrEqual(50)
-      }
+      page.scenes.forEach((scene, i) => {
+        const max = i === 0 || i === page.scenes.length - 1 ? 25 : 50
+        expect(scene.text.trim().split(/\s+/).length, `${page.id} scène ${i}`).toBeLessThanOrEqual(max)
+      })
     }
   })
 
-  it('geeft ondertitels oplopende tijdcodes binnen 1:50', () => {
+  it('geeft ondertitels oplopende tijdcodes binnen 2:00', () => {
     for (const page of PAGE_CONTENT) {
       for (const [lang, lines] of Object.entries(page.subtitles)) {
-        expect(lines!.length, `${page.id} ${lang}`).toBeGreaterThanOrEqual(8)
-        expect(lines!.length, `${page.id} ${lang}`).toBeLessThanOrEqual(32)
+        expect(lines!.length, `${page.id} ${lang}`).toBeGreaterThanOrEqual(28)
+        expect(lines!.length, `${page.id} ${lang}`).toBeLessThanOrEqual(45)
+        for (const line of lines!) {
+          expect(line.text.length, `${page.id} ${lang}: "${line.text}"`).toBeLessThanOrEqual(42)
+        }
 
         const times = lines!.map((l) => parseTimecode(l.t))
         expect(times, `${page.id} ${lang}`).toEqual([...times].sort((a, b) => a - b))
-        expect(times.at(-1), `${page.id} ${lang}`).toBeLessThanOrEqual(110)
+        expect(times.at(-1), `${page.id} ${lang}`).toBeLessThanOrEqual(120)
       }
     }
   })
 
   it('geeft de tracks die de test opent een realistisch tempo', () => {
-    // Vier seconden per regel, niet elf. Deze vier komen in testtaak b, c en d
-    // daadwerkelijk in beeld.
+    // Twee tot vier seconden per regel over twee minuten.
     for (const id of ['p-parkeervergunning', 'p-bijstand']) {
       const page = PAGE_CONTENT.find((p) => p.id === id)!
-      for (const lang of ['nl', 'tr'] as const) {
-        expect(page.subtitles[lang]!.length, `${id} ${lang}`).toBeGreaterThanOrEqual(24)
+      for (const lang of ['nl', 'en', 'tr'] as const) {
+        expect(page.subtitles[lang]!.length, `${id} ${lang}`).toBeGreaterThanOrEqual(35)
       }
     }
   })
@@ -101,14 +110,21 @@ const page = (over: Partial<Page>): Page => ({
 describe('nextAction', () => {
   it('wijst elke paginastatus naar de juiste spaak', () => {
     expect(nextAction(page({ status: 'review-summary' })).to).toBe('/paginas/p-test/samenvatting')
-    expect(nextAction(page({ status: 'review-nl' })).to).toBe('/paginas/p-test/script')
     expect(nextAction(page({ status: 'ready-to-publish' })).to).toBe('/paginas/p-test/publiceren')
     expect(nextAction(page({ status: 'live' })).to).toBe('/paginas/p-test')
   })
 
+  it('stuurt naar het Nederlandse script zodra dat klaarstaat', () => {
+    const p = page({
+      status: 'in-production',
+      langs: { nl: { status: 'review-text' }, tr: { status: 'review-text' } },
+    })
+    expect(nextAction(p).to).toBe('/paginas/p-test/script')
+  })
+
   it('stuurt naar de video zodra er één te controleren valt', () => {
     const p = page({
-      status: 'in-translation',
+      status: 'in-production',
       langs: { nl: { status: 'review-video' }, tr: { status: 'generating' } },
     })
     expect(nextAction(p).to).toBe('/paginas/p-test/video/nl')
@@ -116,7 +132,7 @@ describe('nextAction', () => {
 
   it('geeft geen knop zolang een collega aan zet is', () => {
     const p = page({
-      status: 'in-translation',
+      status: 'in-production',
       langs: { nl: { status: 'approved' }, tr: { status: 'review-text' } },
     })
     expect(nextAction(p).to).toBeNull()
@@ -125,7 +141,7 @@ describe('nextAction', () => {
 
   it('laat Emre alleen zijn eigen taal zien', () => {
     const p = page({
-      status: 'in-translation',
+      status: 'in-production',
       langs: { nl: { status: 'review-video' }, tr: { status: 'review-text' } },
     })
     expect(nextAction(p, 'emre').to).toBe('/paginas/p-test/tr')

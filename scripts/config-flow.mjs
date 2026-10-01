@@ -1,6 +1,7 @@
 /** Loopt de configuratieflow door in een echte browser en let op fouten. */
 import { chromium } from 'playwright'
-const base = process.argv[2]
+import { serveer } from './serve.mjs'
+const { url: base } = await serveer(process.argv[2] ?? 'dist')
 const browser = await chromium.launch()
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
 const errors = []

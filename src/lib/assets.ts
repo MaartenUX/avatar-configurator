@@ -45,6 +45,20 @@ export const silhouetImage = (): string | undefined => AVATARS['silhouet']
 export const voiceClip = (id: string): string | undefined => VOICES[id]
 export const backgroundImage = (slug: string): string | undefined => BACKGROUNDS[slug]
 
+/**
+ * Media uit public/media: die wordt niet in de bundel gebakken maar als los
+ * bestand geserveerd, want video's maken een single-file build onwerkbaar
+ * groot (CHANGES-03 H).
+ *
+ * Deze paden bestaan nog niet; Sebastiaan levert de bestanden later aan. Er is
+ * daarom geen lijst om bij te werken: het pad wordt altijd teruggegeven en de
+ * component valt terug op de mock zodra het laden mislukt. Een bestand erin
+ * droppen is dus genoeg.
+ */
+export const avatarClip = (id: string) => `${import.meta.env.BASE_URL}media/avatars/${id}.webm`
+export const demoVideo = (lang: string) => `${import.meta.env.BASE_URL}media/demo/${lang}.mp4`
+export const widgetKnop = () => `${import.meta.env.BASE_URL}media/widget/button.png`
+
 export const assetCounts = () => ({
   // Het silhouet is een placeholder, geen portret: niet meetellen.
   avatars: Object.keys(AVATARS).filter((k) => k !== 'silhouet').length,

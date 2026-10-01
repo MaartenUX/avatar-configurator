@@ -4,13 +4,14 @@ import { WordCounter } from './WordCounter'
 import { Player } from './Player'
 import { Button } from '../primitives/Button'
 import { wordCount } from '../../lib/format'
+import { sceneLabel, sceneMaxWoorden } from '../../data/copy'
 import { cn } from '../../lib/cn'
 
 export interface SceneBlockProps {
+  /** Nulgebaseerde positie binnen de video. */
   index: number
-  title: string
+  totaal: number
   text: string
-  maxWords: number
   onChange?: (text: string) => void
   /** Toont een speler per scène, zoals in de script-stap. */
   audioId?: string
@@ -19,21 +20,28 @@ export interface SceneBlockProps {
   readOnly?: boolean
 }
 
-/** Eén scène uit de samenvatting, inline te bewerken. */
+/**
+ * Eén scène uit de samenvatting, inline te bewerken. Geen titel: die bestaat
+ * niet in het product, dus ook niet in de editor (CHANGES-03 F26). Boven het
+ * blok staat alleen waar je bent: intro, scène 2 tot en met 5, of outro.
+ */
 export function SceneBlock({
   index,
-  title,
+  totaal,
   text,
-  maxWords,
   onChange,
   audioId,
-  audioSec = 28,
+  audioSec = 18,
   dir = 'ltr',
   readOnly,
 }: SceneBlockProps) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(text)
   const count = wordCount(editing ? draft : text)
+
+  const label = sceneLabel(index, totaal)
+  const maxWoorden = sceneMaxWoorden(index, totaal)
+  const rand = index === 0 || index === totaal - 1
 
   const save = () => {
     onChange?.(draft)
@@ -43,8 +51,15 @@ export function SceneBlock({
   return (
     <article className="flex flex-col gap-2.5 rounded-md bg-white p-4 shadow-card">
       <header className="flex items-center gap-2">
-        <span className="type-label text-gray-3">Scène {index}</span>
-        <h3 className="flex-1 text-body font-medium text-gray-1">{title}</h3>
+        <span
+          className={cn(
+            'type-label rounded-pill px-2 py-0.5',
+            rand ? 'bg-violet-tint text-violet-shade' : 'bg-gray-6 text-gray-3',
+          )}
+        >
+          {label}
+        </span>
+        <span className="flex-1" />
         {!readOnly && !editing && (
           <button
             type="button"
@@ -52,7 +67,7 @@ export function SceneBlock({
               setDraft(text)
               setEditing(true)
             }}
-            aria-label={`Scène ${index} bewerken`}
+            aria-label={`${label} bewerken`}
             className="rounded-sm p-1.5 text-gray-3 transition-colors hover:bg-gray-6 hover:text-blue-shade"
           >
             <Pencil size={15} aria-hidden />
@@ -74,7 +89,7 @@ export function SceneBlock({
             )}
           />
           <div className="flex items-center gap-2">
-            <WordCounter count={count} max={maxWords} />
+            <WordCounter count={count} max={maxWoorden} />
             <span className="ml-auto flex gap-2">
               <Button size="sm" variant="ghost" onClick={() => setEditing(false)}>
                 Annuleer
@@ -90,9 +105,7 @@ export function SceneBlock({
           <p dir={dir} className={cn('text-body text-gray-2', dir === 'rtl' && 'text-right')}>
             {text}
           </p>
-          <div className="flex items-center gap-3">
-            <WordCounter count={count} max={maxWords} />
-          </div>
+          <WordCounter count={count} max={maxWoorden} />
         </>
       )}
 

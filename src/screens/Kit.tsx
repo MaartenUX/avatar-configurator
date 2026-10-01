@@ -209,7 +209,7 @@ function StatePanel() {
         {page && (
           <>
             <KitButton onClick={() => store.approveSummary(page.id)}>approveSummary</KitButton>
-            <KitButton onClick={() => store.approveNl(page.id)}>approveNl</KitButton>
+            <KitButton onClick={() => store.approveLang(page.id, 'nl')}>approveLang nl</KitButton>
             <KitButton onClick={() => store.approveLang(page.id, 'tr')}>approveLang tr</KitButton>
             <KitButton onClick={() => store.approveVideo(page.id, 'tr')}>approveVideo tr</KitButton>
             <KitButton onClick={() => store.publish(page.id)}>publish</KitButton>
@@ -292,7 +292,7 @@ function DataPanel() {
                 <div className="mt-3 flex flex-col gap-3">
                   {p.scenes.map((s, i) => (
                     <div key={i} className="rounded-sm bg-gray-6 p-3">
-                      <p className="type-label text-gray-3">Scène {i + 1} · {s.title}</p>
+                      <p className="type-label text-gray-3">Scène {i + 1}</p>
                       <p className="mt-1 text-body-sm text-gray-2">{s.text}</p>
                     </div>
                   ))}

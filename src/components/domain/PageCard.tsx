@@ -69,7 +69,7 @@ export function PageCard({ page, user = 'esmee', highlighted, langFilter }: Page
             </a>
           </div>
           {/* Live staat één keer, op de kaart zelf. */}
-          <Badge status={PAGE_STATUS[page.status]} dot pulse={page.status === 'in-translation'} />
+          <Badge status={PAGE_STATUS[page.status]} dot pulse={page.status === 'in-production'} />
         </header>
 
         {isLive ? (

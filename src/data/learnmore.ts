@@ -59,28 +59,28 @@ export const LEARN_MORE: LearnMoreDef[] = [
     ],
   },
   {
-    id: 'videotype',
-    title: 'Type video',
+    id: 'scenes',
+    title: 'Scènes en overgangen',
     body:
-      'Een vaste samenvatting duurt maximaal drie minuten en heeft vier tot zes scènes. Drie minuten is ongeveer de grens van wat iemand aandachtig uitzit. Een adaptieve samenvatting past zich aan de lengte van de pagina aan: ongeveer tien procent van de leestijd, met een maximum van zes minuten.',
+      'Een uitlegvideo duurt maximaal twee minuten en bestaat uit vier tot zes korte scènes. Elke video begint met een korte intro en eindigt met een outro; daartussen zit de inhoud. Tussen twee scènes zit een overgang, en die kiest u hier. De lengte en het aantal scènes liggen vast; dat houdt uw video’s onderling herkenbaar.',
     features: [
-      { icon: 'Timer', label: 'Maximaal 3 of 6 minuten' },
+      { icon: 'Timer', label: 'Maximaal 2 minuten' },
       { icon: 'Layers', label: 'Vier tot zes scènes' },
-      { icon: 'Gauge', label: 'Vast of meegroeiend' },
-      { icon: 'Eye', label: 'Geldt voor alle pagina’s' },
+      { icon: 'Eye', label: 'Vaste intro en outro' },
+      { icon: 'Sparkles', label: 'Eén overgang' },
     ],
     faq: [
       {
-        q: 'Waarom kan een video niet langer dan drie minuten?',
-        a: 'Bij informatieve video’s haakt het grootste deel van de kijkers na drie minuten af. Wat daarna komt, wordt zelden gezien.',
+        q: 'Waarom kan een video niet langer dan twee minuten?',
+        a: 'Bij informatieve video’s haakt het grootste deel van de kijkers snel af. Wat daarna komt, wordt zelden gezien. Twee minuten is genoeg voor de kern.',
       },
       {
-        q: 'Wat als onze pagina heel lang is?',
-        a: 'Dan is adaptief een goede keuze: de video groeit mee met de leestijd. De samenvatting blijft wel een samenvatting; details laten we bewust weg.',
+        q: 'Kan ik de overgang later wijzigen?',
+        a: 'Nee, die zit in elke video gebakken. Veranderen betekent alle video’s opnieuw maken.',
       },
       {
         q: 'Kan ik de lengte per pagina instellen?',
-        a: 'Nee. De keuze geldt voor al uw video’s, zodat ze op elkaar lijken.',
+        a: 'Nee. Elke video is maximaal twee minuten, zodat ze op elkaar lijken.',
       },
     ],
   },

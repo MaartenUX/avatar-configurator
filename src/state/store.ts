@@ -43,7 +43,6 @@ export interface Store {
   editTranslation: (id: string, lang: Lang, scenes: Scene[]) => void
   editSubtitles: (id: string, lang: Lang, lines: SubtitleLine[]) => void
   approveSummary: (id: string) => void
-  approveNl: (id: string) => void
   approveLang: (id: string, lang: Lang) => void
   approveVideo: (id: string, lang: Lang) => void
   publish: (id: string) => void
@@ -157,48 +156,44 @@ export const useStore = create<Store>()(
         })),
 
       /**
-       * Basissamenvatting akkoord. De Nederlandse audio wordt gemaakt, en
-       * Nederlands komt op review-text te staan: dat is de scriptstap, die
-       * daarmee als eigen actie op de paginakaart verschijnt. Esmee keurt die
-       * zelf goed, net als straks de Nederlandse ondertiteling.
+       * Basissamenvatting akkoord. Voor élke taal wordt een script met audio
+       * gemaakt — niet pas na het Nederlandse akkoord (CHANGES-03 F21). De
+       * collega's krijgen hier hun bericht.
        */
       approveSummary: (id) =>
-        set((s) => ({
-          pages: s.pages.map((p) =>
-            p.id === id
-              ? {
-                  ...p,
-                  status: 'review-nl',
-                  langs: p.langs.nl
-                    ? { ...p.langs, nl: { ...p.langs.nl, status: 'review-text' } }
-                    : p.langs,
-                  samenvattingDoor: TEAM.find((m) => m.role === 'owner')?.name,
-                  timer: startTimer('audio'),
-                }
-              : p,
-          ),
-        })),
-
-      // NL-script akkoord -> alle talen gaan tegelijk de generatie in.
-      approveNl: (id) =>
         set((s) => ({
           pages: s.pages.map((p) => {
             if (p.id !== id) return p
             const langs: Page['langs'] = {}
             for (const code of Object.keys(p.langs) as Lang[]) {
-              langs[code] = { ...p.langs[code]!, status: 'generating', etaMin: 20 }
+              langs[code] = { ...p.langs[code]!, status: 'waiting' }
             }
-            return { ...p, langs, status: 'in-translation', timer: startTimer('generate') }
+            return {
+              ...p,
+              status: 'in-production',
+              langs,
+              samenvattingDoor: TEAM.find((m) => m.role === 'owner')?.name,
+              timer: startTimer('audio'),
+            }
           }),
         })),
 
-      // Collega keurt de tekst goed -> de video voor die taal wordt gemaakt.
+      // Script akkoord -> de video voor déze taal wordt gemaakt. Elke taal
+      // heeft een eigen timer, want ze lopen onafhankelijk van elkaar.
       approveLang: (id, lang) =>
         set((s) => ({
           pages: s.pages.map((p) => {
             if (p.id !== id) return p
-            const langs = { ...p.langs, [lang]: { ...p.langs[lang]!, status: 'generating' as const, etaMin: 20 } }
-            return { ...p, langs, status: nextPageStatus(langs), timer: startTimer('generate', lang) }
+            const langs = {
+              ...p.langs,
+              [lang]: {
+                ...p.langs[lang]!,
+                status: 'generating' as const,
+                etaMin: 20,
+                timer: startTimer('generate', lang),
+              },
+            }
+            return { ...p, langs, status: nextPageStatus(langs, p.status) }
           }),
         })),
 
@@ -207,7 +202,7 @@ export const useStore = create<Store>()(
           pages: s.pages.map((p) => {
             if (p.id !== id) return p
             const langs = { ...p.langs, [lang]: { ...p.langs[lang]!, status: 'approved' as const } }
-            return { ...p, langs, status: nextPageStatus(langs) }
+            return { ...p, langs, status: nextPageStatus(langs, p.status) }
           }),
         })),
 
@@ -231,8 +226,16 @@ export const useStore = create<Store>()(
             if (!lang) {
               return { ...p, status: 'summarizing', timer: startTimer('summarize') }
             }
-            const langs = { ...p.langs, [lang]: { ...p.langs[lang]!, status: 'generating' as const, etaMin: 20 } }
-            return { ...p, langs, status: nextPageStatus(langs), timer: startTimer('generate', lang) }
+            const langs = {
+              ...p.langs,
+              [lang]: {
+                ...p.langs[lang]!,
+                status: 'generating' as const,
+                etaMin: 20,
+                timer: startTimer('generate', lang),
+              },
+            }
+            return { ...p, langs, status: nextPageStatus(langs, p.status) }
           }),
         })),
 

@@ -3,8 +3,8 @@ import type { Config } from '../../state/types'
 export type SectionId =
   | 'talen'
   | 'avatars'
-  | 'videotype'
-  | 'personaliseren'
+  | 'scenes'
+  | 'achtergronden'
   | 'widget'
   | 'vastleggen'
 
@@ -45,25 +45,25 @@ export const SECTIONS: SectionDef[] = [
     isDone: (c) => c.languages.every((l) => Boolean(c.avatars[l])),
   },
   {
-    id: 'videotype',
+    id: 'scenes',
     index: 3,
-    title: 'Type video',
-    subtitle: 'Hoe lang mag een video duren?',
+    title: 'Scènes en overgangen',
+    subtitle: 'Een uitlegvideo duurt maximaal 2 minuten en bestaat uit 4 tot 6 korte scènes.',
     weten: [
-      'Bij informatieve video’s haakt het grootste deel van de kijkers na drie minuten af.',
-      'De keuze geldt voor al je video’s, zodat ze op elkaar lijken.',
+      'We knippen de informatie in korte blokken. Dat houdt de aandacht vast.',
+      'Elke video begint met een korte intro en eindigt met een outro.',
+      'Tussen de scènes zit een overgang — die kies je hier.',
     ],
-    isDone: (c) => Boolean(c.videoType),
+    isDone: (c) => Boolean(c.transition),
   },
   {
-    id: 'personaliseren',
+    id: 'achtergronden',
     index: 4,
-    title: 'Scènes en achtergronden',
+    title: 'Achtergronden',
     subtitle: 'Wat staat er achter de avatar?',
     weten: [
-      'Elke video heeft een intro-scène, een paar inhoudsscènes en een outro-scène.',
-      'Bij een vaste samenvatting zijn dat vier tot zes scènes in totaal.',
       'Achtergronden worden altijd licht geblurd, zodat de avatar op de voorgrond blijft.',
+      'Rustige beelden zonder mensen werken het best.',
     ],
     isDone: (c) => c.achtergrondModus === 'standaard' || c.backgrounds.length > 0,
   },

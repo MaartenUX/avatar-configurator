@@ -12,12 +12,11 @@ export type LangStatus =
 export type PageStatus =
   | 'summarizing'
   | 'review-summary'
-  | 'review-nl'
-  | 'in-translation'
+  | 'in-production'
   | 'ready-to-publish'
   | 'live'
 
-export type TimerKind = 'summarize' | 'audio' | 'generate'
+export type TimerKind = 'summarize' | 'audio' | 'generate' | 'demo'
 
 /** We slaan op wanneer een timer begon, niet wanneer hij afloopt. Zo overleeft
  *  hij een reload en verandert ?fast=1 ook timers die al lopen. */
@@ -28,8 +27,8 @@ export interface Timer {
   lang?: Lang
 }
 
+/** Scènes hebben geen titel: die bestaan niet in het product (CHANGES-03 F26). */
 export interface Scene {
-  title: string
   text: string
 }
 
@@ -42,6 +41,8 @@ export interface LangState {
   status: LangStatus
   reviewer?: string
   etaMin?: number
+  /** Per taal een eigen timer: talen lopen onafhankelijk van elkaar. */
+  timer?: Timer
 }
 
 export interface Page {
@@ -74,6 +75,8 @@ export interface Config {
   primary?: string
   secondary?: string
   widgetCorner: WidgetCorner
+  /** Overgang tussen de scènes (CHANGES-03 C11). */
+  transition?: 'zoom' | 'logo'
   /** Marge vanaf de rand van de pagina, in pixels. */
   widgetMargin: { x: number; y: number }
   /** Tweede URL: een contentpagina ziet er anders uit dan een homepage. */
@@ -83,8 +86,6 @@ export interface Config {
   level: 'B1' | 'B2'
   languages: Lang[]
   avatars: Partial<Record<Lang, string>>
-  /** Pas gezet zodra de gebruiker kiest; leeg = nog geen keuze. */
-  videoType?: 'vast' | 'adaptief'
   /** Vier shots; null = standaard kantoorshot. Leeg = nog geen keuze. */
   backgrounds: (string | null)[]
   signedAt?: string

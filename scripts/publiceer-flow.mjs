@@ -1,7 +1,8 @@
 /** Testtaak (d): alle talen goedkeuren, publiceren en de social-versies maken. */
 import { chromium } from 'playwright'
+import { serveer } from './serve.mjs'
 
-const base = process.argv[2]
+const { url: base } = await serveer(process.argv[2] ?? 'dist')
 const browser = await chromium.launch()
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
 const fouten = []
