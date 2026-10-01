@@ -79,7 +79,8 @@ export function AvatarTile({ avatar, selected, advised, compact, onSelect }: Ava
         {advised && (
           <span
             className={cn(
-              'type-label absolute left-2 top-2 z-10 whitespace-nowrap rounded-pill bg-green-tint text-green-shade',
+              // Wit, niet groen: het label moet op elke taaltint loskomen.
+              'type-label absolute left-2 top-2 z-10 whitespace-nowrap rounded-pill bg-white text-green-shade shadow-card',
               compact ? 'px-1.5 py-0.5 text-[10px]' : 'px-2 py-1',
             )}
           >

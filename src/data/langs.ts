@@ -39,6 +39,10 @@ export const MAX_EXTRA_LANGS = 4
  * Een zachte tint per taal, zodat de vrijstaande avatars in de kiesrij ergens
  * op staan en je de talen uit elkaar houdt (CHANGES-03 D16). Letterlijke
  * classnamen: de Tailwind-scanner leest broncode als tekst.
+ *
+ * Groen en rood doen hier niet mee: die betekenen in deze app goedgekeurd en
+ * mislukt. De vier talen van de demoset krijgen elk een eigen tint; verderop
+ * in de lijst mag een tint terugkomen, want je kiest er hooguit vijf.
  */
 const TINT: Record<Lang, string> = {
   nl: 'bg-turq-tint',
@@ -46,10 +50,10 @@ const TINT: Record<Lang, string> = {
   de: 'bg-violet-tint',
   fr: 'bg-pink-tint',
   tr: 'bg-orange-tint',
-  ar: 'bg-green-tint',
-  pl: 'bg-blue-tint',
+  ar: 'bg-pink-tint',
+  pl: 'bg-violet-tint',
   el: 'bg-turq-tint',
-  es: 'bg-orange-tint',
+  es: 'bg-blue-tint',
 }
 
 export const langTint = (code: Lang) => TINT[code] ?? 'bg-gray-6'
