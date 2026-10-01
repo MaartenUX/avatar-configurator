@@ -82,7 +82,7 @@ export default function Beheer() {
                     klaar ? 'hover:shadow-pop' : 'cursor-not-allowed opacity-60',
                   )}
                 >
-                  <span className="relative flex aspect-video items-end justify-center bg-gradient-to-br from-turq-tint to-blue-tint">
+                  <span className="relative mx-auto flex aspect-[9/16] w-full max-w-[180px] items-end justify-center bg-gradient-to-br from-turq-tint to-blue-tint">
                     <Avatar face={avatar?.face} name={avatar?.name} className="h-[88%] w-24" />
                     {klaar && (
                       <span className="absolute inset-0 grid place-items-center">

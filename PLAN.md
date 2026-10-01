@@ -237,7 +237,7 @@ plus `LANG_STATUS` en `PAGE_STATUS` die de twee statusdomeinen hierop mappen. `I
 Vier submappen onder `src/components/`, alles herexporteerd uit `index.ts` en alles op `/kit` met zijn volledige state-matrix (elke `variant × size × state` voor primitives, elke `StatusKey` voor statuscomponenten, elke `stage 0..6` voor `SiteMock`).
 
 - **`primitives/`** — Button, Chip, Badge, Indicator, Input, Textarea, Tabs (+SubTabs), Card, Dialog
-- **`layout/`** — ShellLayout, SpokeLayout, SidebarItem, CreditsMeter, StatCard, Stepper, ProgressBar, PipelineStep
+- **`layout/`** — ShellLayout, SpokeLayout, SidebarItem, CreditsMeter, StatCard, Stepper, ProgressBar, ProductieStap
 - **`domain/`** — PageCard, LanguageRow, ChoiceTile, AvatarTile, Avatar, SiteMock, PreviewGrid, SceneBlock, WordCounter, Player, VideoPreview, SubtitleEditor, LockedBanner
 - **`feedback/`** — WaitScreen, ApproveBox, AdviceBox, HowBox, LearnMore, HelpTray, Celebration, Toast, ToastHost, EmptyState
 

@@ -41,8 +41,12 @@ await check('03-samenvatting', 'Basissamenvatting controleren')
 await page.getByRole('button', { name: 'Akkoord', exact: true }).click()
 await check('04-terug-op-overzicht', 'Basissamenvatting goedgekeurd')
 
-// Het script hangt nu aan de Nederlandse rij, niet meer aan de voettekst.
-await page.getByRole('link', { name: 'Controleer script' }).first().click()
+// Alle talen staan tegelijk op "Controleer script" (CHANGES-03 F21); het
+// Nederlandse script heeft zijn eigen scherm met audio.
+const scriptLinks = page.getByRole('link', { name: 'Controleer script' })
+await check('04b-alle-talen-wachten', 'Controleer script')
+console.log(`  ok  ${await scriptLinks.count()} talen staan op "Controleer script"`)
+await page.goto(`${base}?fast=1#/paginas/p-bijstand/script`, { waitUntil: 'load' })
 await check('05-script', 'Nederlands script en audio finetunen')
 
 await page.getByRole('button', { name: 'Akkoord', exact: true }).click()

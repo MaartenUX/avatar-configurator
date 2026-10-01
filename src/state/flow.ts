@@ -8,7 +8,6 @@ export type Spoke = 'summary' | 'script' | 'lang' | 'video' | 'publish'
 export interface FlowCtx {
   pageId: string
   lang?: Lang
-  langCount?: number
 }
 
 /**
@@ -22,12 +21,11 @@ export const FLOW: Record<
 > = {
   summary: {
     destination: () => '/',
-    toast: () => 'Basissamenvatting goedgekeurd — nu het Nederlandse script',
+    toast: () => 'Basissamenvatting goedgekeurd — de scripts staan klaar voor alle talen',
   },
   script: {
     destination: () => '/',
-    toast: (c) =>
-      `Script goedgekeurd. Je collega's krijgen bericht en ${c.langCount ?? 0} video's worden gemaakt.`,
+    toast: () => 'Script goedgekeurd — de Nederlandse video wordt gemaakt.',
   },
   lang: {
     destination: () => '/',

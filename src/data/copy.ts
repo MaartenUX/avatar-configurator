@@ -14,10 +14,13 @@ export const sceneMaxWoorden = (index: number, totaal: number) =>
 export const PRODUCTIE_STAPPEN = [
   { label: 'Samenvatting maken', meta: '1 min · automatisch' },
   { label: 'Basissamenvatting controleren', meta: '3 min · jij' },
-  { label: 'Nederlands script en audio finetunen', meta: '5 min · jij' },
-  { label: 'Vertalingen controleren', meta: '5 min per taal · collega’s' },
+  {
+    label: 'Script en audio controleren',
+    meta: '5 min per taal · jij het Nederlands, je collega’s hun taal, tegelijk',
+  },
   { label: 'Video’s maken', meta: '20 min · automatisch' },
-  { label: 'Ondertiteling controleren en publiceren', meta: '5 min · jij' },
+  { label: 'Video en ondertiteling controleren', meta: '5 min per taal' },
+  { label: 'Publiceren', meta: '2 min · jij' },
 ]
 
 /**

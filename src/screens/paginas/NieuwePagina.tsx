@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AlertTriangle, FileVideo, Megaphone, Video } from 'lucide-react'
-import { Button, Card, ChoiceTile, Input, PipelineStep, SiteMock } from '../../components'
+import { Button, Card, ChoiceTile, Input, ProductieStap, SiteMock } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
 import { useStore } from '../../state/store'
 import { PRODUCTIE_STAPPEN } from '../../data/copy'
@@ -61,7 +61,7 @@ export default function NieuwePagina() {
         <h2 className="text-h3 text-gray-1">Dit gaat er gebeuren</h2>
         <ol>
           {PRODUCTIE_STAPPEN.map((s, i, arr) => (
-            <PipelineStep
+            <ProductieStap
               key={s.label} index={i + 1} label={s.label} meta={s.meta}
               status="todo" isLast={i === arr.length - 1}
             />

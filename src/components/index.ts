@@ -16,7 +16,7 @@ export { SpokeLayout, SpokeFrame } from './layout/SpokeLayout'
 export { VideoMeter } from './layout/VideoMeter'
 export { Stepper } from './layout/Stepper'
 export { ProgressBar } from './layout/ProgressBar'
-export { PipelineStep } from './layout/PipelineStep'
+export { ProductieStap } from './layout/ProductieStap'
 export { LockedBanner } from './layout/LockedBanner'
 
 // Feedback

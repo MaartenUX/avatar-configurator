@@ -81,7 +81,7 @@ export default function Script() {
             <Bekijkbalk />
           ) : (
             <ApproveBox
-          consequence={`Na akkoord krijgen je collega's een bericht om hun taal te controleren, en worden de video's gemaakt. Dat duurt ongeveer 20 minuten.`}
+          consequence="Na akkoord wordt de Nederlandse video gemaakt (± 20 min)."
           onApprove={() => {
             approveLang(page.id, 'nl')
             finish('script', { pageId: page.id })

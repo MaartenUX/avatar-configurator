@@ -3,7 +3,7 @@ import { Check } from 'lucide-react'
 import { STATUS, type StatusKey } from '../../tokens/status'
 import { cn } from '../../lib/cn'
 
-export interface PipelineStepProps {
+export interface ProductieStapProps {
   index: number
   label: string
   /** Wie doet het en hoe lang duurt het, bijv. "3 min · jij". */
@@ -14,14 +14,14 @@ export interface PipelineStepProps {
 }
 
 /** Verticale stap met icoon-tegel, gebruikt in "Dit gaat er gebeuren". */
-export function PipelineStep({
+export function ProductieStap({
   index,
   label,
   meta,
   status,
   icon: Icon,
   isLast,
-}: PipelineStepProps) {
+}: ProductieStapProps) {
   const style = STATUS[status]
   const complete = status === 'approved' || status === 'live'
 

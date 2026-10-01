@@ -87,7 +87,7 @@ export default function Samenvatting() {
             <Bekijkbalk />
           ) : (
             <ApproveBox
-              consequence="Na akkoord wordt deze tekst de basis voor elke taal. In de volgende stap maak je de Nederlandse zinnen mooi voor de spraak."
+              consequence="Na akkoord maken we voor elke taal een script met audio. Je collega’s krijgen een bericht."
               onApprove={() => {
                 approveSummary(page.id)
                 finish('summary', { pageId: page.id })
@@ -107,13 +107,13 @@ export default function Samenvatting() {
  */
 function Voorbeeld({ avatarFace, naam }: { avatarFace?: string; naam?: string }) {
   return (
-    <div className="relative aspect-video w-full max-w-xl overflow-hidden rounded-md bg-gradient-to-br from-turq-tint to-blue-tint shadow-card">
+    <div className="relative mx-auto aspect-[9/16] w-full max-w-[280px] overflow-hidden rounded-md bg-gradient-to-br from-turq-tint to-blue-tint shadow-card">
       <span className="absolute inset-0 grid place-items-end justify-center">
         <Avatar face={avatarFace} name={naam} className="h-4/5 w-56 scale-110 opacity-80 blur-[28px]" />
       </span>
       {/* Donkere sluier: zonder dit valt witte tekst weg op het lichte deel. */}
       <span className="absolute inset-0 bg-gray-1/35" aria-hidden />
-      <span className="absolute inset-0 grid place-items-center px-8">
+      <span className="absolute inset-0 grid place-items-center px-6">
         <span className="text-center text-h3 text-white">
           De video wordt gemaakt zodra de tekst klaar is
         </span>

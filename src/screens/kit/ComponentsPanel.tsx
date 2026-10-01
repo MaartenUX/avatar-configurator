@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Check, Filter, Play, Sparkles, Trash2 } from 'lucide-react'
 import {
-  Badge, Button, Card, Chip, Dialog, Indicator, Input, PipelineStep,
+  Badge, Button, Card, Chip, Dialog, Indicator, Input, ProductieStap,
   ProgressBar, StatCard, Stepper, Tabs, Textarea,
 } from '../../components'
 import { STATUS_KEYS } from '../../tokens/status'
@@ -133,14 +133,14 @@ export function ComponentsPanel() {
         </div>
       </KitBlock>
 
-      <KitBlock title="PipelineStep" note="de stappen uit 'Dit gaat er gebeuren'">
+      <KitBlock title="ProductieStap" note="de stappen uit 'Dit gaat er gebeuren'">
         <Card className="max-w-md">
           <ol>
-            <PipelineStep index={1} label="Samenvatting maken" meta="1 min · automatisch" status="approved" />
-            <PipelineStep index={2} label="Basissamenvatting controleren" meta="3 min · jij" status="review" />
-            <PipelineStep index={3} label="Nederlands script finetunen" meta="5 min · jij" status="todo" />
-            <PipelineStep index={4} label="Vertalingen controleren" meta="5 min per taal · collega's" status="todo" />
-            <PipelineStep index={5} label="Video's maken" meta="20 min · automatisch" status="todo" isLast />
+            <ProductieStap index={1} label="Samenvatting maken" meta="1 min · automatisch" status="approved" />
+            <ProductieStap index={2} label="Basissamenvatting controleren" meta="3 min · jij" status="review" />
+            <ProductieStap index={3} label="Script en audio controleren" meta="5 min per taal" status="todo" />
+            <ProductieStap index={4} label="Video's maken" meta="20 min · automatisch" status="todo" />
+            <ProductieStap index={5} label="Video en ondertiteling controleren" meta="5 min per taal" status="todo" isLast />
           </ol>
         </Card>
       </KitBlock>
