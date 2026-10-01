@@ -34,3 +34,22 @@ export const isLang = (v: unknown): v is Lang =>
 /** Nederlands staat vast; dit zijn de talen waar de redacteur uit kiest (max 4). */
 export const OPTIONAL_LANGS: Lang[] = ['en', 'de', 'fr', 'tr', 'ar', 'pl', 'el', 'es']
 export const MAX_EXTRA_LANGS = 4
+
+/**
+ * Een zachte tint per taal, zodat de vrijstaande avatars in de kiesrij ergens
+ * op staan en je de talen uit elkaar houdt (CHANGES-03 D16). Letterlijke
+ * classnamen: de Tailwind-scanner leest broncode als tekst.
+ */
+const TINT: Record<Lang, string> = {
+  nl: 'bg-turq-tint',
+  en: 'bg-blue-tint',
+  de: 'bg-violet-tint',
+  fr: 'bg-pink-tint',
+  tr: 'bg-orange-tint',
+  ar: 'bg-green-tint',
+  pl: 'bg-blue-tint',
+  el: 'bg-turq-tint',
+  es: 'bg-orange-tint',
+}
+
+export const langTint = (code: Lang) => TINT[code] ?? 'bg-gray-6'

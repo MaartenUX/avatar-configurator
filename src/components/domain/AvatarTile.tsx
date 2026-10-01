@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Volume2 } from 'lucide-react'
 import { Avatar } from './Avatar'
-import { voiceClip } from '../../lib/assets'
+import { avatarClip, voiceClip } from '../../lib/assets'
 import { waveformBars } from '../../mock/waveform'
-import { langDir } from '../../data/langs'
+import { langDir, langTint } from '../../data/langs'
 import type { AvatarDef } from '../../data/types'
 import { cn } from '../../lib/cn'
 
@@ -22,14 +22,21 @@ const SPEAK_MS = 3000
  * Portret in een licht kader, daaronder de naam en de steekwoorden. Gekozen is
  * een blauwe rand, geen gevuld vlak: het portret moet de aandacht houden.
  *
- * Aanklikken kiest én laat de avatar spreken. Tijdens die drie seconden
- * verschijnt de voorbeeldzin als ondertitel óver het portret, zoals in de
+ * Aanklikken kiest én laat de avatar spreken. Is er een clip van deze avatar,
+ * dan speelt die in de tegel zelf: bewegend, met stem en lipsync, vrijstaand
+ * op de tint van zijn taal (CHANGES-03 D16). Ontbreekt het bestand, dan valt
+ * hij terug op het portret met de pulsanimatie en de losse stemopname.
+ *
+ * De voorbeeldzin verschijnt als ondertitel onderin het kader, zoals in de
  * echte video, in plaats van eronder ruimte te reserveren.
  */
 export function AvatarTile({ avatar, selected, advised, compact, onSelect }: AvatarTileProps) {
   const [speaking, setSpeaking] = useState(false)
+  // De clips komen van Sebastiaan; tot ze er zijn faalt het laden meteen.
+  const [clipFaalt, setClipFaalt] = useState(false)
   const bars = waveformBars(avatar.id, 20)
   const dir = langDir(avatar.lang)
+  const clip = speaking && !clipFaalt ? avatarClip(avatar.id) : undefined
 
   useEffect(() => {
     if (!speaking) return
@@ -37,11 +44,17 @@ export function AvatarTile({ avatar, selected, advised, compact, onSelect }: Ava
     return () => window.clearTimeout(t)
   }, [speaking])
 
+  // De clip heeft zijn eigen stem; de losse opname is er alleen voor als hij
+  // ontbreekt, anders hoor je de zin dubbel.
+  useEffect(() => {
+    if (!speaking || !clipFaalt) return
+    const src = voiceClip(avatar.id)
+    if (src) void new Audio(src).play().catch(() => {})
+  }, [speaking, clipFaalt, avatar.id])
+
   const handle = () => {
     onSelect()
     setSpeaking(true)
-    const src = voiceClip(avatar.id)
-    if (src) void new Audio(src).play().catch(() => {})
   }
 
   return (
@@ -57,7 +70,12 @@ export function AvatarTile({ avatar, selected, advised, compact, onSelect }: Ava
           : 'border-transparent shadow-card hover:border-gray-4',
       )}
     >
-      <span className="relative block aspect-[9/8] overflow-hidden rounded-sm bg-gray-6">
+      <span
+        className={cn(
+          'relative block aspect-[9/8] overflow-hidden rounded-sm',
+          langTint(avatar.lang),
+        )}
+      >
         {advised && (
           <span
             className={cn(
@@ -68,13 +86,24 @@ export function AvatarTile({ avatar, selected, advised, compact, onSelect }: Ava
             Meest gekozen
           </span>
         )}
-        {/* Iets minder dan vol: houdt kopruimte vrij voor het advieslabel. */}
-        <Avatar
-          face={avatar.face}
-          name={avatar.name}
-          speaking={speaking}
-          className="absolute inset-x-0 bottom-0 h-[88%]"
-        />
+        {clip ? (
+          <video
+            src={clip}
+            className="absolute inset-0 size-full object-contain"
+            autoPlay
+            playsInline
+            onEnded={() => setSpeaking(false)}
+            onError={() => setClipFaalt(true)}
+          />
+        ) : (
+          /* Iets minder dan vol: houdt kopruimte vrij voor het advieslabel. */
+          <Avatar
+            face={avatar.face}
+            name={avatar.name}
+            speaking={speaking}
+            className="absolute inset-x-0 bottom-0 h-[88%]"
+          />
+        )}
 
         {/* Beluister-affordance; verdwijnt zodra hij spreekt. */}
         <span
