@@ -4,7 +4,7 @@ import { Lock, Save } from 'lucide-react'
 import { Button, LockedBanner, PreviewGrid, SiteMock } from '../../components'
 import { ProgressBar } from '../../components/layout/ProgressBar'
 import { useStore } from '../../state/store'
-import { SECTIONS, doneSections, firstOpenSection } from './sections'
+import { SECTIONS, firstOpenSection } from './sections'
 import { SectionShell } from './SectionShell'
 import { S1Talen, S2Avatars, S3Scenes, S4Achtergronden, S5Widget } from './secties'
 import { S6Demo } from './S6Demo'
@@ -31,7 +31,6 @@ export default function Configuratie() {
   // De demo bekijk je zoals een inwoner dat doet: via de knop op de pagina.
   const [demoOpen, setDemoOpen] = useState(false)
 
-  const gedaan = doneSections(config)
   const vergrendeld = config.status === 'locked'
 
   useEffect(() => { startConfig() }, [startConfig])
@@ -45,11 +44,16 @@ export default function Configuratie() {
   )
 
   const scrollNaar = useCallback((index: number) => {
-    const el = els.current.get(index)
-    if (!el) return
+    if (!els.current.has(index)) return
     setActive(index)
     intentUntil.current = performance.now() + INTENT_MS
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    // Pas scrollen als React de wissel heeft doorgevoerd: anders mikt de
+    // animatie op een plek die daarna nog verschuift.
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        els.current.get(index)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }),
+    )
   }, [])
 
   // 1. Herstel de scrollpositie vóór de eerste paint. De gate voorkomt dat de
@@ -152,7 +156,7 @@ export default function Configuratie() {
               value={active}
               max={SECTIONS.length}
               title={SECTIONS[active - 1]?.title}
-              note={vergrendeld ? 'Vastgelegd' : `± ${Math.max(2, (SECTIONS.length - gedaan.length) * 2)} min te gaan`}
+              note={vergrendeld ? 'Vastgelegd' : undefined}
             />
           </span>
           <Button variant="secondary" size="sm" iconLeft={Save} to="/">

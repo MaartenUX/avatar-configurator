@@ -60,7 +60,8 @@ export const AVATARS: AvatarDef[] = [
 
   // Turks
   {
-    id: 'tr-zeynep', lang: 'tr', name: 'Zeynep', gender: 'v', face: 'vrouw-turks', advised: true,
+    // Gezicht geruild met Nour: de Turkse clip is met dit gezicht opgenomen.
+    id: 'tr-zeynep', lang: 'tr', name: 'Zeynep', gender: 'v', face: 'vrouw-marokkaans', advised: true,
     keywords: ['warm', 'duidelijk', 'geduldig'],
     sampleSentence: 'Merhaba. Size bunun nasıl işlediğini kısaca anlatayım.',
   },
@@ -72,7 +73,7 @@ export const AVATARS: AvatarDef[] = [
 
   // Arabisch
   {
-    id: 'ar-nour', lang: 'ar', name: 'Nour', gender: 'v', face: 'vrouw-marokkaans',
+    id: 'ar-nour', lang: 'ar', name: 'Nour', gender: 'v', face: 'vrouw-turks',
     keywords: ['zacht', 'duidelijk', 'geduldig'],
     sampleSentence: 'مرحباً. سأشرح لك باختصار كيف يعمل هذا.',
   },

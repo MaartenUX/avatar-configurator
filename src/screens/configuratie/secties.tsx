@@ -6,7 +6,7 @@ import { sceneLabel } from '../../data/copy'
 import { useStore } from '../../state/store'
 import { ADVICE, advisedFor, avatarsFor } from '../../data/avatars'
 import { MAX_EXTRA_LANGS, OPTIONAL_LANGS, langLabel } from '../../data/langs'
-import { backgroundImage } from '../../lib/assets'
+import { backgroundImage, kantoorshot } from '../../lib/assets'
 import type { Lang, WidgetCorner } from '../../state/types'
 import { cn } from '../../lib/cn'
 
@@ -151,7 +151,9 @@ export function S3Scenes() {
 
 /* ------------------------------------------- 4. scènes en achtergronden */
 
-const EIGEN_FOTOS = ['kantoor-3', 'kantoor-1', 'kantoor-3', 'kantoor-1', 'kantoor-3', 'kantoor-1']
+/** Gemockte "eigen foto's": we tonen de kantoorshots omgekeerd afgewisseld,
+ *  zodat je ziet dat er iets anders staat dan de standaard. */
+const EIGEN_FOTOS = [1, 0, 1, 0, 1, 0].map(kantoorshot)
 
 export function S4Achtergronden() {
   const config = useStore((s) => s.config)
@@ -201,7 +203,7 @@ export function S4Achtergronden() {
           <div className="grid gap-3 sm:grid-cols-3">
             {shots.map((slug, i) => {
               const standaard = slug === null
-              const src = backgroundImage(slug ?? (i % 2 === 0 ? 'kantoor-1' : 'kantoor-3'))
+              const src = backgroundImage(slug ?? kantoorshot(i))
               const avatar = avatarById(config.avatars[config.languages[0] ?? 'nl'])
               return (
                 <Card key={i} className="flex flex-col gap-3 p-3">
@@ -289,15 +291,17 @@ export function S5Widget() {
     <>
       <div className="flex flex-col gap-2">
         <h3 className="text-h3 text-gray-1">Je website</h3>
-        <div className="flex items-end gap-2">
+        {/* De uitleg staat onder de hele rij, zodat de knop op dezelfde lijn
+            blijft als het veld zelf. */}
+        <div className="flex items-stretch gap-2">
           <span className="flex-1">
-            <Input
-              label="Webadres" value={url} onChange={setUrl} type="url"
-              hint="Hier halen we je logo en kleuren op."
-            />
+            <Input label="Webadres" value={url} onChange={setUrl} type="url" />
           </span>
-          <Button onClick={ophalen} loading={bezig}>Ophalen</Button>
+          <Button onClick={ophalen} loading={bezig} className="self-stretch">
+            Ophalen
+          </Button>
         </div>
+        <p className="text-body-sm text-gray-3">Hier halen we je logo en kleuren op.</p>
 
         {opgehaald && (
           <Card className="flex flex-wrap items-center gap-4 p-4">

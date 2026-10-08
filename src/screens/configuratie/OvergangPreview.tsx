@@ -1,7 +1,7 @@
 import { Avatar } from '../../components'
 import { avatarById } from '../../data/avatars'
 import { sceneLabel } from '../../data/copy'
-import { backgroundImage } from '../../lib/assets'
+import { backgroundImage, kantoorshot } from '../../lib/assets'
 import { useNow } from '../../state/TickProvider'
 import type { Config } from '../../state/types'
 import { cn } from '../../lib/cn'
@@ -32,7 +32,7 @@ export function OvergangPreview({ config }: { config: Config }) {
   // Logo: een kort vlak in de huisstijlkleur op elke scènewissel.
   const flits = logo && sinds < FLITS_MS
 
-  const slug = config.backgrounds[scene] ?? (scene % 2 === 0 ? 'kantoor-1' : 'kantoor-3')
+  const slug = config.backgrounds[scene] ?? kantoorshot(scene)
   const bg = backgroundImage(slug)
   const avatar = avatarById(config.avatars[config.languages[0] ?? 'nl'])
 

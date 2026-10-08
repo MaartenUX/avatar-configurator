@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Play } from 'lucide-react'
 import { Avatar } from './Avatar'
 import { avatarById } from '../../data/avatars'
-import { backgroundImage, demoVideo } from '../../lib/assets'
+import { backgroundImage, kantoorshot } from '../../lib/assets'
 import { langDir } from '../../data/langs'
 import { parseTimecode, formatTimecode } from '../../lib/format'
 import { useNow } from '../../state/TickProvider'
@@ -22,6 +22,8 @@ export interface VideoPreviewProps {
   transition?: 'zoom' | 'logo'
   /** Huisstijlkleur, voor het logovlak in de overgang. */
   primary?: string
+  /** Een echt videobestand. Zonder dit speelt de nagebootste weergave. */
+  film?: string
   durationSec?: number
   /** Springt naar dit moment; gebruikt door de ondertitel-editor. */
   seekTo?: number | null
@@ -35,8 +37,9 @@ const SCENES = 6
  * Het videoframe. Staand (9:16), want zo ziet het echte product eruit: de
  * video wordt op een telefoon bekeken (CHANGES-03 A1).
  *
- * Speelt `public/media/demo/{lang}.mp4` als dat bestand er is; anders de
- * nagebootste weergave met de avatar op de achtergrond.
+ * Met `film` speelt een echt bestand; dan doet de browser het afspelen en de
+ * tijdbalk. Zonder, of als het laden mislukt, draait de nagebootste weergave
+ * op de gedeelde klok: avatar op de achtergrond, ondertitel, eigen tijdbalk.
  */
 export function VideoPreview({
   avatarId,
@@ -45,6 +48,7 @@ export function VideoPreview({
   backgrounds = [],
   transition = 'zoom',
   primary,
+  film,
   durationSec = VIDEO_DUUR,
   seekTo,
   onTimeUpdate,
@@ -55,9 +59,9 @@ export function VideoPreview({
   const now = useNow()
   const avatar = avatarById(avatarId)
   const dir = langDir(lang)
-  // De demovideo bestaat pas als Sebastiaan hem aanlevert.
+  const filmRef = useRef<HTMLVideoElement | null>(null)
   const [filmFaalt, setFilmFaalt] = useState(false)
-  const film = filmFaalt ? undefined : demoVideo(lang)
+  const [filmSpeelt, setFilmSpeelt] = useState(false)
 
   const elapsed = startedAt ? Math.min(durationSec, offset + (now - startedAt) / 1000) : offset
   const playing = startedAt !== null && elapsed < durationSec
@@ -86,7 +90,7 @@ export function VideoPreview({
 
   // Zes scènes verdeeld over de duur bepalen de achtergrond en de overgang.
   const scene = Math.min(SCENES - 1, Math.floor((elapsed / durationSec) * SCENES))
-  const slug = backgrounds[scene] ?? (scene % 2 === 0 ? 'kantoor-1' : 'kantoor-3')
+  const slug = backgrounds[scene] ?? kantoorshot(scene)
   const bg = backgroundImage(slug)
 
   // Camerawissel: de camera wisselt per scène tussen dichtbij en verder weg.
@@ -95,62 +99,81 @@ export function VideoPreview({
   const sceneLengte = durationSec / SCENES
   const inOvergang = playing && transition === 'logo' && elapsed % sceneLengte < 0.6 && scene > 0
 
-  return (
-    <div
-      className={cn(
-        // Staand, en gemeten aan de breedte: in een kolom zonder eigen hoogte
-        // zou een hoogte-gestuurd kader tot niets inklappen.
-        'relative mx-auto aspect-[9/16] w-full max-w-[280px] overflow-hidden rounded-md bg-gray-1 shadow-card',
-        className,
-      )}
-    >
-      {film ? (
+  // Staand, en gemeten aan de breedte: in een kolom zonder eigen hoogte zou
+  // een hoogte-gestuurd kader tot niets inklappen.
+  const kader = cn(
+    'relative mx-auto aspect-[9/16] w-full max-w-[280px] overflow-hidden rounded-md bg-gray-1 shadow-card',
+    className,
+  )
+
+  if (film && !filmFaalt) {
+    return (
+      <div className={kader}>
         <video
+          ref={filmRef}
           src={film}
           className="size-full object-cover"
           playsInline
-          controls={playing}
-          muted={!playing}
+          /* De eigen knop staat erover tot hij speelt; daarna neemt de browser
+             het over met zijn eigen balk. */
+          controls={filmSpeelt}
+          onPlay={() => setFilmSpeelt(true)}
+          onPause={() => setFilmSpeelt(false)}
+          onEnded={() => setFilmSpeelt(false)}
           onError={() => setFilmFaalt(true)}
         />
-      ) : (
-        <>
-          <div
-            className={cn(
-              'absolute inset-0 blur-[7px] transition-transform duration-[400ms] ease-[cubic-bezier(.22,1,.36,1)]',
-              ingezoomd ? 'scale-[1.35]' : 'scale-105',
-            )}
-            style={
-              bg
-                ? { backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-                : { background: 'linear-gradient(160deg, #CDEFEC 0%, #E6FAFF 60%, #FFD9C8 100%)' }
-            }
-          />
-
-          {avatar && (
-            <span
-              className={cn(
-                'absolute inset-x-0 bottom-16 flex justify-center transition-transform duration-[400ms] ease-[cubic-bezier(.22,1,.36,1)]',
-                ingezoomd && 'scale-[1.35]',
-              )}
-            >
-              <Avatar face={avatar.face} name={avatar.name} speaking={playing} className="h-72 w-56" />
+        {!filmSpeelt && (
+          <button
+            type="button"
+            onClick={() => void filmRef.current?.play()}
+            aria-label="Speel video af"
+            className="absolute inset-0 grid place-items-center bg-gray-1/20 transition-colors hover:bg-gray-1/30"
+          >
+            <span className="grid size-16 place-items-center rounded-pill bg-white/95 text-blue-shade shadow-pop">
+              <Play size={26} aria-hidden />
             </span>
-          )}
+          </button>
+        )}
+      </div>
+    )
+  }
 
-          {/* Logovlak tussen twee scènes. */}
-          {inOvergang && (
-            <span
-              className="absolute inset-0 grid place-items-center"
-              style={{ background: primary ?? '#1F5E58' }}
-            >
-              <span className="text-h2 font-semibold text-white">Bergrode</span>
-            </span>
+  return (
+    <div className={kader}>
+      <div
+        className={cn(
+          'absolute inset-0 blur-[7px] transition-transform duration-[400ms] ease-[cubic-bezier(.22,1,.36,1)]',
+          ingezoomd ? 'scale-[1.35]' : 'scale-105',
+        )}
+        style={
+          bg
+            ? { backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+            : { background: 'linear-gradient(160deg, #CDEFEC 0%, #E6FAFF 60%, #FFD9C8 100%)' }
+        }
+      />
+
+      {avatar && (
+        <span
+          className={cn(
+            'absolute inset-x-0 bottom-16 flex justify-center transition-transform duration-[400ms] ease-[cubic-bezier(.22,1,.36,1)]',
+            ingezoomd && 'scale-[1.35]',
           )}
-        </>
+        >
+          <Avatar face={avatar.face} name={avatar.name} speaking={playing} className="h-72 w-56" />
+        </span>
       )}
 
-      {current && !film && (
+      {/* Logovlak tussen twee scènes. */}
+      {inOvergang && (
+        <span
+          className="absolute inset-0 grid place-items-center"
+          style={{ background: primary ?? '#1F5E58' }}
+        >
+          <span className="text-h2 font-semibold text-white">Bergrode</span>
+        </span>
+      )}
+
+      {current && (
         <span
           dir={dir}
           className="absolute inset-x-4 bottom-12 mx-auto w-fit max-w-full rounded-sm bg-gray-1/85 px-3 py-1.5 text-center text-body-sm text-white"

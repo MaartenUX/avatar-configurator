@@ -53,7 +53,6 @@ export function ShellLayout() {
             <span className="type-label rounded-pill bg-gray-1 px-2 py-0.5 text-white">
               Prototype
             </span>
-            <span className="type-label text-gray-1">Testscenario</span>
             <select
               value={scenario}
               onChange={(e) => setScenario(e.target.value as ScenarioId)}

@@ -28,14 +28,6 @@ const VOICES = byBasename(
   }) as Record<string, string>,
 )
 
-const BACKGROUNDS = byBasename(
-  import.meta.glob('../assets/backgrounds/*.{jpg,jpeg,png,webp}', {
-    eager: true,
-    query: '?url',
-    import: 'default',
-  }) as Record<string, string>,
-)
-
 /** Portret bij een gezicht-slug (zie AvatarDef.face). */
 export const faceImage = (face?: string): string | undefined =>
   face ? AVATARS[face] : undefined
@@ -43,25 +35,41 @@ export const faceImage = (face?: string): string | undefined =>
 /** Het grijze silhouet voor de lege staat, zolang er niets gekozen is. */
 export const silhouetImage = (): string | undefined => AVATARS['silhouet']
 export const voiceClip = (id: string): string | undefined => VOICES[id]
-export const backgroundImage = (slug: string): string | undefined => BACKGROUNDS[slug]
 
 /**
  * Media uit public/media: die wordt niet in de bundel gebakken maar als los
- * bestand geserveerd, want video's maken een single-file build onwerkbaar
- * groot (CHANGES-03 H).
- *
- * Deze paden bestaan nog niet; Sebastiaan levert de bestanden later aan. Er is
- * daarom geen lijst om bij te werken: het pad wordt altijd teruggegeven en de
- * component valt terug op de mock zodra het laden mislukt. Een bestand erin
- * droppen is dus genoeg.
+ * bestand geserveerd, want video's maken een bundel onwerkbaar groot
+ * (CHANGES-03 H).
  */
-export const avatarClip = (id: string) => `${import.meta.env.BASE_URL}media/avatars/${id}.webm`
-export const demoVideo = (lang: string) => `${import.meta.env.BASE_URL}media/demo/${lang}.mp4`
-export const widgetKnop = () => `${import.meta.env.BASE_URL}media/widget/button.png`
+const media = (pad: string) => `${import.meta.env.BASE_URL}media/${pad}`
+
+/**
+ * Welke avatars een eigen clip hebben. Er zijn er vier, één per taal, en elke
+ * clip is gemaakt met het gezicht van precies deze avatar. De andere avatars
+ * geven undefined terug en vallen terug op het portret met de pulsanimatie.
+ */
+const CLIPS: Record<string, string> = {
+  'nl-daan': 'nl',
+  'en-emma': 'en',
+  'tr-zeynep': 'tr',
+  'ar-omar': 'ar',
+}
+
+export const avatarClip = (id?: string) =>
+  id && CLIPS[id] ? media(`avatars/${CLIPS[id]}.webm`) : undefined
+
+/** Eén demovideo voor alle talen: hij laat ze allemaal achter elkaar zien. */
+export const demoVideo = () => media('demo/demo.mp4')
+
+/** De twee standaard kantoorshots wisselen elkaar af over de zes scènes. */
+export const KANTOORSHOTS = ['kantoor-1', 'kantoor-2']
+export const kantoorshot = (scene: number) => KANTOORSHOTS[scene % KANTOORSHOTS.length]
+export const backgroundImage = (slug: string) => media(`backgrounds/${slug}.jpg`)
 
 export const assetCounts = () => ({
   // Het silhouet is een placeholder, geen portret: niet meetellen.
   avatars: Object.keys(AVATARS).filter((k) => k !== 'silhouet').length,
   voices: Object.keys(VOICES).length,
-  backgrounds: Object.keys(BACKGROUNDS).length,
+  backgrounds: KANTOORSHOTS.length,
+  clips: Object.keys(CLIPS).length,
 })

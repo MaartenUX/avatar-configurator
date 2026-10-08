@@ -32,25 +32,27 @@ const SPEAK_MS = 3000
  */
 export function AvatarTile({ avatar, selected, advised, compact, onSelect }: AvatarTileProps) {
   const [speaking, setSpeaking] = useState(false)
-  // De clips komen van Sebastiaan; tot ze er zijn faalt het laden meteen.
   const [clipFaalt, setClipFaalt] = useState(false)
   const bars = waveformBars(avatar.id, 20)
   const dir = langDir(avatar.lang)
-  const clip = speaking && !clipFaalt ? avatarClip(avatar.id) : undefined
+  const bestand = clipFaalt ? undefined : avatarClip(avatar.id)
+  const clip = speaking ? bestand : undefined
 
+  // Zonder clip duurt het spreken drie seconden; mét clip bepaalt de clip zelf
+  // wanneer hij klaar is.
   useEffect(() => {
-    if (!speaking) return
+    if (!speaking || bestand) return
     const t = window.setTimeout(() => setSpeaking(false), SPEAK_MS)
     return () => window.clearTimeout(t)
-  }, [speaking])
+  }, [speaking, bestand])
 
   // De clip heeft zijn eigen stem; de losse opname is er alleen voor als hij
   // ontbreekt, anders hoor je de zin dubbel.
   useEffect(() => {
-    if (!speaking || !clipFaalt) return
+    if (!speaking || bestand) return
     const src = voiceClip(avatar.id)
     if (src) void new Audio(src).play().catch(() => {})
-  }, [speaking, clipFaalt, avatar.id])
+  }, [speaking, bestand, avatar.id])
 
   const handle = () => {
     onSelect()
@@ -90,7 +92,7 @@ export function AvatarTile({ avatar, selected, advised, compact, onSelect }: Ava
         {clip ? (
           <video
             src={clip}
-            className="absolute inset-0 size-full object-contain"
+            className="absolute inset-0 size-full object-cover"
             autoPlay
             playsInline
             onEnded={() => setSpeaking(false)}
@@ -119,6 +121,9 @@ export function AvatarTile({ avatar, selected, advised, compact, onSelect }: Ava
 
         {speaking && (
           <>
+            {/* De golfjes horen bij de nagebootste stem; een clip heeft zijn
+                eigen geluid en beweegt zelf. */}
+            {!clip && (
             <span className="absolute bottom-2 right-2 flex h-5 items-end gap-[2px]" aria-hidden>
               {bars.slice(0, 8).map((h, i) => (
                 <span
@@ -128,6 +133,7 @@ export function AvatarTile({ avatar, selected, advised, compact, onSelect }: Ava
                 />
               ))}
             </span>
+            )}
             <span
               dir={dir}
               className="absolute inset-x-2 bottom-2 rounded-sm bg-gray-1/85 px-2 py-1 text-[11px] leading-snug text-white"

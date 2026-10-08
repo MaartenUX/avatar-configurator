@@ -47,58 +47,66 @@ export function SiteMock({
   const hasBrand = Boolean(config.primary)
 
   return (
-    <div
-      className={cn(
-        'relative flex w-full flex-col overflow-hidden rounded-md bg-white shadow-card',
-        mini ? 'aspect-[4/3]' : 'aspect-[16/10]',
-        className,
-      )}
-    >
-      {/* Sitekop: krijgt de opgehaalde huisstijlkleur zodra die er is. */}
+    /* Geen overflow-hidden op de buitenkant: de uitgeklapte speler mag over de
+       pagina heen steken en moet dan wél helemaal zichtbaar blijven. */
+    <div className={cn('relative w-full', expanded && 'mx-auto w-[86%]', className)}>
       <div
-        className="flex items-center gap-2 px-3 py-2 transition-colors duration-500"
-        style={{ background: hasBrand ? primary : '#F2F2F2' }}
+        className={cn(
+          'flex w-full flex-col overflow-hidden rounded-md bg-white shadow-card',
+          mini ? 'aspect-[4/3]' : 'aspect-[16/10]',
+        )}
       >
+        {/* Sitekop: krijgt de opgehaalde huisstijlkleur zodra die er is. */}
         <div
-          className={cn('rounded-sm transition-all duration-500', mini ? 'h-2 w-8' : 'h-3.5 w-16')}
-          style={{ background: hasBrand ? '#ffffff' : '#BDBDBD' }}
-        />
-        <div className="ml-auto flex gap-1.5">
-          {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className={cn('rounded-pill', mini ? 'h-1 w-4' : 'h-1.5 w-8')}
-              style={{ background: hasBrand ? 'rgba(255,255,255,.55)' : '#E0E0E0' }}
-            />
-          ))}
+          className="flex items-center gap-2 px-3 py-2 transition-colors duration-500"
+          style={{ background: hasBrand ? primary : '#F2F2F2' }}
+        >
+          <div
+            className={cn('rounded-sm transition-all duration-500', mini ? 'h-2 w-8' : 'h-3.5 w-16')}
+            style={{ background: hasBrand ? '#ffffff' : '#BDBDBD' }}
+          />
+          <div className="ml-auto flex gap-1.5">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className={cn('rounded-pill', mini ? 'h-1 w-4' : 'h-1.5 w-8')}
+                style={{ background: hasBrand ? 'rgba(255,255,255,.55)' : '#E0E0E0' }}
+              />
+            ))}
+          </div>
         </div>
+
+        {soort === 'content' ? (
+          <ContentPagina mini={mini} pageTitle={pageTitle} secondary={hasBrand ? secondary : '#BDBDBD'} />
+        ) : (
+          <div className="flex flex-1 flex-col gap-2 p-3">
+            <div
+              className={cn('rounded-sm', mini ? 'h-2 w-2/3' : 'h-3 w-3/5')}
+              style={{ background: hasBrand ? secondary : '#BDBDBD' }}
+            />
+            {!mini && <p className="text-body-sm text-gray-3">{pageTitle}</p>}
+            {[1, 0.92, 0.97, 0.6].map((w, i) => (
+              <div
+                key={i}
+                className={cn('rounded-pill bg-gray-6', mini ? 'h-1' : 'h-2')}
+                style={{ width: `${w * 100}%` }}
+              />
+            ))}
+          </div>
+        )}
+
+        {!expanded && <Widget config={config} mini={mini} onOpen={onOpen} />}
       </div>
 
-      {soort === 'content' ? (
-        <ContentPagina mini={mini} pageTitle={pageTitle} secondary={hasBrand ? secondary : '#BDBDBD'} />
-      ) : (
-        <div className="flex flex-1 flex-col gap-2 p-3">
-          <div
-            className={cn('rounded-sm', mini ? 'h-2 w-2/3' : 'h-3 w-3/5')}
-            style={{ background: hasBrand ? secondary : '#BDBDBD' }}
-          />
-          {!mini && <p className="text-body-sm text-gray-3">{pageTitle}</p>}
-          {[1, 0.92, 0.97, 0.6].map((w, i) => (
-            <div
-              key={i}
-              className={cn('rounded-pill bg-gray-6', mini ? 'h-1' : 'h-2')}
-              style={{ width: `${w * 100}%` }}
-            />
-          ))}
-        </div>
-      )}
-
-      {expanded ? (
-        <div className="absolute inset-0 grid place-items-center bg-gray-1/35 p-3">
-          <WidgetVenster config={config} onClose={onClose} />
-        </div>
-      ) : (
-        <Widget config={config} mini={mini} onOpen={onOpen} />
+      {expanded && (
+        <>
+          <span className="absolute inset-0 rounded-md bg-gray-1/35" aria-hidden />
+          {/* Breder dan de speler zelf, zodat de taalrij eronder op één regel
+              past; de video blijft op zijn eigen maat staan. */}
+          <div className="absolute left-1/2 top-1/2 w-[76%] -translate-x-1/2 -translate-y-1/2">
+            <WidgetVenster config={config} onClose={onClose} />
+          </div>
+        </>
       )}
     </div>
   )
@@ -170,7 +178,7 @@ function Widget({
       className={cn(
         'absolute transition-all duration-500',
         CORNER[config.widgetCorner],
-        mini ? 'w-[42%]' : 'w-[38%]',
+        mini ? 'w-[26%]' : 'w-[20%]',
       )}
       style={{ margin: `${marge.y * schaal}px ${marge.x * schaal}px` }}
     >

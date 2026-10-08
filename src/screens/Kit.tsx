@@ -160,7 +160,8 @@ function AssetStatus() {
   const rows = [
     { label: 'Avatarportretten', got: counts.avatars, want: 18, dir: 'src/assets/avatars/{id}.png' },
     { label: 'Stemfragmenten', got: counts.voices, want: 18, dir: 'src/assets/voices/{id}.mp3' },
-    { label: 'Kantoorshots', got: counts.backgrounds, want: 4, dir: 'src/assets/backgrounds/kantoor-1.jpg' },
+    { label: 'Kantoorshots', got: counts.backgrounds, want: 2, dir: 'public/media/backgrounds/kantoor-1.jpg' },
+    { label: 'Avatarclips', got: counts.clips, want: 4, dir: 'public/media/avatars/{taal}.webm' },
   ]
   return (
     <div className="flex flex-col gap-2">

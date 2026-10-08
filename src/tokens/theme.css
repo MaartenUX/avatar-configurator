@@ -100,6 +100,8 @@
 @layer base {
   :root {
     --bar-h: 72px;
+    /* De stappenbalk in de configurator, onder de header. */
+    --stap-h: 63px;
   }
 
   html {

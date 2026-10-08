@@ -96,6 +96,28 @@ const klaar = await page.textContent('body')
 eis(klaar.includes('Je keuzes'), 'de demo is klaar en de keuzes staan er')
 eis(klaar.includes('Overgang'), 'de samenvatting noemt de overgang')
 
+// De demo bekijk je via de knop op de nagebootste pagina (CHANGES-04 B4).
+await page.getByRole('button', { name: 'Bekijk uitleg' }).first().click()
+await page.waitForTimeout(1200)
+await stap('6-speler')
+const speler = await page.evaluate(() => {
+  const v = document.querySelector('video')
+  const rij = document.querySelector('[aria-pressed]')
+  if (!v || !rij) return null
+  const vr = v.getBoundingClientRect()
+  return {
+    src: v.currentSrc,
+    staand: vr.height > vr.width,
+    gat: Math.round(rij.getBoundingClientRect().top - vr.bottom),
+    zichtbaar: vr.top > 0 && vr.bottom < window.innerHeight,
+  }
+})
+eis(Boolean(speler?.src.includes('/media/demo/demo.mp4')), 'de speler draait de aangeleverde demovideo')
+eis(speler?.staand === true, 'de speler is staand')
+eis((speler?.gat ?? 999) >= 0 && (speler?.gat ?? 999) < 48, 'de taalrij staat direct onder de speler',
+  `${speler?.gat} px`)
+eis(speler?.zichtbaar === true, 'de speler valt volledig binnen beeld')
+
 await page.mouse.wheel(0, 1400)
 await page.waitForTimeout(800)
 await stap('6-vastleggen')

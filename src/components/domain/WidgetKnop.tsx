@@ -4,20 +4,11 @@ import { Avatar } from './Avatar'
 import { VideoPreview } from './VideoPreview'
 import { avatarById } from '../../data/avatars'
 import { langDef, langLabel } from '../../data/langs'
-import { widgetKnop } from '../../lib/assets'
+import { backgroundImage, demoVideo, kantoorshot } from '../../lib/assets'
 import { pageContent } from '../../data'
 import { DEMO_DUUR, demoSubtitles } from '../../data/demo'
 import type { Config, Lang } from '../../state/types'
 import { cn } from '../../lib/cn'
-
-/** Hoe breed één figuur in de knop is, afhankelijk van het aantal talen. */
-const FIGUUR = {
-  1: 'w-[46%]',
-  2: 'w-[40%]',
-  3: 'w-[36%]',
-  4: 'w-[32%]',
-  5: 'w-[28%]',
-} as const
 
 export interface WidgetKnopProps {
   config: Config
@@ -27,59 +18,56 @@ export interface WidgetKnopProps {
 }
 
 /**
- * De knop zoals hij op de gemeentepagina staat: liggend, zonder eigen
- * achtergrond. De gekozen avatars staan vrij naast elkaar met de play-knop in
- * het midden, in de opgehaalde huisstijlkleur (CHANGES-03 A2).
+ * De widget zoals hij op de gemeentepagina staat: één kader met daarin een
+ * staand videoframe en daaronder een balk in de huisstijlkleur (CHANGES-02 B8
+ * en B9). De liggende, vrijstaande variant uit CHANGES-03 A2 is vervallen.
  *
- * Levert Sebastiaan `public/media/widget/button.png`, dan tonen we die; tot
- * dan bouwen we hem op uit de losse portretten.
+ * Zolang de huisstijl niet is opgehaald is de balk grijs; de tekst wordt dan
+ * donker, want wit op gray-5 is niet te lezen.
  */
 export function WidgetKnop({ config, mini, onOpen }: WidgetKnopProps) {
-  const [echteKnopFaalt, setEchteKnopFaalt] = useState(false)
-  const talen = (config.languages.length ? config.languages : ['nl']) as Lang[]
-  const getoond = talen.slice(0, 5)
-  const primary = config.primary ?? '#828282'
-
-  if (!echteKnopFaalt) {
-    return (
-      <button type="button" onClick={onOpen} className="block w-full" aria-label="Bekijk uitleg">
-        <img
-          src={widgetKnop()}
-          alt="Bekijk uitleg"
-          className="w-full"
-          onError={() => setEchteKnopFaalt(true)}
-        />
-      </button>
-    )
-  }
+  const taal = (config.languages[0] ?? 'nl') as Lang
+  const avatar = avatarById(config.avatars[taal])
+  const bg = backgroundImage(config.backgrounds[0] ?? kantoorshot(0))
+  const opgehaald = Boolean(config.primary)
 
   return (
     <button
       type="button"
       onClick={onOpen}
       aria-label="Bekijk uitleg"
-      className="relative flex aspect-[16/7] w-full items-end justify-center"
+      className="block w-full overflow-hidden rounded-sm border border-gray-5 bg-white shadow-card"
     >
-      {getoond.map((code, i) => {
-        const avatar = avatarById(config.avatars[code])
-        return (
-          <Avatar
-            key={code}
-            face={avatar?.face}
-            name={avatar?.name}
-            className={cn('h-full', FIGUUR[getoond.length as 1] ?? 'w-[28%]', i > 0 && '-ml-[7%]')}
-          />
-        )
-      })}
+      <span className="relative block aspect-[9/16] overflow-hidden bg-gray-6">
+        <img src={bg} alt="" className="absolute inset-0 size-full scale-105 object-cover blur-[3px]" />
+        <Avatar
+          face={avatar?.face}
+          name={avatar?.name}
+          className="absolute inset-x-0 bottom-0 mx-auto h-[82%] w-[86%]"
+        />
+        <span className="absolute inset-0 grid place-items-center">
+          <span
+            className={cn(
+              'grid place-items-center rounded-pill bg-white/95 text-blue-shade shadow-card',
+              mini ? 'size-5' : 'size-9',
+            )}
+          >
+            <Play size={mini ? 10 : 17} aria-hidden />
+          </span>
+        </span>
+      </span>
 
+      {/* In het 3x3-raster is de knop te klein voor tekst; daar blijft alleen
+          de balk in de huisstijlkleur over. */}
       <span
         className={cn(
-          'absolute left-1/2 top-1/2 grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-pill text-white shadow-card',
-          mini ? 'size-4' : 'size-10',
+          'block w-full truncate px-2 text-center font-medium',
+          mini ? 'py-1 text-[0px]' : 'py-1 text-[11px] leading-5',
+          opgehaald ? 'text-white' : 'text-gray-2',
         )}
-        style={{ background: primary }}
+        style={{ background: config.primary ?? '#e0e0e0' }}
       >
-        <Play size={mini ? 8 : 18} aria-hidden />
+        {mini ? '' : 'Videovertaling'}
       </span>
     </button>
   )
@@ -112,6 +100,7 @@ export function WidgetVenster({ config, pageId, onClose }: WidgetVensterProps) {
           lang={taal}
           subtitles={inhoud ? inhoud.subtitles[taal] ?? inhoud.subtitles.nl : demoSubtitles(taal)}
           durationSec={inhoud ? undefined : DEMO_DUUR}
+          film={inhoud ? undefined : demoVideo()}
           backgrounds={config.backgrounds}
           transition={config.transition}
           primary={config.primary}

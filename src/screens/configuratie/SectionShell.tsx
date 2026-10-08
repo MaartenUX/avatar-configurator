@@ -28,7 +28,9 @@ export function SectionShell({ def, state, register, onNext, weten, children }: 
       id={`sectie-${def.id}`}
       data-index={def.index}
       data-state={state}
-      style={{ scrollMarginTop: 'var(--bar-h)' }}
+      /* Onder de twee sticky balken plus wat lucht, anders dekt de balk de
+         kop van de sectie af waar je net heen scrolde (CHANGES-04 C6). */
+      style={{ scrollMarginTop: 'calc(var(--bar-h) + var(--stap-h) + 24px)' }}
       className={cn(
         'flex min-h-[calc(100svh-var(--bar-h)-64px)] flex-col gap-5 pb-16 transition-opacity duration-300',
         state === 'future' && 'opacity-40',
@@ -48,9 +50,16 @@ export function SectionShell({ def, state, register, onNext, weten, children }: 
       <div className="flex flex-col gap-5">{children}</div>
 
       {/* Sticky onderin het paneel, zodat je nooit hoeft te zoeken waar je
-          verder klikt. Bij de laatste sectie is er niets meer om heen te gaan. */}
-      {onNext && state === 'active' && (
-        <div className="sticky bottom-0 -mx-8 mt-auto border-t border-gray-5 bg-white px-8 py-3 shadow-[0_-4px_16px_rgba(0,0,0,.06)]">
+          verder klikt. Bij de laatste sectie is er niets meer om heen te gaan.
+          Hij blijft staan als de sectie niet actief is — alleen onzichtbaar —
+          want anders verspringt de pagina zodra de actieve sectie wisselt. */}
+      {onNext && (
+        <div
+          className={cn(
+            'sticky bottom-0 -mx-8 mt-auto border-t border-gray-5 bg-white px-8 py-3 shadow-[0_-4px_16px_rgba(0,0,0,.06)]',
+            state !== 'active' && 'invisible',
+          )}
+        >
           <button
             type="button"
             onClick={onNext}

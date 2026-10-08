@@ -351,6 +351,65 @@ kolom zonder eigen hoogte tot niets in: op het videocontrolescherm was de
 preview 0 bij 0 pixels. Het meet nu de breedte. Daarnaast wees het Meer
 weten-blok van sectie 4 naar het verdwenen id `personaliseren`.
 
+---
+
+# CHANGES-04 — 8 oktober, de media erin
+
+Terminologie vanaf nu: de **widget** is de knop op de website, de **player** is
+het venster dat opent als je erop klikt. "Thumbnail" uit CHANGES-02 betekent
+widget.
+
+### 49. Een clip hoort bij een avatar, niet bij een taal
+Er zijn vier clips, één per taal, maar elke clip is opgenomen met het gezicht
+van één bepaalde avatar. Spelen we de Nederlandse clip onder elke Nederlandse
+avatar, dan klik je op Sanne en verschijnt Daan. De koppeling in
+`src/lib/assets.ts` gaat daarom per avatar: nl-daan, en-emma, tr-zeynep en
+ar-omar. De andere avatars houden het portret met de pulsanimatie.
+
+### 50. Zeynep en Nour hebben hun gezicht geruild
+De Turkse clip is opgenomen met het gezicht dat bij ons Nour was. Zeynep heeft
+dat gezicht nu, Nour het gezicht met hoofddoek dat eerst van Zeynep was. Zo
+toont de tegel dezelfde persoon als de clip en blijven beide portretten in
+gebruik. De namen en de talen zijn niet veranderd. Wil Maarten het andersom,
+dan is het twee regels in `src/data/avatars.ts`.
+
+### 51. Eén demovideo voor alle talen
+CHANGES-03 E20 ging uit van vier bestanden. Er is er één, en dat klopt met wat
+hij laat zien: de vier avatars komen er na elkaar in langs. De taalkeuze onder
+de speler wisselt dus niet van film. Alleen de demo krijgt een echt bestand
+mee; de video's bij een pagina blijven gemockt, anders zou overal dezelfde demo
+spelen.
+
+### 52. De kantoorshots staan in public/media
+Ze komen terug in de demovideo, dus preview en demo moeten hetzelfde beeld
+laten zien. Twee staande shots wisselen elkaar af over de zes scènes
+(1-2-1-2-1-2). Daarmee vervalt de glob op `src/assets/backgrounds`; die map is
+leeg.
+
+### 53. De widget is weer een kader met een balk
+De liggende, vrijstaande variant uit CHANGES-03 A2 is teruggedraaid naar de
+opzet van CHANGES-02 B8 en B9: één kader met een staand videoframe en daaronder
+een balk in de huisstijlkleur met "Videovertaling". Zolang de huisstijl niet is
+opgehaald is die balk gray-5; de tekst is dan donker in plaats van wit, want
+wit op #e0e0e0 is onleesbaar. In het 3x3-raster is de knop te klein voor tekst
+en blijft alleen de gekleurde balk over.
+
+### 54. De player mag over de pagina heen steken
+De buitenkant van de `SiteMock` knipt niets meer af; alleen de nagebootste
+pagina zelf heeft nog een eigen overflow. Het paneel is breder dan de video,
+zodat de taalrij op één regel onder de speler past.
+
+### 55. De sticky voettekst blijft staan als de sectie niet actief is
+Hij werd eerst weggehaald zodra een andere sectie actief werd. Dat verkortte de
+pagina met vijftig pixels midden in een scrollanimatie, waardoor je altijd te
+ver landde — precies de klacht uit C6. Hij blijft nu staan en is alleen
+onzichtbaar, en het scrollen wacht tot React de wissel heeft doorgevoerd.
+
+### 56. Niet uitgevoerd: de commits per sectie
+Git kon in deze ronde niets schrijven: de losse objecten in `.git/objects`
+staan op Dropbox als online-only en elke leespoging blijft hangen. De ronde is
+daarom in één commit gegaan, gemaakt vanuit een verse kloon buiten Dropbox.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een
@@ -375,6 +434,13 @@ weten-blok van sectie 4 naar het verdwenen id `personaliseren`.
    `kantoor-3`); CHANGES-03 A5 vraagt er zes, staand en leeg. De zes scènes
    wisselen die twee nu af. Zichtbaar in de preview en in sectie 4.
 
-6. De media uit `public/media/` ontbreken nog: acht avatarclips, vier
-   demovideo's en de echte widget-knop. Alles valt netjes terug op de mock, dus
-   de bestanden erin zetten is genoeg — zie `public/media/LEESMIJ.md`.
+6. Vier avatars hebben een clip; de andere veertien vallen terug op het
+   portret met de pulsanimatie. Dat is zichtbaar als een tester op Sanne klikt
+   en daarna op Daan.
+
+7. De clips zijn VP9 met een alfakanaal. Chrome en Firefox tonen ze vrijstaand,
+   Safari zet er een zwarte achtergrond achter. Voer de test in Chrome uit.
+
+8. De demovideo weegt 16 MB en staat in de repo, want Vercel serveert hem
+   vanaf `public/media/`. Dat is nu te doen; komen er meer video's bij, dan
+   hoort er een echte mediahost bij.
