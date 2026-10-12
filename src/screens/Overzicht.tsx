@@ -245,8 +245,6 @@ function EersteKeer() {
 }
 
 function Voettekst() {
-  const resetScenario = useStore((s) => s.resetScenario)
-
   return (
     <footer className="flex flex-wrap items-center gap-4 border-t border-gray-5 pt-5 text-body-sm">
       <Link to="/hulp" className="inline-flex items-center gap-1.5 text-gray-2 hover:text-blue-shade">
@@ -262,14 +260,6 @@ function Voettekst() {
         Feedback
       </Link>
 
-      {/* Alleen voor de test: dit scenario terugzetten naar zijn beginstand. */}
-      <button
-        type="button"
-        onClick={resetScenario}
-        className="ml-auto text-gray-4 hover:text-gray-2"
-      >
-        Zet dit scenario terug
-      </button>
     </footer>
   )
 }

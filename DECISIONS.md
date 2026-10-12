@@ -475,6 +475,21 @@ aan de gedeelde klok, dus alle widgets op het scherm lopen gelijk en er is geen
 eigen interval. De vertalingen staan in `src/data/widget.ts`; Arabisch krijgt
 `dir="rtl"`.
 
+### 59. De topbalk in de configurator stond er al
+C6 gaat uit van een ontbrekende header. In de browser staat hij er wel: hij is
+`sticky top-0` en blijft tijdens het scrollen staan, met de stappenbalk eronder
+op `top-[72px]`. Samen 135 px; een sectie landt op 159 px, dus de offset uit
+CHANGES-04 C6 klopt nog. Niets aan gedaan behalve nameten. Moet de balk in de
+configurator juist wég, dan is het één regel.
+
+### 60. De scenariokiezer is geen `select` meer
+Een scheidslijn en een icoon passen niet in een `select`, en "Alles wissen"
+hoort zichtbaar los te staan van de vier standen. Het is nu een eigen menu met
+een vinkje bij de actieve stand. Wissen haalt de sleutel uit `localStorage` en
+herlaadt naar `?scenario=eerste`; een herlaad is de enige manier om zeker te
+weten dat er niets blijft hangen. De verborgen resetknop in de voettekst van
+het overzicht is vervallen (PLAN §8).
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

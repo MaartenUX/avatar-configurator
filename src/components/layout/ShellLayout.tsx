@@ -1,5 +1,6 @@
+import { useEffect, useRef, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-import { SquarePlay } from 'lucide-react'
+import { Check, ChevronDown, RotateCcw, SquarePlay } from 'lucide-react'
 import { VideoMeter } from './VideoMeter'
 import { ToastHost } from '../feedback/Toast'
 import { useStore } from '../../state/store'
@@ -49,20 +50,12 @@ export function ShellLayout() {
           </span>
 
           {/* Zwart kader: dit is de testopstelling, geen onderdeel van het product. */}
-          <label className="flex items-center gap-2 rounded-sm border-2 border-gray-1 px-2.5 py-1.5">
+          <div className="flex items-center gap-2 rounded-sm border-2 border-gray-1 px-2.5 py-1.5">
             <span className="type-label rounded-pill bg-gray-1 px-2 py-0.5 text-white">
               Prototype
             </span>
-            <select
-              value={scenario}
-              onChange={(e) => setScenario(e.target.value as ScenarioId)}
-              className="rounded-sm border border-gray-5 bg-white px-2 py-1 text-body-sm text-gray-1"
-            >
-              {SCENARIOS.map((s) => (
-                <option key={s.id} value={s.id}>{s.label}</option>
-              ))}
-            </select>
-          </label>
+            <ScenarioKeuze scenario={scenario} setScenario={setScenario} label={actief.label} />
+          </div>
         </div>
       </header>
 
@@ -71,6 +64,103 @@ export function ShellLayout() {
       </main>
 
       <ToastHost />
+    </div>
+  )
+}
+
+/**
+ * De scenariokiezer. Geen `select`: daar past geen scheidslijn en geen icoon
+ * in, en "Alles wissen" hoort zichtbaar los te staan van de vier standen
+ * (CHANGES-05 C7).
+ */
+function ScenarioKeuze({
+  scenario,
+  setScenario,
+  label,
+}: {
+  scenario: ScenarioId
+  setScenario: (id: ScenarioId) => void
+  label: string
+}) {
+  const [open, setOpen] = useState(false)
+  const wrap = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const buiten = (e: MouseEvent) => {
+      if (!wrap.current?.contains(e.target as Node)) setOpen(false)
+    }
+    const esc = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+    document.addEventListener('mousedown', buiten)
+    document.addEventListener('keydown', esc)
+    return () => {
+      document.removeEventListener('mousedown', buiten)
+      document.removeEventListener('keydown', esc)
+    }
+  }, [open])
+
+  /** Alles weg en opnieuw beginnen. Een herlaad garandeert dat er niets
+   *  blijft hangen: de store bouwt zich vers op uit het lege scenario. */
+  const wisAlles = () => {
+    try {
+      localStorage.removeItem('avatar-proto-v1')
+    } catch {
+      // Een browser die localStorage blokkeert heeft ook niets te wissen.
+    }
+    window.location.assign(`${import.meta.env.BASE_URL}?scenario=eerste#/`)
+  }
+
+  return (
+    <div ref={wrap} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        aria-haspopup="menu"
+        className="flex items-center gap-1.5 rounded-sm border border-gray-5 bg-white px-2 py-1 text-body-sm text-gray-1 hover:border-gray-4"
+      >
+        {label}
+        <ChevronDown size={14} aria-hidden className={cn('transition-transform', open && 'rotate-180')} />
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          className="absolute right-0 top-[calc(100%+6px)] z-40 flex w-60 flex-col rounded-sm border border-gray-5 bg-white py-1 shadow-pop"
+        >
+          {SCENARIOS.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setScenario(s.id)
+                setOpen(false)
+              }}
+              className="flex items-center gap-2 px-3 py-2 text-left text-body-sm text-gray-1 hover:bg-gray-6"
+            >
+              <Check
+                size={14}
+                aria-hidden
+                className={cn('shrink-0', s.id === scenario ? 'text-blue-shade' : 'text-transparent')}
+              />
+              {s.label}
+            </button>
+          ))}
+
+          <span className="my-1 h-px bg-gray-5" aria-hidden />
+
+          <button
+            type="button"
+            role="menuitem"
+            onClick={wisAlles}
+            className="flex items-center gap-2 px-3 py-2 text-left text-body-sm text-gray-2 hover:bg-gray-6"
+          >
+            <RotateCcw size={14} aria-hidden className="shrink-0" />
+            Alles wissen
+          </button>
+        </div>
+      )}
     </div>
   )
 }
