@@ -496,6 +496,49 @@ padding meer, zodat de figuur op de rand staat in plaats van te zweven. De tint
 van de taal loopt daarmee tot de rand door. Links uitgelijnd: met de naam
 bovenaan leest dat rustiger dan gecentreerd.
 
+---
+
+# CHANGES-06 — 12 oktober
+
+Alle punten verwerkt en in de browser nagekeken op `localhost:5174`.
+
+| Punt | Stand |
+|---|---|
+| A1 play-icoon groen met gloed op live kaarten | gedaan |
+| A2 taaltegels compacter: oog, code, aantal | gedaan |
+| A3 avatarrij in de configuratiekaart | gedaan |
+| B4 terugknop "← Overzicht" op de beheerpagina | gedaan |
+| B5 LIVE-badge naast de titel | gedaan |
+| C6 zijpaneel bij de basissamenvatting gaat over B1 | gedaan |
+| C7 melden primair, opnieuw maken kost een beurt | gedaan |
+| D8 een eigen voorbeeldfoto per uploadtegel | gedaan |
+| D9 personaliseren links, aanbevolen bij standaard | gedaan |
+
+### 62. Ronde portretten tonen het hoofd
+De avatarrij in de configuratiekaart is 28 pixels; een hele staande figuur is
+daarin niet te herkennen. `round` snijdt nu op het hoofd en krijgt een lichte
+vulling, anders valt de cirkel weg op een wit vlak. Dat verbetert ook de
+taalrij onder de player.
+
+### 63. De B1-tips staan in learnmore.ts, niet bij de spraaktips
+CHANGES-06 C6 wijst dat bestand aan. De andere twee panelen lezen uit
+`spraaktips.ts`; daar staat nu een verwijzing, zodat je het paneel terugvindt.
+
+### 64. Opnieuw maken kostte het verkeerde tegoed
+`rerun` telde bij `videos.used` op in plaats van bij `reruns.used`: je raakte
+dus een uitlegvideo kwijt in plaats van een beurt opnieuw maken. C7 vraagt dat
+de teller rechtsboven meeloopt, en dat is nu de goede teller.
+
+### 65. De voorbeeldfoto's zijn illustraties
+Zes geblurde illustraties uit `scripts/maak-voorbeeldfotos.mjs` in plaats van
+beeld van derden: rechtenvrij en in één commando opnieuw te maken. Kiezen voor
+"Personaliseer met eigen foto's" vult de zes scènes er meteen mee, zodat je
+ziet waar het om gaat zonder eerst zes keer te klikken.
+
+Twijfelpunt bij D9: het label "Aanbevolen" staat nu bij *Standaard
+kantoorshots*, zoals CHANGES-06 vraagt. Tot nu toe stond het bij
+personaliseren. De aanbevolen tegel staat daardoor rechts.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

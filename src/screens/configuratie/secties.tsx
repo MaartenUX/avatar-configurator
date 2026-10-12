@@ -6,7 +6,7 @@ import { sceneLabel } from '../../data/copy'
 import { useStore } from '../../state/store'
 import { ADVICE, advisedFor, avatarsFor } from '../../data/avatars'
 import { MAX_EXTRA_LANGS, OPTIONAL_LANGS, langLabel } from '../../data/langs'
-import { backgroundImage, kantoorshot } from '../../lib/assets'
+import { VOORBEELD_FOTOS, backgroundImage, kantoorshot } from '../../lib/assets'
 import type { Lang, WidgetCorner } from '../../state/types'
 import { cn } from '../../lib/cn'
 
@@ -164,9 +164,9 @@ function Overgang() {
   )
 }
 
-/** Gemockte "eigen foto's": we tonen de kantoorshots omgekeerd afgewisseld,
- *  zodat je ziet dat er iets anders staat dan de standaard. */
-const EIGEN_FOTOS = [1, 0, 1, 0, 1, 0].map(kantoorshot)
+/** Elke scène krijgt een ander voorbeeld, zodat je ziet dat je per scène een
+ *  eigen beeld kiest en niet één foto voor alles (CHANGES-06 D8). */
+const EIGEN_FOTOS = VOORBEELD_FOTOS
 
 function Scèneachtergronden() {
   const config = useStore((s) => s.config)
@@ -188,21 +188,18 @@ function Scèneachtergronden() {
       {/* Eerst de keuze, dan pas de tegels. */}
       <div className="grid gap-3 sm:grid-cols-2">
         <ChoiceTile
-          title="Standaard kantoorshots" icon={Building2}
+          title="Personaliseer met eigen foto’s" icon={Images}
+          selected={eigen}
+          description="Bijvoorbeeld het gemeentehuis of een plek buiten in de gemeente."
+          /* Meteen gevuld met een voorbeeld per scène: zo zie je waar het om
+             gaat zonder eerst zes keer te klikken. */
+          onSelect={() => patch({ achtergrondModus: 'eigen', backgrounds: [...EIGEN_FOTOS] })}
+        />
+        <ChoiceTile
+          title="Standaard kantoorshots" icon={Building2} tag="Aanbevolen"
           selected={config.achtergrondModus === 'standaard'}
           description="Rustige kantoorinterieurs, per scène een ander. Je hoeft niets aan te leveren."
           onSelect={() => patch({ achtergrondModus: 'standaard', backgrounds: [] })}
-        />
-        <ChoiceTile
-          title="Personaliseer met eigen foto’s" icon={Images} tag="Aanbevolen"
-          selected={eigen}
-          description="Bijvoorbeeld het gemeentehuis of een plek buiten in de gemeente."
-          onSelect={() =>
-            patch({
-              achtergrondModus: 'eigen',
-              backgrounds: Array.from({ length: aantal }, () => null),
-            })
-          }
         />
       </div>
 

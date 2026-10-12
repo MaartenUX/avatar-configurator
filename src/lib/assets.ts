@@ -65,7 +65,23 @@ export const demoVideo = () => media('demo/demo.mp4')
 /** De twee standaard kantoorshots wisselen elkaar af over de zes scènes. */
 export const KANTOORSHOTS = ['kantoor-1', 'kantoor-2']
 export const kantoorshot = (scene: number) => KANTOORSHOTS[scene % KANTOORSHOTS.length]
-export const backgroundImage = (slug: string) => media(`backgrounds/${slug}.jpg`)
+
+/**
+ * Voorbeelden van eigen foto's, één per scène. Illustraties, geen foto's; zie
+ * scripts/maak-voorbeeldfotos.mjs.
+ */
+export const VOORBEELD_FOTOS = [
+  'gemeentehuis',
+  'park',
+  'winkelstraat',
+  'bibliotheek',
+  'sporthal',
+  'plein',
+]
+
+/** Een achtergrond is een standaard kantoorshot of een eigen beeld. */
+export const backgroundImage = (slug: string) =>
+  KANTOORSHOTS.includes(slug) ? media(`backgrounds/${slug}.jpg`) : media(`examples/${slug}.jpg`)
 
 export const assetCounts = () => ({
   // Het silhouet is een placeholder, geen portret: niet meetellen.
