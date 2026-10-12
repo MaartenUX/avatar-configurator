@@ -424,6 +424,31 @@ Git kon in deze ronde niets schrijven: de losse objecten in `.git/objects`
 staan op Dropbox als online-only en elke leespoging blijft hangen. De ronde is
 daarom in één commit gegaan, gemaakt vanuit een verse kloon buiten Dropbox.
 
+---
+
+# Check van CHANGES-04 tegen de code — 12 oktober
+
+Punt voor punt nagelopen in de code en in de browser op
+`http://localhost:5174/#/configuratie`, niet tegen dit bestand.
+
+| Punt | Stand | Waar |
+|---|---|---|
+| A1 clips en demovideo gekoppeld, geen terugval waar een bestand is | gedaan | `src/lib/assets.ts`, `AvatarTile`, `WidgetVenster`; `scripts/media-check.mjs` bewaakt het |
+| A2 twee nieuwe kantoorshots, afgewisseld over zes scènes | gedaan | `public/media/backgrounds/`, `kantoorshot()` |
+| B3 widget als kader met videoframe en balk | gedaan, maar vervangen | `WidgetKnop`; CHANGES-05 B3 maakt hem weer liggend |
+| B4 player staand met de avatarrij er direct onder | gedaan | `WidgetVenster`; `config-flow.mjs` meet de afstand |
+| B5 paneel over de pagina, niet afgesneden | gedaan | `SiteMock`, buitenkant zonder overflow-hidden |
+| C6 scroll-margin = sticky balken + 24 px | gedaan | `SectionShell`, gemeten op 159 px |
+| C7 tijdsindicatie weg uit de ProgressBar | gedaan | `Configuratie.tsx` |
+| C7 "Stap x van 5" | **niet gedaan** | hing aan D |
+| C8 ophaalknop op de lijn van het invoerveld | gedaan | `secties.tsx`, sectie widget |
+| C9 label "Testscenario" weg, pill blijft | gedaan | `ShellLayout` |
+| D10–D13 vijf secties in de nieuwe volgorde | **niet gedaan** | §D stond niet in de opdracht die ik kreeg |
+
+De §D-punten zijn in de vorige ronde nooit aangekomen: CHANGES-04 werd als
+prompt doorgegeven en die prompt eindigde bij C9. Vandaar dat alles t/m C9 wel
+in de code zit en §D niet.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

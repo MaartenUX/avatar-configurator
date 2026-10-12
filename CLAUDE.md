@@ -4,7 +4,17 @@ Klikbaar prototype voor XS2Content × ReadSpeaker: AI-uitlegvideo's met avatar
 bij gemeentepagina's. Voor een gebruikerstest met 5 webredacteuren.
 Persona: Esmee, webredacteur bij Gemeente Bergrode.
 
-Lees `PLAN.md` voor het uitvoeringsplan en `DECISIONS.md` voor gemaakte keuzes.
+## Bron van waarheid
+
+`PLAN.md` en de `changes-*.md`-bestanden zijn samen het ontwerp. Ze stapelen:
+een later bestand wint van een eerder bestand waar ze elkaar tegenspreken, dus
+**het hoogste nummer wint**. Lees ze op volgorde en begin bij het laatste.
+
+`DECISIONS.md` legt vast wat er gebouwd is en waarom; het is een logboek, geen
+opdracht. Controleer een punt dus altijd tegen de code, niet tegen DECISIONS.
+
+CHANGES-01 en CHANGES-02 staan niet in de repo — die kwamen als losse prompts
+binnen. Wat eruit gebouwd is, staat in DECISIONS.md.
 
 ## Taal
 
@@ -18,8 +28,9 @@ Nooit *summary*, *translate*, *run*, *pipeline*. Nergens lorem ipsum.
 - Push naar `origin` na elke commit: Vercel deployt vanaf `main`.
 - Maak nooit zelf een branch aan zonder dat erom gevraagd is.
 - Na elke wijziging: `npm run typecheck && npm test`.
-- Visuele controle: `node scripts/verify.mjs <url> --shots`. Werkt zowel tegen
-  de dev-server als tegen de single-file build vanaf `file://`.
+- Visuele controle: de dev-server op `http://localhost:5174`, en
+  `node scripts/verify.mjs dist` tegen de gebouwde map. Vink een punt pas af
+  als het in de browser klopt.
 
 ## Regels die uit het bouwplan komen
 
