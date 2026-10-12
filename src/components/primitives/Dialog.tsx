@@ -22,6 +22,8 @@ export interface DialogProps {
   onConfirm?: () => void
   cancelLabel?: string
   danger?: boolean
+  /** Eigen knoppenrij; vervangt de standaard annuleren/bevestigen. */
+  footer?: ReactNode
   children?: ReactNode
 }
 
@@ -37,6 +39,7 @@ export function Dialog({
   onConfirm,
   cancelLabel = 'Annuleer',
   danger,
+  footer,
   children,
 }: DialogProps) {
   const panelRef = useRef<HTMLDivElement>(null)
@@ -104,16 +107,18 @@ export function Dialog({
 
         {children && <div className="mt-4">{children}</div>}
 
-        <div className="mt-6 flex justify-end gap-2">
-          <Button variant="secondary" onClick={onClose}>
-            {cancelLabel}
-          </Button>
-          {onConfirm && (
-            <Button variant={danger ? 'danger' : 'primary'} onClick={onConfirm}>
-              {confirmLabel}
+        {footer ?? (
+          <div className="mt-6 flex justify-end gap-2">
+            <Button variant="secondary" onClick={onClose}>
+              {cancelLabel}
             </Button>
-          )}
-        </div>
+            {onConfirm && (
+              <Button variant={danger ? 'danger' : 'primary'} onClick={onConfirm}>
+                {confirmLabel}
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

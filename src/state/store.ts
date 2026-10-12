@@ -226,9 +226,11 @@ export const useStore = create<Store>()(
           }),
         })),
 
+      // Opnieuw maken komt uit de eigen pot, niet uit het aantal uitlegvideo's:
+      // je maakt geen nieuwe video, je maakt dezelfde opnieuw.
       rerun: (id, lang) =>
         set((s) => ({
-          videos: { ...s.videos, used: Math.min(s.videos.total, s.videos.used + 1) },
+          reruns: { ...s.reruns, used: Math.min(s.reruns.total, s.reruns.used + 1) },
           pages: s.pages.map((p) => {
             if (p.id !== id) return p
             if (!lang) {

@@ -3,6 +3,9 @@
  * elke controlestap. Vervangt de HelpTray, die zijn uitleg leende uit het
  * configurator-vocabulaire en daardoor bij een scherm over ondertitels de
  * uitleg over de widget toonde.
+ *
+ * Het paneel bij de basissamenvatting gaat niet over spraak maar over B1; die
+ * tekst staat in learnmore.ts (B1_TIPS en B1_FAQ).
  */
 export const SPRAAKTIPS = [
   'Houd zinnen kort en zeg één ding per zin. Een stem kan geen komma’s laten horen.',

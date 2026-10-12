@@ -55,7 +55,7 @@ export default function Samenvatting() {
             </p>
           </div>
 
-          <HowBox points={HOE.samenvatting} actie={<SpraakTips compact />} />
+          <HowBox points={HOE.samenvatting} actie={<SpraakTips soort="b1" compact />} />
 
           <div className="flex flex-col gap-3">
             {page.scenes.map((scene, i) => (

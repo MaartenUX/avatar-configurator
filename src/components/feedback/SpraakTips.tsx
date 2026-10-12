@@ -2,16 +2,26 @@ import { useState } from 'react'
 import { Lightbulb } from 'lucide-react'
 import { Accordion, SidePanel } from './SidePanel'
 import { ONDERTITEL_FAQ, ONDERTITEL_TIPS, SPRAAKTIPS, SPRAAK_FAQ } from '../../data/spraaktips'
+import { B1_FAQ, B1_TIPS } from '../../data/learnmore'
 import { cn } from '../../lib/cn'
 
 export interface SpraakTipsProps {
-  /** 'spraak' bij de tekststappen, 'ondertitel' bij de videostap. */
-  soort?: 'spraak' | 'ondertitel'
+  /** 'b1' bij de basissamenvatting, 'spraak' bij de tekststappen,
+   *  'ondertitel' bij de videostap. */
+  soort?: 'b1' | 'spraak' | 'ondertitel'
   /** Korte variant voor binnen het "Waar let je op"-kader. */
   compact?: boolean
 }
 
 const INHOUD = {
+  b1: {
+    knop: 'Zo maak je een goede B1-samenvatting',
+    titel: 'Goed op B1-niveau',
+    intro:
+      'Deze tekst wordt de basis voor alle talen. Hoe eenvoudiger hij is, hoe beter elke vertaling eruit komt — en hoe meer inwoners hem begrijpen.',
+    tips: B1_TIPS,
+    faq: B1_FAQ,
+  },
   spraak: {
     knop: 'Zo maak je de tekst beter voor spraak',
     titel: 'Beter voor spraak',

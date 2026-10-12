@@ -148,3 +148,28 @@ export const LEARN_MORE: LearnMoreDef[] = [
 
 const BY_ID = Object.fromEntries(LEARN_MORE.map((l) => [l.id, l]))
 export const learnMore = (id: string): LearnMoreDef | undefined => BY_ID[id]
+
+/**
+ * Het zijpaneel bij de basissamenvatting gaat over B1, niet over spraak: daar
+ * schrijf je de tekst die de basis wordt voor alle talen (CHANGES-06 C6). De
+ * spraaktips blijven bij het script en de vertalingen staan.
+ */
+export const B1_TIPS = [
+  'Houd zinnen kort: maximaal vijftien woorden.',
+  'Eén boodschap per zin. Twee dingen in één zin leest niemand goed.',
+  'Gebruik woorden die mensen kennen. Geen vaktermen, geen afkortingen.',
+  'Schrijf actief: “u vraagt de vergunning aan”, niet “de vergunning wordt aangevraagd”.',
+  'Wees concreet: “binnen 2 weken” zegt meer dan “op korte termijn”.',
+  'Zet er alleen in wat een inwoner echt moet weten. De rest staat op de pagina.',
+]
+
+export const B1_FAQ = [
+  {
+    q: 'Mag ik informatie toevoegen?',
+    a: 'Ja, maar houd het bij de essentie. Details horen op de pagina zelf, niet in de video.',
+  },
+  {
+    q: 'De inhoud klopt niet.',
+    a: 'De samenvatting volgt de pagina. Klopt er iets niet, overleg dan met de webredactie van die pagina en pas eerst de pagina aan.',
+  },
+]

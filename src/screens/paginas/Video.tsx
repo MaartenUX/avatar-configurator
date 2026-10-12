@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { TriangleAlert } from 'lucide-react'
 import {
-  ApproveBox, Dialog, HowBox, SubtitleEditor, VideoPreview, WaitScreen,
+  ApproveBox, Button, Dialog, HowBox, SubtitleEditor, VideoPreview, WaitScreen,
 } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
 import { Bekijkbalk } from '../../components/feedback/Bekijkbalk'
@@ -13,6 +13,7 @@ import { useFinishSpoke } from '../../state/flow'
 import { findPage } from '../../state/selectors'
 import { langDir, langLabel, isLang } from '../../data/langs'
 import { HOE, WACHT_TIPS } from '../../data/copy'
+import { cn } from '../../lib/cn'
 
 const REDENEN = [
   { id: 'avatar', label: 'De avatar ziet er vreemd uit' },
@@ -29,7 +30,10 @@ export default function Video() {
   const editSubtitles = useStore((s) => s.editSubtitles)
   const approveVideo = useStore((s) => s.approveVideo)
   const rerun = useStore((s) => s.rerun)
+  const reruns = useStore((s) => s.reruns)
+  const flash = useStore((s) => s.flash)
   const finish = useFinishSpoke()
+  const geenReruns = reruns.used >= reruns.total
 
   const [tijd, setTijd] = useState(0)
   const [spring, setSpring] = useState<number | null>(null)
@@ -118,13 +122,50 @@ export default function Video() {
         options={REDENEN}
         value={reden}
         onValueChange={setReden}
-        confirmLabel="Opnieuw maken"
-        onConfirm={() => {
-          rerun(page.id, lang)
-          setDialoog(false)
-          finish('video', { pageId: page.id, lang })
-        }}
-        cancelLabel="Melden bij XS2Content"
+        footer={
+          /* Melden staat voorop: dat kost niets en wij kunnen er iets mee.
+             Zelf opnieuw maken gaat van je eigen pot af (CHANGES-06 C7). */
+          <div className="mt-6 flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <Button
+                className="w-fit"
+                disabled={!reden}
+                onClick={() => {
+                  setDialoog(false)
+                  flash({
+                    text: 'Je melding staat bij XS2Content. Je hoort ervan.',
+                    tone: 'success',
+                  })
+                }}
+              >
+                Melden bij XS2Content
+              </Button>
+              <p className="text-body-sm text-gray-3">
+                Beschrijf wat er niet klopt, dan kijken wij ernaar. Dit kost je niets.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Button
+                variant="secondary"
+                className="w-fit"
+                disabled={!reden || geenReruns}
+                onClick={() => {
+                  rerun(page.id, lang)
+                  setDialoog(false)
+                  finish('video', { pageId: page.id, lang })
+                }}
+              >
+                Zelf opnieuw maken
+              </Button>
+              <p className={cn('text-body-sm', geenReruns ? 'text-orange-shade' : 'text-gray-3')}>
+                {geenReruns
+                  ? 'Je kunt niet meer zelf opnieuw maken. Meld het bij XS2Content.'
+                  : `Dit gebruikt 1 van je ${reruns.total} keer opnieuw maken (nog ${reruns.total - reruns.used} over).`}
+              </p>
+            </div>
+          </div>
+        }
       />
     </SpokeFrame>
   )
