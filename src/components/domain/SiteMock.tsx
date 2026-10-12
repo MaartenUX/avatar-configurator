@@ -30,7 +30,7 @@ const CORNER: Record<Config['widgetCorner'], string> = {
 /**
  * Wireframe van een gemeentesite met de widget erin. Elke laag bewaakt zijn
  * eigen configwaarde, zodat de preview ook klopt voor iemand die terugkomt en
- * meteen in sectie 5 landt.
+ * meteen in de widget-sectie landt.
  */
 export function SiteMock({
   config,
@@ -52,7 +52,9 @@ export function SiteMock({
     <div className={cn('relative w-full', expanded && 'mx-auto w-[86%]', className)}>
       <div
         className={cn(
-          'flex w-full flex-col overflow-hidden rounded-md bg-white shadow-card',
+          // relative: de widget hoort binnen de nagebootste pagina te staan,
+          // niet binnen de buitenste laag waar de speler overheen komt.
+          'relative flex w-full flex-col overflow-hidden rounded-md bg-white shadow-card',
           mini ? 'aspect-[4/3]' : 'aspect-[16/10]',
         )}
       >

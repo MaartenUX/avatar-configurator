@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { ArrowDown } from 'lucide-react'
 import { HowBox, LearnMore } from '../../components'
-import type { SectionDef } from './sections'
+import { SECTIONS, type SectionDef } from './sections'
 import { cn } from '../../lib/cn'
 
 export interface SectionShellProps {
@@ -37,7 +37,9 @@ export function SectionShell({ def, state, register, onNext, weten, children }: 
       )}
     >
       <header className="flex flex-col gap-1.5">
-        <span className="type-label text-gray-3">Stap {def.index} van 6</span>
+        <span className="type-label text-gray-3">
+          Stap {def.index} van {SECTIONS.length}
+        </span>
         <h2 className="text-h1 text-gray-1">{def.title}</h2>
         <p className="text-body text-gray-2">{def.subtitle}</p>
         <span className="mt-1">

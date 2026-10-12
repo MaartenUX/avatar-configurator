@@ -43,24 +43,24 @@ for (const naam of ['Sanne', 'Emma', 'Mehmet', 'Nour']) {
 await page.waitForTimeout(400)
 await stap('2-avatars-gekozen')
 
+await page.locator('#sectie-widget').scrollIntoViewIfNeeded()
+await page.waitForTimeout(900)
+await page.getByRole('button', { name: 'Ophalen' }).click()
+await page.waitForTimeout(2200)
+await stap('3-widget')
+
 await page.locator('#sectie-scenes').scrollIntoViewIfNeeded()
 await page.waitForTimeout(900)
 await page.getByRole('button', { name: /Camerawissel/ }).click()
 await page.waitForTimeout(400)
-await stap('3-overgang')
-const overgang = await page.textContent('body')
-eis(overgang.includes('max 2:00'), 'tijdlijn met max 2:00 bij de overgang')
-
-await page.locator('#sectie-achtergronden').scrollIntoViewIfNeeded()
-await page.waitForTimeout(700)
 await page.getByRole('button', { name: /Standaard kantoorshots/ }).click()
-await stap('4-achtergronden')
-
-await page.locator('#sectie-widget').scrollIntoViewIfNeeded()
-await page.waitForTimeout(700)
-await page.getByRole('button', { name: 'Ophalen' }).click()
-await page.waitForTimeout(2200)
-await stap('5-widget')
+await page.waitForTimeout(400)
+await stap('4-scenes')
+const scenes = await page.textContent('body')
+eis(scenes.includes('max 2:00'), 'tijdlijn met max 2:00 bij de overgang')
+eis(scenes.includes('Overgang') && scenes.includes('Scèneachtergronden'),
+  'sectie 4 heeft beide subkoppen')
+eis(scenes.includes('Stap 4 van 5'), 'de stappenbalk telt tot vijf')
 
 await page.locator('#sectie-vastleggen').scrollIntoViewIfNeeded()
 await page.waitForTimeout(900)
@@ -97,6 +97,10 @@ eis(klaar.includes('Je keuzes'), 'de demo is klaar en de keuzes staan er')
 eis(klaar.includes('Overgang'), 'de samenvatting noemt de overgang')
 
 // De demo bekijk je via de knop op de nagebootste pagina (CHANGES-04 B4).
+// Even terugscrollen: komt de samenvattingskaart in beeld, dan wisselt de
+// preview naar het 3x3-raster en is de widget niet meer aan te klikken.
+await page.evaluate(() => window.scrollBy(0, -220))
+await page.waitForTimeout(700)
 await page.getByRole('button', { name: 'Bekijk uitleg' }).first().click()
 await page.waitForTimeout(1200)
 await stap('6-speler')

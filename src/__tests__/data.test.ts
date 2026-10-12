@@ -3,6 +3,7 @@ import { PAGE_CONTENT, RESERVED_IDS } from '../data'
 import { AVATARS, advisedFor, avatarsFor } from '../data/avatars'
 import { LANGS } from '../data/langs'
 import { LEARN_MORE } from '../data/learnmore'
+import { SECTIONS } from '../screens/configuratie/sections'
 import { parseTimecode } from '../lib/format'
 import { nextAction } from '../state/selectors'
 import type { Page } from '../state/types'
@@ -92,11 +93,13 @@ describe('avatars', () => {
 })
 
 describe('learnmore', () => {
-  it('geeft elke sectie vier features en drie vragen', () => {
-    expect(LEARN_MORE).toHaveLength(6)
+  it('heeft voor elke configuratiesectie een set met vier features en vragen', () => {
+    // Aan de secties gekoppeld, niet aan een vast aantal: de volgorde en het
+    // aantal secties veranderen mee met het ontwerp.
+    expect(LEARN_MORE.map((l) => l.id).sort()).toEqual(SECTIONS.map((s) => s.id).sort())
     for (const l of LEARN_MORE) {
       expect(l.features, l.id).toHaveLength(4)
-      expect(l.faq, l.id).toHaveLength(3)
+      expect(l.faq.length, l.id).toBeGreaterThanOrEqual(3)
     }
   })
 })

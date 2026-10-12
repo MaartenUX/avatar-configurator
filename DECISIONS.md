@@ -440,14 +440,28 @@ Punt voor punt nagelopen in de code en in de browser op
 | B5 paneel over de pagina, niet afgesneden | gedaan | `SiteMock`, buitenkant zonder overflow-hidden |
 | C6 scroll-margin = sticky balken + 24 px | gedaan | `SectionShell`, gemeten op 159 px |
 | C7 tijdsindicatie weg uit de ProgressBar | gedaan | `Configuratie.tsx` |
-| C7 "Stap x van 5" | **niet gedaan** | hing aan D |
+| C7 "Stap x van 5" | nu gedaan | `SectionShell` telt `SECTIONS.length` |
 | C8 ophaalknop op de lijn van het invoerveld | gedaan | `secties.tsx`, sectie widget |
 | C9 label "Testscenario" weg, pill blijft | gedaan | `ShellLayout` |
-| D10–D13 vijf secties in de nieuwe volgorde | **niet gedaan** | §D stond niet in de opdracht die ik kreeg |
+| D10–D13 vijf secties in de nieuwe volgorde | nu gedaan | zie 57 |
 
 De §D-punten zijn in de vorige ronde nooit aangekomen: CHANGES-04 werd als
 prompt doorgegeven en die prompt eindigde bij C9. Vandaar dat alles t/m C9 wel
 in de code zit en §D niet.
+
+### 57. Vijf secties, widget vóór de scènes
+De overgang *Logo tussen de scènes* heeft het logo en de huisstijlkleur nodig,
+en die worden in de widget-sectie opgehaald. Die sectie staat nu op 3. Overgang
+en scèneachtergronden zijn één sectie geworden met twee subkoppen; de sectie is
+af als beide keuzes staan.
+
+De stapteller leest `SECTIONS.length` in plaats van een vast getal, en de test
+op `learnmore.ts` controleert nu dat er voor elke sectie een set is in plaats
+van dat het er zes zijn. De sets van de oude secties 3 en 4 zijn samengevoegd.
+
+Eén ding kwam daarbij boven: de widget in de `SiteMock` hing sinds CHANGES-04
+aan de buitenste laag in plaats van aan de nagebootste pagina, waardoor hij
+niet meer aan te klikken was zodra de pagina-inhoud eroverheen lag.
 
 ## Open punten
 

@@ -54,25 +54,25 @@ export function S6Demo({ gridSentinel, onWijzig, onVastgelegd }: S6Props) {
     {
       label: 'Overgang',
       waarde: config.transition === 'logo' ? 'Logo tussen de scènes' : 'Camerawissel',
-      sectie: 3,
+      sectie: 4,
     },
     {
-      label: 'Achtergronden',
+      label: 'Scèneachtergronden',
       waarde:
         config.achtergrondModus === 'eigen'
           ? `${config.backgrounds.filter(Boolean).length} eigen beelden`
           : 'Standaard kantoorshots',
       sectie: 4,
     },
-    { label: 'Website', waarde: config.siteUrl || '—', sectie: 5 },
+    { label: 'Website', waarde: config.siteUrl || '—', sectie: 3 },
     {
       label: 'Plek van de widget',
       waarde: `${HOEK_LABEL[config.widgetCorner]}, ${config.widgetMargin?.x ?? 24} bij ${config.widgetMargin?.y ?? 24} px van de rand`,
-      sectie: 5,
+      sectie: 3,
     },
   ]
 
-  const alleStappenAf = SECTIONS.slice(0, 5).every((s) => s.isDone(config))
+  const alleStappenAf = SECTIONS.slice(0, -1).every((s) => s.isDone(config))
 
   if (bezig) {
     return (

@@ -118,14 +118,29 @@ export function S2Avatars() {
   )
 }
 
-/* ------------------------------------------------------- 3. overgangen */
+/* ------------------- 4. scènes: overgangen en scèneachtergronden */
 
-export function S3Scenes() {
+/**
+ * Twee keuzes onder elkaar in één sectie (CHANGES-04 D12). Ze horen bij
+ * elkaar: allebei bepalen ze hoe de video eruitziet, en allebei liggen ze na
+ * het vastleggen vast.
+ */
+export function S4Scenes() {
+  return (
+    <>
+      <Overgang />
+      <Scèneachtergronden />
+    </>
+  )
+}
+
+function Overgang() {
   const config = useStore((s) => s.config)
   const patch = useStore((s) => s.patchConfig)
 
   return (
-    <>
+    <div className="flex flex-col gap-3">
+      <h3 className="text-h3 text-gray-1">Overgang</h3>
       <div className="grid gap-3 sm:grid-cols-2">
         <ChoiceTile
           title="Camerawissel" icon={Camera} tag="Aanbevolen"
@@ -145,17 +160,15 @@ export function S3Scenes() {
           Camerawissel. De video loopt door zonder onderbreking; kijkers haken minder snel af.
         </AdviceBox>
       )}
-    </>
+    </div>
   )
 }
-
-/* ------------------------------------------- 4. scènes en achtergronden */
 
 /** Gemockte "eigen foto's": we tonen de kantoorshots omgekeerd afgewisseld,
  *  zodat je ziet dat er iets anders staat dan de standaard. */
 const EIGEN_FOTOS = [1, 0, 1, 0, 1, 0].map(kantoorshot)
 
-export function S4Achtergronden() {
+function Scèneachtergronden() {
   const config = useStore((s) => s.config)
   const patch = useStore((s) => s.patchConfig)
   // Elke video heeft zes scènes: intro, vier inhoud, outro (CHANGES-03 A4).
@@ -170,7 +183,8 @@ export function S4Achtergronden() {
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-3">
+      <h3 className="text-h3 text-gray-1">Scèneachtergronden</h3>
       {/* Eerst de keuze, dan pas de tegels. */}
       <div className="grid gap-3 sm:grid-cols-2">
         <ChoiceTile
@@ -249,11 +263,11 @@ export function S4Achtergronden() {
           </div>
         </>
       )}
-    </>
+    </div>
   )
 }
 
-/* ---------------------------------------------------------------- 5. widget */
+/* ---------------------------------------------------------------- 3. widget */
 
 const HOEKEN: { id: WidgetCorner; label: string }[] = [
   { id: 'lt', label: 'Linksboven' },
@@ -265,7 +279,7 @@ const HOEKEN: { id: WidgetCorner; label: string }[] = [
 /** Gemockte huisstijl van Bergrode; in het echt komt dit uit de site. */
 const HUISSTIJL = { logo: 'bergrode', primary: '#1F5E58', secondary: '#FF996D' }
 
-export function S5Widget() {
+export function S3Widget() {
   const config = useStore((s) => s.config)
   const patch = useStore((s) => s.patchConfig)
   const fast = useStore((s) => s.fast)

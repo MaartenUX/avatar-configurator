@@ -60,14 +60,14 @@ export const LEARN_MORE: LearnMoreDef[] = [
   },
   {
     id: 'scenes',
-    title: 'Scènes en overgangen',
+    title: 'Scènes, overgangen en achtergronden',
     body:
-      'Een uitlegvideo duurt maximaal twee minuten en bestaat uit vier tot zes korte scènes. Elke video begint met een korte intro en eindigt met een outro; daartussen zit de inhoud. Tussen twee scènes zit een overgang, en die kiest u hier. De lengte en het aantal scènes liggen vast; dat houdt uw video’s onderling herkenbaar.',
+      'Een uitlegvideo duurt maximaal twee minuten en bestaat uit vier tot zes korte scènes. Elke video begint met een korte intro en eindigt met een outro; daartussen zit de inhoud. Tussen twee scènes zit een overgang, en die kiest u hier. Achter de avatar staat per scène een achtergrond: standaard een rustig kantoorinterieur, per scène een ander, zodat de video visueel afwisselt zonder af te leiden. U kunt er ook eigen foto’s voor gebruiken, bijvoorbeeld van uw gemeentehuis of van de wijk waar de pagina over gaat.',
     features: [
       { icon: 'Timer', label: 'Maximaal 2 minuten' },
       { icon: 'Layers', label: 'Vier tot zes scènes' },
-      { icon: 'Eye', label: 'Vaste intro en outro' },
       { icon: 'Sparkles', label: 'Eén overgang' },
+      { icon: 'Image', label: 'Eigen foto per scène' },
     ],
     faq: [
       {
@@ -82,31 +82,13 @@ export const LEARN_MORE: LearnMoreDef[] = [
         q: 'Kan ik de lengte per pagina instellen?',
         a: 'Nee. Elke video is maximaal twee minuten, zodat ze op elkaar lijken.',
       },
-    ],
-  },
-  {
-    id: 'achtergronden',
-    title: 'Achtergronden',
-    body:
-      'Achter de avatar staat per scène een achtergrond. Standaard is dat een rustig kantoorinterieur, per scène een ander, zodat de video visueel afwisselt zonder af te leiden. U kunt per scène een eigen foto gebruiken, bijvoorbeeld van uw gemeentehuis of van de wijk waar de pagina over gaat.',
-    features: [
-      { icon: 'Image', label: 'Zes scènes' },
-      { icon: 'Upload', label: 'Eigen foto per scène' },
-      { icon: 'Building2', label: 'Neutrale kantoorshots' },
-      { icon: 'Copy', label: 'Eén foto voor alles' },
-    ],
-    faq: [
       {
-        q: 'Welke foto’s werken goed?',
+        q: 'Welke foto’s werken goed als achtergrond?',
         a: 'Rustige beelden zonder mensen, staand en minstens 1080 pixels breed. Liggend mag ook: we snijden er een staand stuk uit. De avatar staat er half voor, dus houd het midden vrij.',
       },
       {
         q: 'Mag ik foto’s van inwoners gebruiken?',
         a: 'Alleen met hun toestemming. Kies bij twijfel een kantoorshot of een beeld zonder herkenbare personen.',
-      },
-      {
-        q: 'Kan ik dit later wijzigen?',
-        a: 'Nee, ook dit ligt na het vastleggen vast. De achtergrond zit in elk gerenderd beeld.',
       },
     ],
   },

@@ -102,7 +102,7 @@ eis('rijacties staan er wel', kaarten.includes('Controleer video'))
 await page.goto(`${base}?fast=1&scenario=eerste#/configuratie`, { waitUntil: 'load' })
 await page.waitForTimeout(600)
 const cfg = await page.textContent('body')
-eis('stappenbalk noemt de sectietitel', cfg.includes('Stap 1 van 6') && cfg.includes('Taalniveau en talen'))
+eis('stappenbalk noemt de sectietitel', cfg.includes('Stap 1 van 5') && cfg.includes('Taalniveau en talen'))
 
 // 9. Elk shell-scherm is bereikbaar zonder zijbalk.
 await page.goto(`${base}#/`, { waitUntil: 'load' })

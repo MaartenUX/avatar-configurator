@@ -6,7 +6,7 @@ import { ProgressBar } from '../../components/layout/ProgressBar'
 import { useStore } from '../../state/store'
 import { SECTIONS, firstOpenSection } from './sections'
 import { SectionShell } from './SectionShell'
-import { S1Talen, S2Avatars, S3Scenes, S4Achtergronden, S5Widget } from './secties'
+import { S1Talen, S2Avatars, S3Widget, S4Scenes } from './secties'
 import { S6Demo } from './S6Demo'
 import { OvergangPreview } from './OvergangPreview'
 import { cn } from '../../lib/cn'
@@ -131,9 +131,8 @@ export default function Configuratie() {
   const inhoud = {
     talen: <S1Talen />,
     avatars: <S2Avatars />,
-    scenes: <S3Scenes />,
-    achtergronden: <S4Achtergronden />,
-    widget: <S5Widget />,
+    widget: <S3Widget />,
+    scenes: <S4Scenes />,
     vastleggen: (
       <S6Demo
         gridSentinel={gridSentinel}
@@ -178,14 +177,14 @@ export default function Configuratie() {
                   previewMode === 'grid' ? 'pointer-events-none absolute inset-0 scale-95 opacity-0' : 'opacity-100',
                 )}
               >
-                {active === 3 ? (
-                  /* Sectie 3 kijkt naar de overgang, niet naar de website. */
+                {active === 4 ? (
+                  /* De scènesectie kijkt naar de video zelf, niet naar de website. */
                   <OvergangPreview config={config} />
                 ) : (
                   <SiteMock
                     config={config}
                     soort={config.contentUrl ? 'content' : 'home'}
-                    expanded={active === 4 || demoOpen}
+                    expanded={demoOpen}
                     onOpen={config.demoKlaar ? () => setDemoOpen(true) : undefined}
                     onClose={demoOpen ? () => setDemoOpen(false) : undefined}
                   />

@@ -3,9 +3,8 @@ import type { Config } from '../../state/types'
 export type SectionId =
   | 'talen'
   | 'avatars'
-  | 'scenes'
-  | 'achtergronden'
   | 'widget'
+  | 'scenes'
   | 'vastleggen'
 
 export interface SectionDef {
@@ -45,31 +44,8 @@ export const SECTIONS: SectionDef[] = [
     isDone: (c) => c.languages.every((l) => Boolean(c.avatars[l])),
   },
   {
-    id: 'scenes',
-    index: 3,
-    title: 'Scènes en overgangen',
-    subtitle: 'Een uitlegvideo duurt maximaal 2 minuten en bestaat uit 4 tot 6 korte scènes.',
-    weten: [
-      'We knippen de informatie in korte blokken. Dat houdt de aandacht vast.',
-      'Elke video begint met een korte intro en eindigt met een outro.',
-      'Tussen de scènes zit een overgang — die kies je hier.',
-    ],
-    isDone: (c) => Boolean(c.transition),
-  },
-  {
-    id: 'achtergronden',
-    index: 4,
-    title: 'Achtergronden',
-    subtitle: 'Wat staat er achter de avatar?',
-    weten: [
-      'Achtergronden worden altijd licht geblurd, zodat de avatar op de voorgrond blijft.',
-      'Rustige beelden zonder mensen werken het best.',
-    ],
-    isDone: (c) => c.achtergrondModus === 'standaard' || c.backgrounds.length > 0,
-  },
-  {
     id: 'widget',
-    index: 5,
+    index: 3,
     title: 'Widget: kleur en positie',
     subtitle: 'Hoe past de video bij je website?',
     weten: [
@@ -79,8 +55,23 @@ export const SECTIONS: SectionDef[] = [
     isDone: (c) => Boolean(c.siteUrl && c.primary && c.widgetCorner),
   },
   {
+    id: 'scenes',
+    index: 4,
+    title: 'Scènes',
+    subtitle: 'Een uitlegvideo duurt maximaal 2 minuten en bestaat uit 4 tot 6 korte scènes.',
+    weten: [
+      'We knippen de informatie in korte blokken. Dat houdt de aandacht vast.',
+      'Elke video begint met een korte intro en eindigt met een outro.',
+      'Tussen de scènes zit een overgang — die kies je hier.',
+    ],
+    // Twee keuzes in één sectie: pas af als ze er allebei staan.
+    isDone: (c) =>
+      Boolean(c.transition) &&
+      (c.achtergrondModus === 'standaard' || c.backgrounds.length > 0),
+  },
+  {
     id: 'vastleggen',
-    index: 6,
+    index: 5,
     title: 'Maak een demovideo',
     subtitle: 'Controleer alles in het echt voordat je het vastlegt.',
     isDone: (c) => c.status === 'locked',
