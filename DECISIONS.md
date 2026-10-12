@@ -490,6 +490,12 @@ herlaadt naar `?scenario=eerste`; een herlaad is de enige manier om zeker te
 weten dat er niets blijft hangen. De verborgen resetknop in de voettekst van
 het overzicht is vervallen (PLAN §8).
 
+### 61. De avatar staat op de onderrand van de tegel
+Naam en steekwoorden staan nu boven het portret en de tegel heeft onderaan geen
+padding meer, zodat de figuur op de rand staat in plaats van te zweven. De tint
+van de taal loopt daarmee tot de rand door. Links uitgelijnd: met de naam
+bovenaan leest dat rustiger dan gecentreerd.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

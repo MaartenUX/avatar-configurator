@@ -70,16 +70,26 @@ export function AvatarTile({ avatar, selected, advised, compact, onSelect }: Ava
       onClick={handle}
       aria-pressed={selected}
       className={cn(
-        'group relative flex w-full flex-col rounded-md border-2 bg-white text-center transition-all',
-        compact ? 'gap-2 p-2' : 'gap-3 p-3',
+        'group relative flex w-full flex-col overflow-hidden rounded-md border-2 bg-white text-left transition-all',
         selected
           ? 'border-blue shadow-card'
           : 'border-transparent shadow-card hover:border-gray-4',
       )}
     >
+      {/* Naam boven, portret eronder: zo staat de avatar op de onderrand van
+          de tegel in plaats van te zweven (CHANGES-05 D8). */}
+      <span className={cn('flex flex-col gap-0.5', compact ? 'px-2.5 pb-2 pt-2.5' : 'px-3 pb-2.5 pt-3')}>
+        <span className={cn(compact ? 'text-body font-medium' : 'text-h3', 'text-gray-1')}>
+          {avatar.name}
+        </span>
+        <span className={cn('text-gray-3', compact ? 'text-[12px] leading-snug' : 'text-body-sm')}>
+          {avatar.keywords.join(' • ')}
+        </span>
+      </span>
+
       <span
         className={cn(
-          'relative block aspect-[9/8] overflow-hidden rounded-sm',
+          'relative block aspect-[9/8] w-full overflow-hidden',
           langTint(avatar.lang),
         )}
       >
@@ -109,7 +119,7 @@ export function AvatarTile({ avatar, selected, advised, compact, onSelect }: Ava
             face={avatar.face}
             name={avatar.name}
             speaking={speaking}
-            className="absolute inset-x-0 bottom-0 h-[88%]"
+            className="absolute inset-x-0 bottom-0 h-[92%]"
           />
         )}
 
@@ -147,15 +157,6 @@ export function AvatarTile({ avatar, selected, advised, compact, onSelect }: Ava
             </span>
           </>
         )}
-      </span>
-
-      <span className="flex flex-col gap-0.5">
-        <span className={cn(compact ? 'text-body font-medium' : 'text-h3', 'text-gray-1')}>
-          {avatar.name}
-        </span>
-        <span className={cn('text-gray-3', compact ? 'text-[12px] leading-snug' : 'text-body-sm')}>
-          {avatar.keywords.join(' • ')}
-        </span>
       </span>
     </button>
   )
