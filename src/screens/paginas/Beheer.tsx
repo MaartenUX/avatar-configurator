@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { ExternalLink, Eye, Play, RefreshCw, X } from 'lucide-react'
 import {
-  Button, Card, Dialog, Distributie, EmbedBlok, ShellContainer, StatCard, VideoPreview,
+  Badge, Button, Card, Dialog, Distributie, EmbedBlok, ShellContainer, StatCard, VideoPreview,
 } from '../../components'
+import { Link } from 'react-router-dom'
+import { ArrowLeft } from 'lucide-react'
 import { Avatar } from '../../components/domain/Avatar'
 import { useStore } from '../../state/store'
 import { findPage, totalViews } from '../../state/selectors'
@@ -35,7 +37,19 @@ export default function Beheer() {
     <ShellContainer breed>
       <div className="flex flex-col gap-8">
         <header className="flex flex-col gap-1">
-          <h1 className="text-h1 text-gray-1">{page.title}</h1>
+          {/* Terug naar de hub, net als in de spaken. */}
+          <Link
+            to="/"
+            className="-ml-2 mb-1 inline-flex w-fit items-center gap-2 rounded-sm px-2 py-1.5 text-body text-gray-2 hover:text-blue-shade"
+          >
+            <ArrowLeft size={18} aria-hidden />
+            Overzicht
+          </Link>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="text-h1 text-gray-1">{page.title}</h1>
+            {live && <Badge status="live" dot />}
+          </div>
           <a
             href={page.url} target="_blank" rel="noreferrer"
             className="inline-flex w-fit items-center gap-1.5 text-body text-gray-3 hover:text-blue-shade"
@@ -45,7 +59,8 @@ export default function Beheer() {
           </a>
           <p className="text-body-sm text-gray-3">
             Toegevoegd op {formatDateNl(page.createdAt)}
-            {live ? ' · staat live' : ' · nog in productie'}
+            {/* Staat de pagina live, dan zegt de badge dat al. */}
+            {!live && ' · nog in productie'}
           </p>
         </header>
 
