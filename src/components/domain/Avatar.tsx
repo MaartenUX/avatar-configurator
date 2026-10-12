@@ -40,7 +40,9 @@ export function Avatar({ face, name, size, round, speaking, className }: AvatarP
         <img
           src={src}
           alt={name ?? ''}
-          className="size-full object-contain object-bottom"
+          /* Rond is altijd klein: dan vult het hoofd de cirkel, want een hele
+             figuur in 28 pixels is niet te herkennen. */
+          className={cn('size-full', round ? 'object-cover object-top' : 'object-contain object-bottom')}
           draggable={false}
         />
       ) : (

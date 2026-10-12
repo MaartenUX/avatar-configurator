@@ -50,8 +50,18 @@ export function PageCard({ page, user = 'esmee', highlighted, langFilter }: Page
     >
       <Card className="flex flex-col gap-4">
         <header className="flex items-start gap-3">
+          {/* Staat de pagina live, dan licht het icoon op: dat is het verschil
+              waar je op het overzicht naar zoekt (CHANGES-06 A1). */}
           <span
-            className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-sm bg-gray-6 text-gray-2"
+            className={cn(
+              'mt-0.5 grid size-9 shrink-0 place-items-center rounded-sm',
+              isLive ? 'bg-green-tint text-green-shade' : 'bg-gray-6 text-gray-2',
+            )}
+            style={
+              isLive
+                ? { boxShadow: '0 0 0 4px #E6FEE1, 0 0 12px rgba(31,155,6,.35)' }
+                : undefined
+            }
             aria-hidden
           >
             <SquarePlay size={18} />

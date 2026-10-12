@@ -149,15 +149,17 @@ export interface LangViewTileProps {
   views?: number
 }
 
-/** Compacte tegel voor een live pagina: taal en aantal weergaven, meer niet. */
+/**
+ * Compacte tegel voor een live pagina: hoe vaak is deze taal bekeken. De
+ * taalnaam staat er niet bij — op een live kaart gaat het om het getal, en de
+ * code zegt genoeg (CHANGES-06 A2).
+ */
 export function LangViewTile({ lang, views }: LangViewTileProps) {
   return (
-    <span className="flex items-baseline gap-2 rounded-sm bg-gray-6 px-3 py-2">
+    <span className="flex items-center gap-2 rounded-sm bg-gray-6 px-3 py-2">
+      <Eye size={14} className="shrink-0 text-gray-3" aria-hidden />
       <span className="type-label text-gray-3">{lang}</span>
-      <span className="text-body text-gray-1">{langLabel(lang)}</span>
-      <span className="flex items-center gap-1 text-body-sm text-gray-3">
-        {formatNumber(views ?? 0)}
-      </span>
+      <span className="text-body text-gray-1">{formatNumber(views ?? 0)}</span>
     </span>
   )
 }
