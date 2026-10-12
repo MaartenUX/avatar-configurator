@@ -161,7 +161,7 @@ function AssetStatus() {
     { label: 'Avatarportretten', got: counts.avatars, want: 18, dir: 'src/assets/avatars/{id}.png' },
     { label: 'Stemfragmenten', got: counts.voices, want: 18, dir: 'src/assets/voices/{id}.mp3' },
     { label: 'Kantoorshots', got: counts.backgrounds, want: 2, dir: 'public/media/backgrounds/kantoor-1.jpg' },
-    { label: 'Avatarclips', got: counts.clips, want: 4, dir: 'public/media/avatars/{taal}.webm' },
+    { label: 'Avatarclips', got: counts.clips, want: 8, dir: 'public/media/avatars/{avatar-id}.webm' },
   ]
   return (
     <div className="flex flex-col gap-2">

@@ -6,14 +6,20 @@ een map en geen los bestand.
 
 | Pad | Inhoud | Staat erin |
 |---|---|---|
-| `avatars/{nl,en,tr,ar}.webm` | Bewegende avatar met lipsync en stem, vrijstaand (VP9 met alfakanaal), ± 3 s | ja |
+| `avatars/{avatar-id}.webm` | Bewegende avatar met lipsync en stem, vrijstaand (VP9 met alfakanaal), ± 3 s | 7 van de 8 |
 | `demo/demo.mp4` | De demovideo: staand, 1080×1920, 52 s, alle vier de avatars achter elkaar | ja |
 | `backgrounds/kantoor-{1,2}.jpg` | De twee standaard kantoorshots: staand uitgesneden, leeg, licht geblurd | ja |
 
-De vier clips horen elk bij één avatar, want ze zijn met dat gezicht opgenomen:
-`nl` bij Daan, `en` bij Emma, `tr` bij Zeynep en `ar` bij Omar. Die koppeling
-staat in `src/lib/assets.ts`. De andere avatars hebben geen clip en vallen
-terug op het portret met de pulsanimatie.
+Een clip heet naar de avatar waar hij bij hoort, want hij is met dat gezicht
+opgenomen. `ar-nour.webm` ontbreekt nog — dat is de Arabische vrouw; zonder dat
+bestand pulseert haar tegel zoals voorheen. Welke avatars een clip hebben staat
+in `src/lib/assets.ts`.
+
+De acht avatars delen vier gezichten: Heygen levert er niet meer. Het portret
+in de tegel volgt daarom altijd de clip, zodat je ziet wie je hoort. Nederlands
+en Engels tonen dezelfde twee mensen, en de Turkse en Arabische man zijn
+dezelfde — dat is ook hoe het echte product werkt: één avatar spreekt meer
+talen.
 
 De demovideo is één bestand voor alle talen: hij laat de avatars zelf na elkaar
 zien. De voorbeeldtekst die bij de nagebootste weergave hoort staat in

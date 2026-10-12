@@ -15,8 +15,10 @@ const eis = (goed, tekst, detail = '') => {
 }
 
 // De bestanden worden geserveerd.
-for (const pad of ['media/avatars/nl.webm', 'media/avatars/en.webm', 'media/avatars/tr.webm',
-                   'media/avatars/ar.webm', 'media/demo/demo.mp4',
+for (const pad of ['media/avatars/nl-daan.webm', 'media/avatars/nl-sanne.webm',
+                   'media/avatars/en-emma.webm', 'media/avatars/en-james.webm',
+                   'media/avatars/tr-zeynep.webm', 'media/avatars/tr-mehmet.webm',
+                   'media/avatars/ar-omar.webm', 'media/demo/demo.mp4',
                    'media/backgrounds/kantoor-1.jpg', 'media/backgrounds/kantoor-2.jpg']) {
   const r = await page.request.get(`${base}/${pad}`)
   eis(r.ok(), `${pad} wordt geserveerd`, `${r.status()}`)
@@ -35,7 +37,7 @@ const clip = await page.evaluate(() => {
   const v = document.querySelector('video')
   return v ? { src: v.currentSrc, tijd: v.currentTime, breed: v.videoWidth } : null
 })
-eis(Boolean(clip?.src.includes('/media/avatars/nl.webm')), 'de tegel van Daan speelt de Nederlandse clip',
+eis(Boolean(clip?.src.includes('/media/avatars/nl-daan.webm')), 'de tegel van Daan speelt zijn eigen clip',
   clip?.src?.split('/media/').pop())
 eis((clip?.tijd ?? 0) > 0, 'de clip loopt echt', `${clip?.tijd?.toFixed(2)} s`)
 await page.screenshot({ path: 'shots/media-avatarclip.png' })

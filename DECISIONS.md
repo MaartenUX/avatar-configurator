@@ -405,6 +405,20 @@ pagina met vijftig pixels midden in een scrollanimatie, waardoor je altijd te
 ver landde — precies de klacht uit C6. Hij blijft nu staan en is alleen
 onzichtbaar, en het scrollen wacht tot React de wissel heeft doorgevoerd.
 
+### 56b. Het portret volgt de clip, ook als gezichten zich herhalen
+Bij de tweede levering kwamen er drie clips bij: de andere sekse voor
+Nederlands, Engels en Turks. Ze zijn opgenomen met dezelfde vier gezichten als
+de eerste vier, dus acht tegels delen vier gezichten. Sanne krijgt daarom het
+blonde portret en Mehmet het portret van Omar. Gevolg: Nederlands en Engels
+tonen dezelfde twee mensen en de Turkse en Arabische man zijn dezelfde. Dat is
+bewust gekozen boven stille tegels naast bewegende buren — en het is niet
+onrealistisch, want in het echte product spreekt één avatar meerdere talen. De
+portretten `vrouw-donker` en `man-turks` zijn daardoor niet meer in gebruik.
+
+### 56c. Eén avatar tegelijk aan het woord
+De clips hebben geluid. Klik je snel achter elkaar, dan spraken er eerst twee
+door elkaar. Een tegel zet nu eerst de vorige stil.
+
 ### 56. Niet uitgevoerd: de commits per sectie
 Git kon in deze ronde niets schrijven: de losse objecten in `.git/objects`
 staan op Dropbox als online-only en elke leespoging blijft hangen. De ronde is
@@ -434,9 +448,9 @@ daarom in één commit gegaan, gemaakt vanuit een verse kloon buiten Dropbox.
    `kantoor-3`); CHANGES-03 A5 vraagt er zes, staand en leeg. De zes scènes
    wisselen die twee nu af. Zichtbaar in de preview en in sectie 4.
 
-6. Vier avatars hebben een clip; de andere veertien vallen terug op het
-   portret met de pulsanimatie. Dat is zichtbaar als een tester op Sanne klikt
-   en daarna op Daan.
+6. Zeven van de acht avatars in de testtalen hebben een clip; alleen Nour
+   wacht nog op `ar-nour.webm`. De avatars in de talen buiten de test (Duits,
+   Frans, Pools, Grieks, Spaans) hebben er geen en pulseren.
 
 7. De clips zijn VP9 met een alfakanaal. Chrome en Firefox tonen ze vrijstaand,
    Safari zet er een zwarte achtergrond achter. Voer de test in Chrome uit.

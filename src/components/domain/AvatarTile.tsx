@@ -18,6 +18,9 @@ export interface AvatarTileProps {
 
 const SPEAK_MS = 3000
 
+/** Eén avatar tegelijk aan het woord: twee stemmen door elkaar is niets. */
+let zetVorigeStil: (() => void) | null = null
+
 /**
  * Portret in een licht kader, daaronder de naam en de steekwoorden. Gekozen is
  * een blauwe rand, geen gevuld vlak: het portret moet de aandacht houden.
@@ -56,6 +59,8 @@ export function AvatarTile({ avatar, selected, advised, compact, onSelect }: Ava
 
   const handle = () => {
     onSelect()
+    zetVorigeStil?.()
+    zetVorigeStil = () => setSpeaking(false)
     setSpeaking(true)
   }
 

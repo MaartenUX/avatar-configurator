@@ -2,6 +2,11 @@ import type { AvatarDef } from './types'
 
 /**
  * Per taal een vrouw en een man, met namen en stemmen die bij de taal passen.
+ *
+ * Gezichten komen terug in meer dan één taal. Dat is geen compromis van de
+ * mock: de clips zijn met vier gezichten opgenomen, en in het echte product
+ * spreekt één avatar ook meerdere talen. Het portret volgt altijd de clip,
+ * zodat je ziet wie je hoort.
  * De voorbeeldzin klinkt bij het aanklikken en staat in de taal zelf, zodat je
  * hoort én ziet wat een inwoner straks krijgt.
  *
@@ -12,7 +17,7 @@ import type { AvatarDef } from './types'
 export const AVATARS: AvatarDef[] = [
   // Nederlands
   {
-    id: 'nl-sanne', lang: 'nl', name: 'Sanne', gender: 'v', face: 'vrouw-donker', advised: true,
+    id: 'nl-sanne', lang: 'nl', name: 'Sanne', gender: 'v', face: 'vrouw-blond', advised: true,
     keywords: ['rustig', 'warm', 'duidelijk'],
     sampleSentence: 'Goedendag. Ik leg u in het kort uit hoe dit werkt.',
   },
@@ -66,7 +71,7 @@ export const AVATARS: AvatarDef[] = [
     sampleSentence: 'Merhaba. Size bunun nasıl işlediğini kısaca anlatayım.',
   },
   {
-    id: 'tr-mehmet', lang: 'tr', name: 'Mehmet', gender: 'm', face: 'man-turks',
+    id: 'tr-mehmet', lang: 'tr', name: 'Mehmet', gender: 'm', face: 'man-marokkaans',
     keywords: ['zakelijk', 'rustig', 'lage stem'],
     sampleSentence: 'Merhaba. Size bunun nasıl işlediğini kısaca anlatayım.',
   },

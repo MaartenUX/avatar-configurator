@@ -44,19 +44,20 @@ export const voiceClip = (id: string): string | undefined => VOICES[id]
 const media = (pad: string) => `${import.meta.env.BASE_URL}media/${pad}`
 
 /**
- * Welke avatars een eigen clip hebben. Er zijn er vier, één per taal, en elke
- * clip is gemaakt met het gezicht van precies deze avatar. De andere avatars
- * geven undefined terug en vallen terug op het portret met de pulsanimatie.
+ * Welke avatars een eigen clip hebben. Elke clip is opgenomen met het gezicht
+ * van precies deze avatar, dus de koppeling gaat per avatar en niet per taal.
+ * De rest geeft undefined terug en valt terug op het portret met de
+ * pulsanimatie — nu nog alleen Nour, haar clip moet nog komen.
  */
-const CLIPS: Record<string, string> = {
-  'nl-daan': 'nl',
-  'en-emma': 'en',
-  'tr-zeynep': 'tr',
-  'ar-omar': 'ar',
-}
+const CLIPS = new Set([
+  'nl-daan', 'nl-sanne',
+  'en-emma', 'en-james',
+  'tr-zeynep', 'tr-mehmet',
+  'ar-omar',
+])
 
 export const avatarClip = (id?: string) =>
-  id && CLIPS[id] ? media(`avatars/${CLIPS[id]}.webm`) : undefined
+  id && CLIPS.has(id) ? media(`avatars/${id}.webm`) : undefined
 
 /** Eén demovideo voor alle talen: hij laat ze allemaal achter elkaar zien. */
 export const demoVideo = () => media('demo/demo.mp4')
@@ -71,5 +72,5 @@ export const assetCounts = () => ({
   avatars: Object.keys(AVATARS).filter((k) => k !== 'silhouet').length,
   voices: Object.keys(VOICES).length,
   backgrounds: KANTOORSHOTS.length,
-  clips: Object.keys(CLIPS).length,
+  clips: CLIPS.size,
 })
