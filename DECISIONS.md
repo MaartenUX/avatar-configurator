@@ -463,6 +463,18 @@ Eén ding kwam daarbij boven: de widget in de `SiteMock` hing sinds CHANGES-04
 aan de buitenste laag in plaats van aan de nagebootste pagina, waardoor hij
 niet meer aan te klikken was zodra de pagina-inhoud eroverheen lag.
 
+### 58. De widget is liggend, zonder foto, met een wisselende balk
+CHANGES-05 B vervangt CHANGES-04 B3 en CHANGES-03 A2. Het kader blijft, maar de
+bovenkant is wit: de gekozen avatars staan er vrijstaand naast elkaar met de
+play-knop eroverheen, en een taal zonder gekozen avatar toont een grijs
+silhouet. De foto hoort bij de video, niet bij de knop — de player houdt zijn
+kantoorshot.
+
+De balk wisselt elke 2,5 seconde van taal en fadet daarbij uit en in. Hij hangt
+aan de gedeelde klok, dus alle widgets op het scherm lopen gelijk en er is geen
+eigen interval. De vertalingen staan in `src/data/widget.ts`; Arabisch krijgt
+`dir="rtl"`.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

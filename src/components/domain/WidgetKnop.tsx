@@ -4,7 +4,9 @@ import { Avatar } from './Avatar'
 import { VideoPreview } from './VideoPreview'
 import { avatarById } from '../../data/avatars'
 import { langDef, langLabel } from '../../data/langs'
-import { backgroundImage, demoVideo, kantoorshot } from '../../lib/assets'
+import { demoVideo } from '../../lib/assets'
+import { WIDGET_FADE_MS, WIDGET_TAAL_MS, WIDGET_TEKST } from '../../data/widget'
+import { useNow } from '../../state/TickProvider'
 import { pageContent } from '../../data'
 import { DEMO_DUUR, demoSubtitles } from '../../data/demo'
 import type { Config, Lang } from '../../state/types'
@@ -17,19 +19,27 @@ export interface WidgetKnopProps {
   onOpen?: () => void
 }
 
+/** Hoe breed één figuur in de knop is, afhankelijk van het aantal talen. */
+const FIGUUR = {
+  1: 'w-[40%]',
+  2: 'w-[34%]',
+  3: 'w-[30%]',
+  4: 'w-[26%]',
+  5: 'w-[23%]',
+} as const
+
 /**
- * De widget zoals hij op de gemeentepagina staat: één kader met daarin een
- * staand videoframe en daaronder een balk in de huisstijlkleur (CHANGES-02 B8
- * en B9). De liggende, vrijstaande variant uit CHANGES-03 A2 is vervallen.
+ * De widget zoals hij op de gemeentepagina staat: liggend, één kader met een
+ * witte bovenkant waarin de gekozen avatars vrijstaand naast elkaar staan, de
+ * play-knop eroverheen, en daaronder een balk in de huisstijlkleur
+ * (CHANGES-05 B3).
  *
- * Zolang de huisstijl niet is opgehaald is de balk grijs; de tekst wordt dan
- * donker, want wit op gray-5 is niet te lezen.
+ * Geen foto erachter: die hoort bij de video, niet bij de knop. Zolang er voor
+ * een taal nog geen avatar gekozen is, staat er een grijs silhouet.
  */
 export function WidgetKnop({ config, mini, onOpen }: WidgetKnopProps) {
-  const taal = (config.languages[0] ?? 'nl') as Lang
-  const avatar = avatarById(config.avatars[taal])
-  const bg = backgroundImage(config.backgrounds[0] ?? kantoorshot(0))
-  const opgehaald = Boolean(config.primary)
+  const talen = (config.languages.length ? config.languages : ['nl']) as Lang[]
+  const getoond = talen.slice(0, 5)
 
   return (
     <button
@@ -38,13 +48,19 @@ export function WidgetKnop({ config, mini, onOpen }: WidgetKnopProps) {
       aria-label="Bekijk uitleg"
       className="block w-full overflow-hidden rounded-sm border border-gray-5 bg-white shadow-card"
     >
-      <span className="relative block aspect-[9/16] overflow-hidden bg-gray-6">
-        <img src={bg} alt="" className="absolute inset-0 size-full scale-105 object-cover blur-[3px]" />
-        <Avatar
-          face={avatar?.face}
-          name={avatar?.name}
-          className="absolute inset-x-0 bottom-0 mx-auto h-[82%] w-[86%]"
-        />
+      <span className="relative flex aspect-[16/8] w-full items-end justify-center bg-white px-1">
+        {getoond.map((code, i) => {
+          const avatar = avatarById(config.avatars[code])
+          return (
+            <Avatar
+              key={code}
+              face={avatar?.face}
+              name={avatar?.name}
+              className={cn('h-[94%]', FIGUUR[getoond.length as 1] ?? 'w-[23%]', i > 0 && '-ml-[5%]')}
+            />
+          )
+        })}
+
         <span className="absolute inset-0 grid place-items-center">
           <span
             className={cn(
@@ -57,19 +73,47 @@ export function WidgetKnop({ config, mini, onOpen }: WidgetKnopProps) {
         </span>
       </span>
 
+      <WidgetBalk config={config} mini={mini} />
+    </button>
+  )
+}
+
+/**
+ * De balk onder de knop. De tekst wisselt elke 2,5 seconde naar een volgende
+ * gekozen taal en fadet daarbij uit en in. Hij hangt aan de gedeelde klok, dus
+ * alle widgets op het scherm lopen gelijk en er is geen eigen interval.
+ */
+function WidgetBalk({ config, mini }: { config: Config; mini?: boolean }) {
+  const now = useNow()
+  const talen = (config.languages.length ? config.languages : ['nl']) as Lang[]
+  const taal = talen[Math.floor(now / WIDGET_TAAL_MS) % talen.length]
+  const sinds = now % WIDGET_TAAL_MS
+  const opgehaald = Boolean(config.primary)
+
+  return (
+    <span
+      className={cn(
+        'block w-full truncate px-2 text-center font-medium',
+        mini ? 'py-1 text-[0px]' : 'py-1 text-[11px] leading-5',
+        opgehaald ? 'text-white' : 'text-gray-2',
+      )}
+      style={{ background: config.primary ?? '#e0e0e0' }}
+    >
       {/* In het 3x3-raster is de knop te klein voor tekst; daar blijft alleen
           de balk in de huisstijlkleur over. */}
-      <span
-        className={cn(
-          'block w-full truncate px-2 text-center font-medium',
-          mini ? 'py-1 text-[0px]' : 'py-1 text-[11px] leading-5',
-          opgehaald ? 'text-white' : 'text-gray-2',
-        )}
-        style={{ background: config.primary ?? '#e0e0e0' }}
-      >
-        {mini ? '' : 'Videovertaling'}
-      </span>
-    </button>
+      {!mini && (
+        <span
+          dir={langDef(taal)?.dir}
+          className="inline-block transition-opacity"
+          style={{
+            opacity: sinds >= WIDGET_TAAL_MS - WIDGET_FADE_MS ? 0 : 1,
+            transitionDuration: `${WIDGET_FADE_MS}ms`,
+          }}
+        >
+          {WIDGET_TEKST[taal]}
+        </span>
+      )}
+    </span>
   )
 }
 

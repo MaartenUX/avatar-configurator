@@ -180,7 +180,7 @@ function Widget({
       className={cn(
         'absolute transition-all duration-500',
         CORNER[config.widgetCorner],
-        mini ? 'w-[26%]' : 'w-[20%]',
+        mini ? 'w-[44%]' : 'w-[34%]',
       )}
       style={{ margin: `${marge.y * schaal}px ${marge.x * schaal}px` }}
     >
