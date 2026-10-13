@@ -1,12 +1,14 @@
+import { useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { RefreshCw } from 'lucide-react'
 import {
-  ApproveBox, Avatar, Button, HowBox, SceneBlock, WaitScreen,
+  ApproveBox, Avatar, Button, Dialog, HowBox, SceneBlock, WaitScreen,
 } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
 import { Bekijkbalk } from '../../components/feedback/Bekijkbalk'
 import { SpraakTips } from '../../components/feedback/SpraakTips'
 import { useStore } from '../../state/store'
+import { pageContent } from '../../data'
 import { useBekijkstand } from '../../state/useBekijkstand'
 import { useFinishSpoke } from '../../state/flow'
 import { findPage } from '../../state/selectors'
@@ -27,11 +29,19 @@ export default function Samenvatting() {
   const approveSummary = useStore((s) => s.approveSummary)
   const rerun = useStore((s) => s.rerun)
   const finish = useFinishSpoke()
+  const [waarschuw, setWaarschuw] = useState(false)
 
   if (!page) return <Navigate to="/" replace />
 
-  const avatar = avatarById(config.avatars.nl)
+  const avatar = avatarById(config.avatars[config.languages[0] ?? 'nl'])
   const wacht = page.status === 'summarizing'
+
+  // Opnieuw genereren gooit je eigen zinnen weg; dat zeggen we alleen als er
+  // écht iets veranderd is (CHANGES-09 B9).
+  const origineel = pageContent(page.id)?.scenes
+  const bewerkt = Boolean(
+    origineel && page.scenes.some((scene, i) => scene.text !== origineel[i]?.text),
+  )
 
   return (
     <SpokeFrame
@@ -74,7 +84,7 @@ export default function Samenvatting() {
           <span className="flex flex-wrap items-center gap-3">
             <Button
               variant="secondary" iconLeft={RefreshCw}
-              onClick={() => rerun(page.id)}
+              onClick={() => (bewerkt ? setWaarschuw(true) : rerun(page.id))}
             >
               Opnieuw genereren
             </Button>
@@ -97,6 +107,18 @@ export default function Samenvatting() {
           )}
         </>
       )}
+      <Dialog
+        open={waarschuw}
+        onClose={() => setWaarschuw(false)}
+        title="Opnieuw genereren?"
+        description="Opnieuw genereren maakt een nieuwe samenvatting. Je aanpassingen in de tekst gaan verloren."
+        cancelLabel="Annuleer"
+        confirmLabel="Opnieuw genereren"
+        onConfirm={() => {
+          setWaarschuw(false)
+          rerun(page.id)
+        }}
+      />
     </SpokeFrame>
   )
 }
