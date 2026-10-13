@@ -6,7 +6,7 @@ import { sceneLabel } from '../../data/copy'
 import { useStore } from '../../state/store'
 import { ADVICE, advisedFor, avatarsFor } from '../../data/avatars'
 import { MAX_EXTRA_LANGS, OPTIONAL_LANGS, langLabel } from '../../data/langs'
-import { VOORBEELD_FOTOS, backgroundImage, kantoorshot } from '../../lib/assets'
+import { KANTOORSHOTS, backgroundImage, kantoorshot } from '../../lib/assets'
 import type { Lang, WidgetCorner } from '../../state/types'
 import { cn } from '../../lib/cn'
 
@@ -164,9 +164,12 @@ function Overgang() {
   )
 }
 
-/** Elke scène krijgt een ander voorbeeld, zodat je ziet dat je per scène een
- *  eigen beeld kiest en niet één foto voor alles (CHANGES-06 D8). */
-const EIGEN_FOTOS = VOORBEELD_FOTOS
+/**
+ * Elke scène krijgt een ander beeld, zodat je ziet dat je per scène kiest en
+ * niet één foto voor alles. De eerste twee zijn de echte kantoorshots die ook
+ * in de demovideo zitten; daarna volgen de voorbeelden (CHANGES-07 A2).
+ */
+const EIGEN_FOTOS = [...KANTOORSHOTS, 'park', 'winkelstraat', 'bibliotheek', 'plein']
 
 function Scèneachtergronden() {
   const config = useStore((s) => s.config)
@@ -188,27 +191,27 @@ function Scèneachtergronden() {
       {/* Eerst de keuze, dan pas de tegels. */}
       <div className="grid gap-3 sm:grid-cols-2">
         <ChoiceTile
-          title="Personaliseer met eigen foto’s" icon={Images}
-          selected={eigen}
-          description="Bijvoorbeeld het gemeentehuis of een plek buiten in de gemeente."
-          /* Meteen gevuld met een voorbeeld per scène: zo zie je waar het om
-             gaat zonder eerst zes keer te klikken. */
-          onSelect={() => patch({ achtergrondModus: 'eigen', backgrounds: [...EIGEN_FOTOS] })}
-        />
-        <ChoiceTile
           title="Standaard kantoorshots" icon={Building2} tag="Aanbevolen"
           selected={config.achtergrondModus === 'standaard'}
           description="Rustige kantoorinterieurs, per scène een ander. Je hoeft niets aan te leveren."
           onSelect={() => patch({ achtergrondModus: 'standaard', backgrounds: [] })}
+        />
+        <ChoiceTile
+          title="Personaliseer met eigen foto’s" icon={Images} tag="Tip" tagToon="tip"
+          selected={eigen}
+          description="Een leuke manier om de video’s persoonlijker te maken. Bijvoorbeeld het gemeentehuis of een plek buiten in de gemeente."
+          /* Meteen gevuld met een beeld per scène: zo zie je waar het om gaat
+             zonder eerst zes keer te klikken. */
+          onSelect={() => patch({ achtergrondModus: 'eigen', backgrounds: [...EIGEN_FOTOS] })}
         />
       </div>
 
       {eigen && (
         <>
           <AdviceBox label="Handig om te weten">
-            Een leuke manier om de video’s persoonlijker te maken. Foto’s hoeven niet van
-            topkwaliteit te zijn — ze worden altijd licht geblurd. Staande foto’s werken het
-            best. Liggend mag ook: we snijden er een staand stuk uit.
+            Foto’s hoeven niet van topkwaliteit te zijn — ze worden altijd licht geblurd.
+            Staande foto’s werken het best. Liggend mag ook: we snijden er een staand stuk
+            uit.
           </AdviceBox>
 
           <div className="grid gap-3 sm:grid-cols-3">

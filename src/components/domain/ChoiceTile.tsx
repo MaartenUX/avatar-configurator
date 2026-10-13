@@ -10,8 +10,11 @@ export interface ChoiceTileProps {
   /** Afbeelding of gekleurd vlak boven de tekst. */
   visual?: ReactNode
   selected: boolean
-  /** Label rechtsboven, bijv. "Aanbevolen". */
+  /** Label bij de titel, bijv. "Aanbevolen" of "Tip". */
   tag?: string
+  /** Groen is een advies, blauw een tip. Letterlijke classnamen: de
+   *  Tailwind-scanner leest broncode als tekst. */
+  tagToon?: 'advies' | 'tip'
   disabled?: boolean
   onSelect: () => void
   className?: string
@@ -25,6 +28,7 @@ export function ChoiceTile({
   visual,
   selected,
   tag,
+  tagToon = 'advies',
   disabled,
   onSelect,
   className,
@@ -62,7 +66,12 @@ export function ChoiceTile({
           {title}
         </span>
         {tag && (
-          <span className="type-label rounded-pill bg-green-tint px-2 py-0.5 text-green-shade">
+          <span
+            className={cn(
+              'type-label rounded-pill px-2 py-0.5',
+              tagToon === 'tip' ? 'bg-blue-tint text-blue-shade' : 'bg-green-tint text-green-shade',
+            )}
+          >
             {tag}
           </span>
         )}
