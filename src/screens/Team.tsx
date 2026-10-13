@@ -1,7 +1,6 @@
 import { Mail, Plus, ShieldCheck } from 'lucide-react'
 import { Button, Card, ShellContainer } from '../components'
 import { useStore } from '../state/store'
-import { langLabel } from '../data/langs'
 
 /** Max vijf accounts onder één hoofdaccount; geen rollen per taal. */
 const MAX_ACCOUNTS = 5
@@ -30,14 +29,13 @@ export default function Team() {
               <span className="text-body text-gray-1">{lid.name}</span>
               <span className="text-body-sm text-gray-3">{lid.email}</span>
             </span>
-            {lid.role === 'owner' ? (
+            {/* Geen rol per taal: iedereen ziet hetzelfde en controleert de
+                taal die hij spreekt. Alleen de beheerder is een echte rol
+                (CHANGES-08 B5). */}
+            {lid.role === 'owner' && (
               <span className="type-label inline-flex items-center gap-1.5 rounded-pill bg-blue-tint px-2.5 py-1 text-blue-shade">
                 <ShieldCheck size={13} aria-hidden />
                 Beheerder
-              </span>
-            ) : (
-              <span className="text-body-sm text-gray-3">
-                Controleert {lid.langs?.map(langLabel).join(' en ') ?? '—'}
               </span>
             )}
           </div>

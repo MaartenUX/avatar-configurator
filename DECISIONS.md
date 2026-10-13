@@ -565,6 +565,35 @@ de titel van de herkende pagina. Daarna zijn beide gewoon te bewerken.
 Gevolg voor de controlescripts: `productie-flow` en `dod-check` klikken nu
 eerst in het adresveld, net als een tester, want zonder dat blijft Start uit.
 
+---
+
+# CHANGES-08 — 13 oktober
+
+| Punt | Stand |
+|---|---|
+| A1 teller klikbaar, popover eronder | gedaan |
+| A2 inhoud: twee tellers met uitleg en drie vragen | gedaan |
+| A3 tooltip na 500 ms met de eerste zin | gedaan |
+| A4 hetzelfde kaartje achter een ⓘ in S0 en in de lege staat | gedaan |
+| B5 geen taalrollen op de teampagina | gedaan |
+
+### 68. De popover is een eigen component, geen dialoog
+Je leest hier iets na terwijl de pagina eronder gewoon blijft staan; een modaal
+venster maakt dat zwaarder dan het is. Hij staat op `/kit`. Twee dingen die uit
+de praktijk kwamen: de knopinhoud krijgt mee of het kaartje openstaat (anders
+hing de tooltip over het kaartje heen), en hij kan omhoog openklappen, want in
+S0 staat de regel onderaan het scherm.
+
+### 69. De teksten heten ABONNEMENT, niet subscription
+CHANGES-08 A2 noemt `subscription`. De rest van het bestand is Nederlands en de
+projectafspraak is Nederlands, dus de export heet `ABONNEMENT`.
+
+### 70. De taalkoppeling in het team blijft in de data
+B5 schrijft dat de seed het taalveld verliest. Dat veld (`langs`) bepaalt wie
+welke taal controleert; zonder dat wordt Esmee de controleur van álle talen en
+verdwijnt Emre uit de collega-view — precies wat B5 zelf wil behouden. De
+teampagina toont de rol niet meer; de data houdt hem.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een
