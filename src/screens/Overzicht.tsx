@@ -65,7 +65,9 @@ export default function Overzicht() {
 
       <LockedBanner signedAt={config.signedAt} />
 
-      {alleTalen.length > 1 && (
+      {pages.length === 0 && user === 'esmee' && <NogGeenPaginas videos={videos} />}
+
+      {pages.length > 0 && alleTalen.length > 1 && (
         <div className="flex flex-wrap items-center gap-2">
           <span className="type-label text-gray-3">Filter op taal</span>
           <Chip
@@ -86,6 +88,7 @@ export default function Overzicht() {
         </div>
       )}
 
+      {pages.length > 0 && (
       <section className="flex flex-col gap-3">
         <div className="flex items-center gap-3">
           <h2 className="text-h2 text-gray-1">In productie</h2>
@@ -129,6 +132,7 @@ export default function Overzicht() {
           </div>
         )}
       </section>
+      )}
 
       {live.length > 0 && (
         <section className="flex flex-col gap-3">
@@ -147,6 +151,28 @@ export default function Overzicht() {
       <Voettekst />
     </div>
     </ShellContainer>
+  )
+}
+
+/**
+ * Vastgelegd, maar nog geen pagina's. Eén kaart met de enige volgende stap;
+ * lege kopjes "In productie" en "Live" zeggen niets (CHANGES-07 B3).
+ */
+function NogGeenPaginas({ videos }: { videos: { used: number; total: number } }) {
+  return (
+    <Card className="flex flex-col items-center gap-4 py-10 text-center">
+      <div className="flex max-w-md flex-col gap-1.5">
+        <h2 className="text-h2 text-gray-1">Maak je eerste uitlegvideo</h2>
+        <p className="text-body text-gray-2">
+          Voeg een pagina van je website toe. Wij maken de samenvatting; jij controleert hem
+          en je collega’s doen hun taal.
+        </p>
+      </div>
+      <Button to="/paginas/nieuw" iconLeft={Plus}>Pagina toevoegen</Button>
+      <p className="text-body-sm text-gray-3">
+        Dit wordt video {videos.used + 1} van {videos.total}.
+      </p>
+    </Card>
   )
 }
 
