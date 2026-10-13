@@ -26,7 +26,7 @@ export const SECTIONS: SectionDef[] = [
     subtitle: 'In welke talen wil je je inwoners bereiken?',
     weten: [
       'B1 is de norm voor overheidsteksten: korte zinnen en gewone woorden.',
-      'Nederlands staat vast en is de basis voor elke vertaling.',
+      'De eerste taal die je kiest is de bron; de andere worden daaruit vertaald.',
       'Elke taal heeft een collega nodig die hem controleert voordat de video wordt gemaakt.',
     ],
     isDone: (c) => c.languages.length > 1,
@@ -52,7 +52,7 @@ export const SECTIONS: SectionDef[] = [
       'We halen je logo en kleuren op uit je website; je hoeft niets te uploaden.',
       'De widget staat standaard rechtsonder. Dat kun je aanpassen onder “Meer specificaties”.',
     ],
-    isDone: (c) => Boolean(c.siteUrl && c.primary && c.widgetCorner),
+    isDone: (c) => Boolean(c.siteUrl && c.primary && c.widgetPosition),
   },
   {
     id: 'scenes',
@@ -63,6 +63,7 @@ export const SECTIONS: SectionDef[] = [
       'We knippen de informatie in korte blokken. Dat houdt de aandacht vast.',
       'Elke video begint met een korte intro en eindigt met een outro.',
       'Tussen de scènes zit een overgang — die kies je hier.',
+      'Hoeveel scènes een video krijgt, hangt af van de hoeveelheid informatie op de pagina. Dat bepaal je niet zelf.',
     ],
     // Twee keuzes in één sectie: pas af als ze er allebei staan.
     isDone: (c) =>

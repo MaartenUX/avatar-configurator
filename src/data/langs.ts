@@ -31,9 +31,12 @@ export const langDir = (code: Lang) => BY_CODE[code]?.dir ?? 'ltr'
 export const isLang = (v: unknown): v is Lang =>
   typeof v === 'string' && Object.hasOwn(BY_CODE, v)
 
-/** Nederlands staat vast; dit zijn de talen waar de redacteur uit kiest (max 4). */
-export const OPTIONAL_LANGS: Lang[] = ['en', 'de', 'fr', 'tr', 'ar', 'pl', 'el', 'es']
-export const MAX_EXTRA_LANGS = 4
+/**
+ * Vier talen in totaal, Nederlands meegeteld — dat is wat het pakket biedt
+ * (CHANGES-09 A2). Nederlands staat voorgeselecteerd maar is uit te zetten;
+ * een Duitse gemeente begint ergens anders.
+ */
+export const MAX_TALEN = 4
 
 /**
  * Een zachte tint per taal, zodat de vrijstaande avatars in de kiesrij ergens

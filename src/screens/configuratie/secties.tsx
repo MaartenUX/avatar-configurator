@@ -5,9 +5,9 @@ import { avatarById } from '../../data/avatars'
 import { sceneLabel } from '../../data/copy'
 import { useStore } from '../../state/store'
 import { ADVICE, advisedFor, avatarsFor } from '../../data/avatars'
-import { MAX_EXTRA_LANGS, OPTIONAL_LANGS, langLabel } from '../../data/langs'
+import { LANG_CODES, MAX_TALEN, langLabel } from '../../data/langs'
 import { KANTOORSHOTS, backgroundImage, kantoorshot } from '../../lib/assets'
-import type { Lang, WidgetCorner } from '../../state/types'
+import type { Lang, WidgetPositie } from '../../state/types'
 import { cn } from '../../lib/cn'
 
 /* ---------------------------------------------------------------- 1. talen */
@@ -15,8 +15,7 @@ import { cn } from '../../lib/cn'
 export function S1Talen() {
   const config = useStore((s) => s.config)
   const patch = useStore((s) => s.patchConfig)
-  const extra = config.languages.filter((l) => l !== 'nl')
-  const vol = extra.length >= MAX_EXTRA_LANGS
+  const vol = config.languages.length >= MAX_TALEN
 
   const toggle = (lang: Lang) => {
     const has = config.languages.includes(lang)
@@ -40,21 +39,23 @@ export function S1Talen() {
             onSelect={() => patch({ level: 'B1' })}
           />
           <ChoiceTile
-            title="B2" selected={config.level === 'B2'}
-            description="Langere zinnen, meer vakwoorden. Kies dit alleen als je doelgroep dat aankan."
-            onSelect={() => patch({ level: 'B2' })}
+            title="A2" selected={config.level === 'A2'}
+            description="Nog eenvoudiger: alleen de meest gewone woorden en heel korte zinnen. Voor wie moeite heeft met lezen."
+            onSelect={() => patch({ level: 'A2' })}
           />
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <h3 className="text-h3 text-gray-1">Talen</h3>
-        <p className="text-body-sm text-gray-2">
-          Kies er maximaal {MAX_EXTRA_LANGS} bij naast Nederlands.
-        </p>
+        <div className="flex items-baseline gap-3">
+          <h3 className="text-h3 text-gray-1">Talen</h3>
+          <span className="text-body-sm text-gray-3">
+            {config.languages.length} van {MAX_TALEN}
+          </span>
+        </div>
+        <p className="text-body-sm text-gray-2">Kies maximaal {MAX_TALEN} talen.</p>
         <div className="flex flex-wrap gap-2">
-          <Chip label="Nederlands" selected />
-          {OPTIONAL_LANGS.map((l) => {
+          {LANG_CODES.map((l) => {
             const on = config.languages.includes(l)
             return (
               <Chip
@@ -69,8 +70,8 @@ export function S1Talen() {
         </div>
         {vol && (
           <p className="text-body-sm text-orange-shade">
-            Je hebt het maximum van {MAX_EXTRA_LANGS} extra talen bereikt. Meer talen nodig? Dat
-            staat onder “Meer weten”.
+            Je hebt het maximum van {MAX_TALEN} talen bereikt. Meer talen nodig? Dat staat onder
+            “Meer weten”.
           </p>
         )}
       </div>
@@ -269,10 +270,12 @@ function Scèneachtergronden() {
 
 /* ---------------------------------------------------------------- 3. widget */
 
-const HOEKEN: { id: WidgetCorner; label: string }[] = [
+const PLEKKEN: { id: WidgetPositie; label: string }[] = [
   { id: 'lt', label: 'Linksboven' },
-  { id: 'rt', label: 'Rechtsboven' },
+  { id: 'lm', label: 'Links-midden' },
   { id: 'lb', label: 'Linksonder' },
+  { id: 'rt', label: 'Rechtsboven' },
+  { id: 'rm', label: 'Rechts-midden' },
   { id: 'rb', label: 'Rechtsonder' },
 ]
 
@@ -288,6 +291,7 @@ export function S3Widget() {
   const [contentOpen, setContentOpen] = useState(Boolean(config.contentUrl))
   const [specs, setSpecs] = useState(false)
   const [bezig, setBezig] = useState(false)
+  const [aanpassen, setAanpassen] = useState(false)
 
   const ophalen = () => {
     setBezig(true)
@@ -329,11 +333,47 @@ export function S3Widget() {
               </span>
             </span>
             <span className="flex-1 text-body text-gray-2">Klopt dit?</span>
-            <Button size="sm" variant="secondary" onClick={() => patch({ primary: undefined, logo: undefined })}>
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => setAanpassen(!aanpassen)}
+              aria-expanded={aanpassen}
+            >
               Aanpassen
             </Button>
-            <Button size="sm" iconLeft={Check} onClick={() => {}}>Ja</Button>
+            <Button size="sm" iconLeft={Check} onClick={() => setAanpassen(false)}>Ja</Button>
           </Card>
+        )}
+
+        {/* Klopt de opgehaalde huisstijl niet, dan pas je hem hier aan; de
+            preview links verandert meteen mee (CHANGES-09 A3). */}
+        {opgehaald && aanpassen && (
+          <div className="flex flex-col gap-4 rounded-md border border-gray-5 p-4">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <KleurVeld
+                label="Primaire kleur"
+                waarde={config.primary ?? '#1F5E58'}
+                onChange={(v) => patch({ primary: v })}
+              />
+              <KleurVeld
+                label="Tweede kleur"
+                waarde={config.secondary ?? '#FF996D'}
+                onChange={(v) => patch({ secondary: v })}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <span className="type-label text-gray-3">Logo</span>
+              <button
+                type="button"
+                onClick={() => patch({ logo: config.logo === 'eigen' ? 'bergrode' : 'eigen' })}
+                className="flex w-fit items-center gap-2 rounded-sm border border-dashed border-gray-4 px-3 py-2 text-body-sm text-gray-2 hover:border-blue hover:text-blue-shade"
+              >
+                {config.logo === 'eigen' ? <Check size={15} aria-hidden /> : <Upload size={15} aria-hidden />}
+                {config.logo === 'eigen' ? 'Eigen logo geüpload' : 'Ander logo uploaden'}
+              </button>
+            </div>
+          </div>
         )}
       </div>
 
@@ -377,16 +417,16 @@ export function S3Widget() {
 
       <div className="flex flex-col gap-2">
         <h3 className="text-h3 text-gray-1">Plek op de pagina</h3>
-        <div className="flex flex-wrap gap-2">
-          {HOEKEN.map((h) => (
+        <div className="grid grid-cols-3 gap-2">
+          {PLEKKEN.map((h) => (
             <button
               key={h.id}
               type="button"
-              onClick={() => patch({ widgetCorner: h.id })}
-              aria-pressed={config.widgetCorner === h.id}
+              onClick={() => patch({ widgetPosition: h.id })}
+              aria-pressed={config.widgetPosition === h.id}
               className={cn(
-                'flex w-[120px] flex-col gap-1.5 rounded-sm border-2 p-2 text-left transition-colors',
-                config.widgetCorner === h.id
+                'flex flex-col gap-1.5 rounded-sm border-2 p-2 text-left transition-colors',
+                config.widgetPosition === h.id
                   ? 'border-blue bg-blue-tint'
                   : 'border-gray-5 hover:border-gray-4',
               )}
@@ -444,11 +484,45 @@ export function S3Widget() {
   )
 }
 
-function HoekSchets({ corner }: { corner: WidgetCorner }) {
-  const pos: Record<WidgetCorner, string> = {
+/** Hexcode met het kleurvlakje ervoor; pas doorgeven als de code compleet is. */
+function KleurVeld({
+  label,
+  waarde,
+  onChange,
+}: {
+  label: string
+  waarde: string
+  onChange: (v: string) => void
+}) {
+  const [tekst, setTekst] = useState(waarde)
+
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="type-label text-gray-3">{label}</span>
+      <span className="flex items-center gap-2 rounded-sm border border-gray-4 px-2 py-1.5 focus-within:border-blue">
+        <span className="size-6 shrink-0 rounded-sm border border-gray-5" style={{ background: waarde }} />
+        <input
+          value={tekst}
+          onChange={(e) => {
+            const v = e.target.value
+            setTekst(v)
+            if (/^#[0-9a-fA-F]{6}$/.test(v)) onChange(v)
+          }}
+          spellCheck={false}
+          className="w-full bg-transparent text-body text-gray-1 outline-none"
+        />
+      </span>
+    </label>
+  )
+}
+
+function HoekSchets({ corner }: { corner: WidgetPositie }) {
+  const pos: Record<WidgetPositie, string> = {
     lt: 'top-1 left-1',
-    rt: 'top-1 right-1',
+    lm: 'top-1/2 left-1 -translate-y-1/2',
     lb: 'bottom-1 left-1',
+    rt: 'top-1 right-1',
+    rm: 'top-1/2 right-1 -translate-y-1/2',
     rb: 'bottom-1 right-1',
   }
   return (

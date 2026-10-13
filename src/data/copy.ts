@@ -35,7 +35,8 @@ export const FASES = [
     punten: [
       'Welke talen je gebruikt, en op welk taalniveau',
       'Welke avatar en stem bij elke taal horen',
-      'Hoe de widget eruitziet op je website',
+      'Je logo en kleuren, en hoe de widget op je website staat',
+      'Welke achtergrondfoto’s achter de avatar komen',
     ],
   },
   {

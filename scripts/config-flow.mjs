@@ -106,20 +106,22 @@ await page.waitForTimeout(1200)
 await stap('6-speler')
 const speler = await page.evaluate(() => {
   const v = document.querySelector('video')
-  const rij = document.querySelector('[aria-pressed]')
-  if (!v || !rij) return null
+  if (!v) return null
   const vr = v.getBoundingClientRect()
+  const paneel = v.closest('.flex.w-full.flex-col')
   return {
     src: v.currentSrc,
     staand: vr.height > vr.width,
-    gat: Math.round(rij.getBoundingClientRect().top - vr.bottom),
     zichtbaar: vr.top > 0 && vr.bottom < window.innerHeight,
+    // De demo laat alle talen na elkaar zien; dan hoort er geen taalkeuze bij.
+    taalrij: Boolean(paneel?.querySelector('[aria-pressed]')),
+    uitleg: (paneel?.textContent ?? '').includes('alle gekozen talen na elkaar'),
   }
 })
 eis(Boolean(speler?.src.includes('/media/demo/demo.mp4')), 'de speler draait de aangeleverde demovideo')
 eis(speler?.staand === true, 'de speler is staand')
-eis((speler?.gat ?? 999) >= 0 && (speler?.gat ?? 999) < 48, 'de taalrij staat direct onder de speler',
-  `${speler?.gat} px`)
+eis(speler?.taalrij === false, 'de demo heeft geen taalrij eronder')
+eis(speler?.uitleg === true, 'de demo zegt dat alle talen na elkaar komen')
 eis(speler?.zichtbaar === true, 'de speler valt volledig binnen beeld')
 
 await page.mouse.wheel(0, 1400)

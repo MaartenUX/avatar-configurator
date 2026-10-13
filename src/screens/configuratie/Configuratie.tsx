@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Lock, Save } from 'lucide-react'
-import { Button, LockedBanner, PreviewGrid, SiteMock } from '../../components'
+import { Button, Chip, LockedBanner, PreviewGrid, SiteMock } from '../../components'
 import { ProgressBar } from '../../components/layout/ProgressBar'
 import { useStore } from '../../state/store'
 import { SECTIONS, firstOpenSection } from './sections'
@@ -17,6 +17,7 @@ const INTENT_MS = 700
 export default function Configuratie() {
   const config = useStore((s) => s.config)
   const setScrollY = useStore((s) => s.setScrollY)
+  const patchConfig = useStore((s) => s.patchConfig)
   const startConfig = useStore((s) => s.startConfig)
   const flash = useStore((s) => s.flash)
   const navigate = useNavigate()
@@ -170,6 +171,20 @@ export default function Configuratie() {
           {/* Verticaal gecentreerd in de halve hoogte, op driekwart formaat. */}
           <div className="sticky top-[130px] flex h-[calc(100svh-160px)] items-center justify-center">
             <div className="w-[75%]">
+            {/* Zo ziet een bezoeker het: op een scherm of op een telefoon.
+                Alleen bij de widget-sectie, want daar gaat het erover. */}
+            {active === 3 && (
+              <div className="mb-3 flex justify-center gap-2">
+                {(['desktop', 'mobiel'] as const).map((w) => (
+                  <Chip
+                    key={w}
+                    label={w === 'desktop' ? 'Desktop' : 'Mobiel'}
+                    selected={(config.weergave ?? 'desktop') === w}
+                    onClick={() => patchConfig({ weergave: w })}
+                  />
+                ))}
+              </div>
+            )}
             <div className="relative">
               <div
                 className={cn(
@@ -183,6 +198,7 @@ export default function Configuratie() {
                 ) : (
                   <SiteMock
                     config={config}
+                    telefoon={config.weergave === 'mobiel'}
                     soort={config.contentUrl ? 'content' : 'home'}
                     expanded={demoOpen}
                     onOpen={config.demoKlaar ? () => setDemoOpen(true) : undefined}

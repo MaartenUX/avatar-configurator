@@ -63,7 +63,8 @@ export interface Page {
   samenvattingDoor?: string
 }
 
-export type WidgetCorner = 'lb' | 'rb' | 'lt' | 'rt'
+/** Zes plekken langs de rand; Eindhoven heeft hem links-midden (CHANGES-09 A4). */
+export type WidgetPositie = 'lb' | 'lm' | 'lt' | 'rb' | 'rm' | 'rt'
 
 export interface Config {
   status: 'empty' | 'draft' | 'locked'
@@ -74,16 +75,18 @@ export interface Config {
   logo?: string
   primary?: string
   secondary?: string
-  widgetCorner: WidgetCorner
+  widgetPosition: WidgetPositie
   /** Overgang tussen de scènes (CHANGES-03 C11). */
   transition?: 'zoom' | 'logo'
   /** Marge vanaf de rand van de pagina, in pixels. */
   widgetMargin: { x: number; y: number }
+  /** Hoe je de preview bekijkt; verandert niets aan de widget zelf. */
+  weergave?: 'desktop' | 'mobiel'
   /** Tweede URL: een contentpagina ziet er anders uit dan een homepage. */
   contentUrl?: string
   /** Standaard kantoorshots of eigen foto's per scène. */
   achtergrondModus?: 'standaard' | 'eigen'
-  level: 'B1' | 'B2'
+  level: 'A2' | 'B1'
   languages: Lang[]
   avatars: Partial<Record<Lang, string>>
   /** Zes shots; null = standaard kantoorshot. Leeg = nog geen keuze. */

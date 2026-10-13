@@ -124,6 +124,10 @@ export interface WidgetVensterProps {
   onClose?: () => void
 }
 
+/** Boven de demo, in plaats van de taalrij: hij toont alle talen na elkaar. */
+const DEMO_UITLEG =
+  'In deze demo hoor je alle gekozen talen na elkaar. Echte video’s zijn altijd in één taal.'
+
 /**
  * Wat je ziet na een klik op de knop: de staande speler, en daaronder de rij
  * avatars als taalkeuze. Die rij blijft altijd onder de speler staan, ook
@@ -136,8 +140,16 @@ export function WidgetVenster({ config, pageId, onClose }: WidgetVensterProps) {
   // noemt, want je kijkt naar je instellingen (CHANGES-03 E20).
   const inhoud = pageId ? pageContent(pageId) : undefined
 
+  // De demo is één video met alle talen erin; dan zegt een taalkeuze eronder
+  // het verkeerde (CHANGES-09 A7).
+  const demo = !inhoud
+
   return (
     <div className="flex w-full flex-col items-center gap-3">
+      {demo && (
+        <p className="max-w-[300px] text-center text-body-sm text-gray-2">{DEMO_UITLEG}</p>
+      )}
+
       <div className="relative w-full max-w-[280px]">
         <VideoPreview
           avatarId={config.avatars[taal]}
@@ -162,6 +174,7 @@ export function WidgetVenster({ config, pageId, onClose }: WidgetVensterProps) {
       </div>
 
       {/* De taalkeuze: de avatars zelf, want zo herken je wie er spreekt. */}
+      {!demo && (
       <div className="flex flex-wrap items-end justify-center gap-2">
         {talen.map((code) => {
           const avatar = avatarById(config.avatars[code])
@@ -192,6 +205,7 @@ export function WidgetVenster({ config, pageId, onClose }: WidgetVensterProps) {
           )
         })}
       </div>
+      )}
     </div>
   )
 }

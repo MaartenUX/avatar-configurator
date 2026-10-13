@@ -13,8 +13,9 @@ export interface S6Props {
   onVastgelegd: () => void
 }
 
-const HOEK_LABEL = {
-  lt: 'Linksboven', rt: 'Rechtsboven', lb: 'Linksonder', rb: 'Rechtsonder',
+const PLEK_LABEL = {
+  lt: 'Linksboven', lm: 'Links-midden', lb: 'Linksonder',
+  rt: 'Rechtsboven', rm: 'Rechts-midden', rb: 'Rechtsonder',
 } as const
 
 /**
@@ -67,7 +68,7 @@ export function S6Demo({ gridSentinel, onWijzig, onVastgelegd }: S6Props) {
     { label: 'Website', waarde: config.siteUrl || '—', sectie: 3 },
     {
       label: 'Plek van de widget',
-      waarde: `${HOEK_LABEL[config.widgetCorner]}, ${config.widgetMargin?.x ?? 24} bij ${config.widgetMargin?.y ?? 24} px van de rand`,
+      waarde: `${PLEK_LABEL[config.widgetPosition]}, ${config.widgetMargin?.x ?? 24} bij ${config.widgetMargin?.y ?? 24} px van de rand`,
       sectie: 3,
     },
   ]

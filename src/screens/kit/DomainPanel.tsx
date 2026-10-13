@@ -13,9 +13,9 @@ import { langLabel } from '../../data/langs'
 import { pageContent } from '../../data'
 import { SEED_CONFIG } from '../../data/seed'
 import { startTimer } from '../../state/timers'
-import type { Config, WidgetCorner } from '../../state/types'
+import type { Config, WidgetPositie } from '../../state/types'
 
-const CORNERS: { id: WidgetCorner; label: string }[] = [
+const CORNERS: { id: WidgetPositie; label: string }[] = [
   { id: 'lt', label: 'Linksboven' },
   { id: 'rt', label: 'Rechtsboven' },
   { id: 'lb', label: 'Linksonder' },
@@ -61,7 +61,7 @@ export function DomainPanel() {
         <KitRow>
           {CORNERS.map((c) => (
             <div key={c.id} className="w-52">
-              <SiteMock config={{ ...staged, widgetCorner: c.id }} mini />
+              <SiteMock config={{ ...staged, widgetPosition: c.id }} mini />
               <p className="mt-1 text-body-sm text-gray-3">{c.label}</p>
             </div>
           ))}

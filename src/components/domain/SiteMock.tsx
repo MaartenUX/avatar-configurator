@@ -17,13 +17,17 @@ export interface SiteMockProps {
   onClose?: () => void
   /** Contentpagina in plaats van homepage: kop, broodkruimel, tekst, zijbalk. */
   soort?: 'home' | 'content'
+  /** Toont de pagina als telefoonscherm; de widget houdt zijn plek. */
+  telefoon?: boolean
   className?: string
 }
 
-const CORNER: Record<Config['widgetCorner'], string> = {
+const PLEK: Record<Config['widgetPosition'], string> = {
   lb: 'bottom-0 left-0',
-  rb: 'bottom-0 right-0',
+  lm: 'top-1/2 left-0 -translate-y-1/2',
   lt: 'top-0 left-0',
+  rb: 'bottom-0 right-0',
+  rm: 'top-1/2 right-0 -translate-y-1/2',
   rt: 'top-0 right-0',
 }
 
@@ -40,6 +44,7 @@ export function SiteMock({
   onOpen,
   onClose,
   soort = 'home',
+  telefoon,
   className,
 }: SiteMockProps) {
   const primary = config.primary ?? '#BDBDBD'
@@ -49,13 +54,26 @@ export function SiteMock({
   return (
     /* Geen overflow-hidden op de buitenkant: de uitgeklapte speler mag over de
        pagina heen steken en moet dan wél helemaal zichtbaar blijven. */
-    <div className={cn('relative w-full', expanded && 'mx-auto w-[86%]', className)}>
+    <div
+      className={cn(
+        'relative',
+        // Niet allebei een breedte: anders wint w-full van het telefoonformaat.
+        !telefoon && 'w-full',
+        expanded && 'mx-auto w-[86%]',
+        /* Telefoon: een smal staand scherm met een dikke rand eromheen. De
+           hoogte bepaalt de maat, anders valt hij van het paneel af. */
+        telefoon &&
+          'mx-auto w-[240px] rounded-[30px] border-[7px] border-gray-1 bg-gray-1 shadow-card',
+        className,
+      )}
+    >
       <div
         className={cn(
           // relative: de widget hoort binnen de nagebootste pagina te staan,
           // niet binnen de buitenste laag waar de speler overheen komt.
-          'relative flex w-full flex-col overflow-hidden rounded-md bg-white shadow-card',
-          mini ? 'aspect-[4/3]' : 'aspect-[16/10]',
+          'relative flex w-full flex-col overflow-hidden bg-white',
+          telefoon ? 'aspect-[375/812] rounded-[24px]' : 'rounded-md shadow-card',
+          !telefoon && (mini ? 'aspect-[4/3]' : 'aspect-[16/10]'),
         )}
       >
         {/* Sitekop: krijgt de opgehaalde huisstijlkleur zodra die er is. */}
@@ -97,7 +115,7 @@ export function SiteMock({
           </div>
         )}
 
-        {!expanded && <Widget config={config} mini={mini} onOpen={onOpen} />}
+        {!expanded && <Widget config={config} mini={mini} telefoon={telefoon} onOpen={onOpen} />}
       </div>
 
       {expanded && (
@@ -165,10 +183,12 @@ function ContentPagina({
 function Widget({
   config,
   mini,
+  telefoon,
   onOpen,
 }: {
   config: Config
   mini?: boolean
+  telefoon?: boolean
   onOpen?: () => void
 }) {
   const marge = config.widgetMargin ?? { x: 24, y: 24 }
@@ -179,8 +199,9 @@ function Widget({
     <div
       className={cn(
         'absolute transition-all duration-500',
-        CORNER[config.widgetCorner],
+        PLEK[config.widgetPosition],
         mini ? 'w-[44%]' : 'w-[34%]',
+        telefoon && 'w-[62%]',
       )}
       style={{ margin: `${marge.y * schaal}px ${marge.x * schaal}px` }}
     >
