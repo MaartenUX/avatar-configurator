@@ -10,6 +10,8 @@ export interface InputProps {
   /** Uitleg onder het veld. */
   hint?: string
   error?: string
+  /** Bijv. om het veld bij de eerste focus voor te vullen. */
+  onFocus?: () => void
   type?: 'text' | 'url' | 'email'
   icon?: LucideIcon
   suffix?: ReactNode
@@ -28,6 +30,7 @@ export function Input({
   placeholder,
   hint,
   error,
+  onFocus,
   type = 'text',
   icon: Icon,
   suffix,
@@ -63,6 +66,7 @@ export function Input({
             value={value}
             disabled={disabled}
             placeholder={placeholder}
+            onFocus={onFocus}
             aria-describedby={hint || error ? hintId : undefined}
             aria-invalid={error ? true : undefined}
             onChange={(e) => onChange(e.target.value)}

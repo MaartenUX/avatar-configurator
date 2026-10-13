@@ -32,6 +32,9 @@ await page.waitForTimeout(600)
 await page.getByRole('link', { name: /Pagina toevoegen/ }).first().click()
 await check('01-toevoegen', 'Dit gaat er gebeuren')
 
+// Het adresveld vult zich bij focus; zonder klik blijft Start uit.
+await page.locator('input[type=url]').first().click()
+await page.waitForTimeout(300)
 await page.getByRole('button', { name: 'Start', exact: true }).click()
 await check('02-wachten', 'We maken de samenvatting')
 

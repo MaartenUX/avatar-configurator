@@ -539,6 +539,32 @@ Twijfelpunt bij D9: het label "Aanbevolen" staat nu bij *Standaard
 kantoorshots*, zoals CHANGES-06 vraagt. Tot nu toe stond het bij
 personaliseren. De aanbevolen tegel staat daardoor rechts.
 
+---
+
+# CHANGES-07 — 13 oktober
+
+Alle punten verwerkt en in de browser nagekeken op `localhost:5174`.
+
+| Punt | Stand |
+|---|---|
+| A1 standaard links met advies, personaliseren rechts met TIP-pill | gedaan |
+| A2 scène 1 en 2 de echte kantoorshots, 3 t/m 6 de voorbeelden | gedaan |
+| B3 lege-staat-kaart na vastleggen, zonder lege kopjes | gedaan |
+| C4 adresveld leeg, vult zich bij focus | gedaan |
+
+### 66. Het label heeft nu twee tonen
+`ChoiceTile` kende alleen een groen advieslabel. "Tip" is blauw, dus er is een
+`tagToon` bijgekomen met twee letterlijke classnamen — samenstellen kan niet,
+de Tailwind-scanner leest broncode als tekst.
+
+### 67. De titel vult zich mee met het adres
+C4 noemt alleen het adresveld. Een ingevulde titel naast een leeg adres leest
+als een fout, dus de titel begint ook leeg en vult zich bij dezelfde focus met
+de titel van de herkende pagina. Daarna zijn beide gewoon te bewerken.
+
+Gevolg voor de controlescripts: `productie-flow` en `dod-check` klikken nu
+eerst in het adresveld, net als een tester, want zonder dat blijft Start uit.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

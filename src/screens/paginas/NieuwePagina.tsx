@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AlertTriangle, FileVideo, Megaphone, Video } from 'lucide-react'
 import { Button, Card, ChoiceTile, Input, ProductieStap, SiteMock } from '../../components'
@@ -13,8 +13,23 @@ export default function NieuwePagina() {
   const videos = useStore((s) => s.videos)
   const addPage = useStore((s) => s.addPage)
 
-  const [url, setUrl] = useState('https://www.bergrode.nl/parkeervergunning-bewoners')
-  const [titel, setTitel] = useState('Parkeervergunning bewoners')
+  const [url, setUrl] = useState('')
+  const [titel, setTitel] = useState('')
+  const voorgevuld = useRef(false)
+
+  /**
+   * Het veld begint leeg, maar niemand hoeft tijdens de test een webadres over
+   * te typen. Bij de eerste focus vult het zich met de pagina uit de testtaak;
+   * wist je hem daarna, dan blijft hij leeg (CHANGES-07 C4).
+   */
+  const vulVoor = () => {
+    if (voorgevuld.current) return
+    voorgevuld.current = true
+    const pagina = PAGE_CONTENT.find((p) => p.id === 'p-parkeervergunning')
+    if (!pagina) return
+    setUrl(pagina.url)
+    setTitel(pagina.title)
+  }
 
   const geenVideos = videos.used >= videos.total
   const over = videos.total - videos.used
@@ -46,6 +61,8 @@ export default function NieuwePagina() {
       <div className="flex flex-col gap-3">
         <Input
           label="Adres van de pagina" value={url} onChange={setUrl} type="url"
+          placeholder="https://www.bergrode.nl/…"
+          onFocus={vulVoor}
           hint="Plak het webadres van de pagina waar de video bij komt."
           error={bestaat ? 'Voor deze pagina bestaat al een video.' : undefined}
         />
