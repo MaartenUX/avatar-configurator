@@ -594,6 +594,44 @@ welke taal controleert; zonder dat wordt Esmee de controleur van álle talen en
 verdwijnt Emre uit de collega-view — precies wat B5 zelf wil behouden. De
 teampagina toont de rol niet meer; de data houdt hem.
 
+---
+
+# CHANGES-09 — 13 oktober, na de review met ReadSpeaker
+
+| Punt | Stand |
+|---|---|
+| A1 taalniveau A2 en B1 | gedaan |
+| A2 vier talen in totaal, Nederlands uitzetbaar | gedaan |
+| A3 huisstijl aanpassen werkt | gedaan |
+| A4 zes widgetposities | gedaan |
+| A5 toggle desktop/mobiel | gedaan |
+| A6 aantal scènes is geen keuze | gedaan |
+| A7 demo zonder taalrij | gedaan |
+| A8 fase 1 noemt logo, kleuren en achtergronden | gedaan |
+| B9 waarschuwing bij opnieuw genereren | gedaan |
+| B10 celebration: zes voorbeelden in plaats van knoppen | gedaan |
+| C11 FAQ over de widget in de tekst | gedaan |
+
+### 71. Nederlands is een gewone keuze geworden
+Met vier talen in totaal telt Nederlands mee. De chip staat voorgeselecteerd
+maar is uit te zetten; de kopregel "Nederlands staat vast" is vervangen door
+"de eerste taal die je kiest is de bron". In de test blijft Nederlands gewoon
+aan, dus de productieflow verandert niet.
+
+### 72. De zes posities staan niet onder "Meer specificaties"
+CHANGES-09 A4 noemt dat blok, maar de positietegels zijn eerder juist uit de
+inklapper gehaald omdat ze zichtbaar moesten zijn. Ze blijven dus staan waar ze
+staan, nu als raster van drie bij twee. `widgetCorner` heet `widgetPosition`.
+
+### 73. De telefoonweergave is een preview, geen instelling
+De keuze desktop/mobiel staat in de config zodat hij een herlaad overleeft,
+maar hij verandert niets aan de widget zelf — alleen hoe je hem bekijkt.
+
+### 74. De waarschuwing komt alleen als er iets te verliezen valt
+"Opnieuw genereren" vergelijkt de scènes met de oorspronkelijke tekst uit de
+seed. Is er niets veranderd, dan genereert hij meteen; dat scheelt een klik in
+het geval dat het vaakst voorkomt.
+
 ## Open punten
 
 1. De Turkse en Arabische teksten zijn zorgvuldig geschreven maar niet door een

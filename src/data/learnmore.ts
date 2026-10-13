@@ -10,17 +10,17 @@ export const LEARN_MORE: LearnMoreDef[] = [
     id: 'talen',
     title: 'Taalniveau en talen',
     body:
-      'Het taalniveau bepaalt hoe de samenvatting geschreven wordt. B1 is de norm voor overheidsteksten: korte zinnen, gewone woorden, één boodschap per zin. Ongeveer zeven op de tien Nederlanders leest comfortabel op dit niveau. Nederlands staat altijd aan en is de basis voor elke vertaling.',
+      'Het taalniveau bepaalt hoe de samenvatting geschreven wordt. B1 is de norm voor overheidsteksten: korte zinnen, gewone woorden, één boodschap per zin. Ongeveer zeven op de tien Nederlanders leest comfortabel op dit niveau. A2 gaat nog een stap verder, voor wie moeite heeft met lezen. De eerste taal die u kiest is de bron; de andere worden daaruit vertaald.',
     features: [
-      { icon: 'Languages', label: 'Nederlands plus vier talen' },
-      { icon: 'BookOpen', label: 'B1 of B2' },
+      { icon: 'Languages', label: 'Vier talen in totaal' },
+      { icon: 'BookOpen', label: 'A2 of B1' },
       { icon: 'Users', label: 'Een collega per taal' },
       { icon: 'RefreshCw', label: 'Eén bron voor alle talen' },
     ],
     faq: [
       {
         q: 'Waarom B1 en niet gewoon onze eigen tekst?',
-        a: 'Een uitlegvideo wordt één keer bekeken, zonder terugbladeren. Op B1 blijft de kern hangen bij de meeste inwoners. Kiest u B2, dan mogen de zinnen langer zijn en blijft meer vakjargon staan.',
+        a: 'Een uitlegvideo wordt één keer bekeken, zonder terugbladeren. Op B1 blijft de kern hangen bij de meeste inwoners. Kiest u A2, dan worden de zinnen nog korter en vervallen ook de laatste moeilijke woorden.',
       },
       {
         q: 'We hebben meer dan vier talen nodig.',
@@ -100,7 +100,7 @@ export const LEARN_MORE: LearnMoreDef[] = [
     features: [
       { icon: 'MousePointerClick', label: 'Eén regel code' },
       { icon: 'Palette', label: 'Uw eigen kleuren' },
-      { icon: 'LayoutGrid', label: 'Vier hoeken' },
+      { icon: 'LayoutGrid', label: 'Zes plekken' },
       { icon: 'Smartphone', label: 'Werkt op mobiel' },
     ],
     faq: [
@@ -114,7 +114,11 @@ export const LEARN_MORE: LearnMoreDef[] = [
       },
       {
         q: 'Wat zien bezoekers precies?',
-        a: 'Een klein blok met een afbeelding en de tekst "Bekijk uitleg". Na een klik verschijnt de taalkeuze en daarna de video, met ondertiteling.',
+        a: 'Een klein blok met de avatars en een balk in uw kleur. Na een klik verschijnt de video met de taalkeuze eronder, met ondertiteling.',
+      },
+      {
+        q: 'Kan de widget ook in de tekst staan in plaats van zwevend?',
+        a: 'Ja. Uw webdeveloper past de code aan; de video is dezelfde.',
       },
     ],
   },
