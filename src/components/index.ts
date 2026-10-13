@@ -17,6 +17,8 @@ export { VideoMeter } from './layout/VideoMeter'
 export { Stepper } from './layout/Stepper'
 export { ProgressBar } from './layout/ProgressBar'
 export { ProductieStap } from './layout/ProductieStap'
+export { Popover } from './feedback/Popover'
+export { AbonnementInfo, AbonnementPopover } from './domain/AbonnementUitleg'
 export { LockedBanner } from './layout/LockedBanner'
 
 // Feedback

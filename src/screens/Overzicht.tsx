@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Check, CircleHelp, MessageCircle, Plus, Settings2, Sparkles, Users } from 'lucide-react'
 import {
-  Button, Card, Chip, EmptyState, LockedBanner, PageCard, ShellContainer,
+  AbonnementInfo, Button, Card, Chip, EmptyState, LockedBanner, PageCard, ShellContainer,
 } from '../components'
 import { useStore } from '../state/store'
 import { useNow } from '../state/TickProvider'
@@ -169,8 +169,9 @@ function NogGeenPaginas({ videos }: { videos: { used: number; total: number } })
         </p>
       </div>
       <Button to="/paginas/nieuw" iconLeft={Plus}>Pagina toevoegen</Button>
-      <p className="text-body-sm text-gray-3">
+      <p className="flex items-center gap-1.5 text-body-sm text-gray-3">
         Dit wordt video {videos.used + 1} van {videos.total}.
+        <AbonnementInfo />
       </p>
     </Card>
   )

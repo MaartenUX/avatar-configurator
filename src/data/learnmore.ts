@@ -173,3 +173,29 @@ export const B1_FAQ = [
     a: 'De samenvatting volgt de pagina. Klopt er iets niet, overleg dan met de webredactie van die pagina en pas eerst de pagina aan.',
   },
 ]
+
+/**
+ * Wat er achter de teller rechtsboven zit. Hij staat op drie plekken: in de
+ * header, bij "Dit wordt video x van y" en in de lege staat van het overzicht
+ * (CHANGES-08 A). Eén tekst, zodat die drie niet uit elkaar lopen.
+ */
+export const ABONNEMENT = {
+  label: 'Je abonnement',
+  videos: 'Elke pagina die je toevoegt is één uitlegvideo, in alle talen samen.',
+  reruns:
+    'Vind je een video niet goed? Meld het bij XS2Content, dat kost niets. Zelf opnieuw maken kan vijf keer per abonnement.',
+  faq: [
+    {
+      q: 'Wat als mijn video’s op zijn?',
+      a: 'Neem contact op met XS2Content; uitbreiden kan altijd.',
+    },
+    {
+      q: 'Telt tekst opnieuw genereren mee?',
+      a: 'Nee. Alleen een video opnieuw maken kost er één van de vijf.',
+    },
+    {
+      q: 'Telt een pagina opnieuw maken na een wijziging mee?',
+      a: 'Ja, dat is een nieuwe uitlegvideo.',
+    },
+  ],
+}

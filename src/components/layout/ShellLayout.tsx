@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { Check, ChevronDown, RotateCcw, SquarePlay } from 'lucide-react'
 import { VideoMeter } from './VideoMeter'
+import { AbonnementPopover } from '../domain/AbonnementUitleg'
 import { ToastHost } from '../feedback/Toast'
 import { useStore } from '../../state/store'
 import { SCENARIOS } from '../../data/seed'
@@ -37,7 +38,10 @@ export function ShellLayout() {
         </Link>
 
         <div className="flex items-center gap-6">
-          <VideoMeter videos={videos} reruns={reruns} />
+          {/* Staat het kaartje open, dan hoeft de tooltip er niet overheen. */}
+          <AbonnementPopover
+            trigger={(open) => <VideoMeter videos={videos} reruns={reruns} interactief={!open} />}
+          />
 
           {/* Het account hoort bij de interface; het kader ernaast niet. */}
           <span className="flex items-center gap-2.5">

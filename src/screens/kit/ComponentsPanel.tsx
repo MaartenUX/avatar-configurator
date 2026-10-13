@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Check, Filter, Play, Sparkles, Trash2 } from 'lucide-react'
 import {
-  Badge, Button, Card, Chip, Dialog, Indicator, Input, ProductieStap,
+  Badge, Button, Card, Chip, Dialog, Indicator, Input, Popover, ProductieStap,
   ProgressBar, StatCard, Stepper, Tabs, Textarea,
 } from '../../components'
 import { STATUS_KEYS } from '../../tokens/status'
@@ -143,6 +143,26 @@ export function ComponentsPanel() {
             <ProductieStap index={5} label="Video en ondertiteling controleren" meta="5 min per taal" status="todo" isLast />
           </ol>
         </Card>
+      </KitBlock>
+
+      <KitBlock title="Popover" note="kaartje onder zijn knop, sluit bij klik buiten of Esc">
+        <Popover
+          label="Voorbeeld"
+          trigger={
+            <span className="rounded-sm border border-gray-5 px-3 py-2 text-body text-gray-2">
+              Open de popover
+            </span>
+          }
+        >
+          <span className="type-label w-fit rounded-pill bg-gray-6 px-2 py-0.5 text-gray-3">
+            Label
+          </span>
+          <p className="text-body-sm text-gray-2">
+            Een kaartje voor uitleg die je erbij pakt, niet voor een keuze. Blijft de pagina
+            eronder bedienbaar, dan hoort het hier; moet je eerst iets beslissen, gebruik dan
+            een dialoog.
+          </p>
+        </Popover>
       </KitBlock>
 
       <KitBlock title="Dialog">

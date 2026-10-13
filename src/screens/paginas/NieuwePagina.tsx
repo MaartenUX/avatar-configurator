@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AlertTriangle, FileVideo, Megaphone, Video } from 'lucide-react'
-import { Button, Card, ChoiceTile, Input, ProductieStap, SiteMock } from '../../components'
+import { AbonnementInfo, Button, Card, ChoiceTile, Input, ProductieStap, SiteMock } from '../../components'
 import { SpokeFrame } from '../../components/layout/SpokeLayout'
 import { useStore } from '../../state/store'
 import { PRODUCTIE_STAPPEN } from '../../data/copy'
@@ -97,7 +97,10 @@ export default function NieuwePagina() {
               Je hebt alle uitlegvideo’s gebruikt. Neem contact op met XS2Content voor meer.
             </>
           ) : (
-            <>Dit is uitlegvideo {videos.used + 1} van {videos.total}. Je houdt er {over - 1} over.</>
+            <>
+              Dit is uitlegvideo {videos.used + 1} van {videos.total}. Je houdt er {over - 1} over.
+              <AbonnementInfo richting="boven" align="right" />
+            </>
           )}
         </span>
         <span className="flex gap-2">
